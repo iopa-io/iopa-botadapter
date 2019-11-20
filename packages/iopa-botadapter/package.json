@@ -1,0 +1,43 @@
+{
+    "name": "iopa-botadapter",
+    "version": "3.0.0",
+    "description": "Use the IOPA framework for Bots on serverless",
+    "author": "iopa <build@iopa.io>",
+    "license": "MIT",
+    "main": "dist/index.js",
+    "types": "src/index.ts",
+    "ts:main": "src/index.ts",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/iopa-io/iopa-microsoft-botbuilder.git"
+    },
+    "dependencies": {
+        "iopa-botadapter-schema": "3.0.0",
+        "iopa-botadapter-schema-auth": "3.0.0",
+        "iopa-botadapter-schema-teams": "3.0.0",
+        "iopa-botadapter-schema-tokens": "3.0.0",
+        "iopa-botadapter-types": "3.0.0",
+        "async-retry": "^1.2.3"
+    },
+    "keywords": [
+        "botbuilder-js",
+        "botframework",
+        "iopa",
+        "serverless",
+        "cloudflare",
+        "workers",
+        "functions",
+        "lambda",
+        "azure function",
+        "google cloud function",
+        "node",
+        "bot",
+        "conversational agent"
+    ],
+    "engines": {},
+    "scripts": {
+        "build": "tsc",
+        "format": "prettier --ignore-path ../../.gitignore --write '**/*.{js,jsx,ts,tsx,json,md}'"
+    },
+    "homepage": "http://iopa.io"
+}

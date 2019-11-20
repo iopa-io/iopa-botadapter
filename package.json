@@ -1,0 +1,22 @@
+{
+    "name": "mono-repository-for-iopa-botadapter",
+    "private": true,
+    "version": "3.0.0",
+    "description": "IOPA Bot Framework for Microsoft Teams and other Microsoft BotFramework hosted bots",
+    "author": "iopa <build@iopa.io>",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/iopa-io/iopa-botadapter.git"
+    },
+    "dependencies": {},
+    "keywords": [],
+    "engines": {},
+    "scripts": {
+        "build": "lerna run build"
+    },
+    "homepage": "http://iopa.io",
+    "workspaces": [
+        "packages/*"
+    ]
+}
