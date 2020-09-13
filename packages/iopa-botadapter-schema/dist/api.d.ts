@@ -10,24 +10,24 @@
  * Do not edit the class manually.
  */
 /// <reference path="../src/custom.d.ts" />
-import { Configuration } from './configuration'
+import { Configuration } from './configuration';
 /**
  *
  * @export
  */
 export declare const COLLECTION_FORMATS: {
-    csv: string
-    ssv: string
-    tsv: string
-    pipes: string
-}
+    csv: string;
+    ssv: string;
+    tsv: string;
+    pipes: string;
+};
 /**
  *
  * @export
  * @interface FetchAPI
  */
 export interface FetchAPI {
-    (url: string, init?: any): Promise<Response>
+    (url: string, init?: any): Promise<Response>;
 }
 /**
  *
@@ -35,8 +35,8 @@ export interface FetchAPI {
  * @interface FetchArgs
  */
 export interface FetchArgs {
-    url: string
-    options: any
+    url: string;
+    options: any;
 }
 /**
  *
@@ -44,14 +44,10 @@ export interface FetchArgs {
  * @class BaseAPI
  */
 export declare class BaseAPI {
-    protected basePath: string
-    protected fetch: FetchAPI
-    protected configuration: Configuration
-    constructor(
-        configuration?: Configuration,
-        basePath?: string,
-        fetch?: FetchAPI
-    )
+    protected basePath: string;
+    protected fetch: FetchAPI;
+    protected configuration: Configuration;
+    constructor(configuration?: Configuration, basePath?: string, fetch?: FetchAPI);
 }
 /**
  *
@@ -60,9 +56,9 @@ export declare class BaseAPI {
  * @extends {Error}
  */
 export declare class RequiredError extends Error {
-    field: string
-    name: 'RequiredError'
-    constructor(field: string, msg?: string)
+    field: string;
+    name: 'RequiredError';
+    constructor(field: string, msg?: string);
 }
 /**
  * Defines action types for clickable buttons.
@@ -80,7 +76,7 @@ export declare enum ActionTypes {
     Signin,
     Call,
     Payment,
-    MessageBack,
+    MessageBack
 }
 /**
  * An Activity is the basic communication type for the Bot Framework 3.0 protocol.
@@ -93,253 +89,253 @@ export interface Activity {
      * @type {ActivityTypes}
      * @memberof Activity
      */
-    type?: ActivityTypes
+    type?: ActivityTypes;
     /**
      * Contains an ID that uniquely identifies the activity on the channel.
      * @type {string}
      * @memberof Activity
      */
-    id?: string
+    id?: string;
     /**
      * Contains the date and time that the message was sent, in UTC, expressed in ISO-8601 format.
      * @type {Date}
      * @memberof Activity
      */
-    timestamp?: Date
+    timestamp?: Date;
     /**
      * Contains the local date and time of the message, expressed in ISO-8601 format.  For example, 2016-09-23T13:07:49.4714686-07:00.
      * @type {Date}
      * @memberof Activity
      */
-    localTimestamp?: Date
+    localTimestamp?: Date;
     /**
      * Contains the name of the local timezone of the message, expressed in IANA Time Zone database format.  For example, America/Los_Angeles.
      * @type {string}
      * @memberof Activity
      */
-    localTimezone?: string
+    localTimezone?: string;
     /**
      * A string containing an IRI identifying the caller of a bot. This field is not intended to be transmitted  over the wire, but is instead populated by bots and clients based on cryptographically verifiable data  that asserts the identity of the callers (e.g. tokens).
      * @type {string}
      * @memberof Activity
      */
-    callerId?: string
+    callerId?: string;
     /**
      * Contains the URL that specifies the channel's service endpoint. Set by the channel.
      * @type {string}
      * @memberof Activity
      */
-    serviceUrl?: string
+    serviceUrl?: string;
     /**
      * Contains an ID that uniquely identifies the channel. Set by the channel.
      * @type {string}
      * @memberof Activity
      */
-    channelId?: string
+    channelId?: string;
     /**
      * Identifies the sender of the message.
      * @type {ChannelAccount}
      * @memberof Activity
      */
-    from?: ChannelAccount
+    from?: ChannelAccount;
     /**
      * Identifies the conversation to which the activity belongs.
      * @type {ConversationAccount}
      * @memberof Activity
      */
-    conversation?: ConversationAccount
+    conversation?: ConversationAccount;
     /**
      * Identifies the recipient of the message.
      * @type {ChannelAccount}
      * @memberof Activity
      */
-    recipient?: ChannelAccount
+    recipient?: ChannelAccount;
     /**
      * Format of text fields Default:markdown
      * @type {TextFormatTypes}
      * @memberof Activity
      */
-    textFormat?: TextFormatTypes
+    textFormat?: TextFormatTypes;
     /**
      * The layout hint for multiple attachments. Default: list.
      * @type {AttachmentLayoutTypes}
      * @memberof Activity
      */
-    attachmentLayout?: AttachmentLayoutTypes
+    attachmentLayout?: AttachmentLayoutTypes;
     /**
      * The collection of members added to the conversation.
      * @type {Array<ChannelAccount>}
      * @memberof Activity
      */
-    membersAdded?: Array<ChannelAccount>
+    membersAdded?: Array<ChannelAccount>;
     /**
      * The collection of members removed from the conversation.
      * @type {Array<ChannelAccount>}
      * @memberof Activity
      */
-    membersRemoved?: Array<ChannelAccount>
+    membersRemoved?: Array<ChannelAccount>;
     /**
      * The collection of reactions added to the conversation.
      * @type {Array<MessageReaction>}
      * @memberof Activity
      */
-    reactionsAdded?: Array<MessageReaction>
+    reactionsAdded?: Array<MessageReaction>;
     /**
      * The collection of reactions removed from the conversation.
      * @type {Array<MessageReaction>}
      * @memberof Activity
      */
-    reactionsRemoved?: Array<MessageReaction>
+    reactionsRemoved?: Array<MessageReaction>;
     /**
      * The updated topic name of the conversation.
      * @type {string}
      * @memberof Activity
      */
-    topicName?: string
+    topicName?: string;
     /**
      * Indicates whether the prior history of the channel is disclosed.
      * @type {boolean}
      * @memberof Activity
      */
-    historyDisclosed?: boolean
+    historyDisclosed?: boolean;
     /**
      * A locale name for the contents of the text field.  The locale name is a combination of an ISO 639 two- or three-letter culture code associated with a language  and an ISO 3166 two-letter subculture code associated with a country or region.  The locale name can also correspond to a valid BCP-47 language tag.
      * @type {string}
      * @memberof Activity
      */
-    locale?: string
+    locale?: string;
     /**
      * The text content of the message.
      * @type {string}
      * @memberof Activity
      */
-    text?: string
+    text?: string;
     /**
      * The text to speak.
      * @type {string}
      * @memberof Activity
      */
-    speak?: string
+    speak?: string;
     /**
      * Indicates whether your bot is accepting,  expecting, or ignoring user input after the message is delivered to the client.
      * @type {InputHints}
      * @memberof Activity
      */
-    inputHint?: InputHints
+    inputHint?: InputHints;
     /**
      * The text to display if the channel cannot render cards.
      * @type {string}
      * @memberof Activity
      */
-    summary?: string
+    summary?: string;
     /**
      * The suggested actions for the activity.
      * @type {SuggestedActions}
      * @memberof Activity
      */
-    suggestedActions?: SuggestedActions
+    suggestedActions?: SuggestedActions;
     /**
      * Attachments
      * @type {Array<Attachment>}
      * @memberof Activity
      */
-    attachments?: Array<Attachment>
+    attachments?: Array<Attachment>;
     /**
      * Represents the entities that were mentioned in the message.
      * @type {Array<Entity>}
      * @memberof Activity
      */
-    entities?: Array<Entity>
+    entities?: Array<Entity>;
     /**
      * Contains channel-specific content.
      * @type {any}
      * @memberof Activity
      */
-    channelData?: any
+    channelData?: any;
     /**
      * Indicates whether the recipient of a contactRelationUpdate was added or removed from the sender's contact list.
      * @type {string}
      * @memberof Activity
      */
-    action?: string
+    action?: string;
     /**
      * Contains the ID of the message to which this message is a reply.
      * @type {string}
      * @memberof Activity
      */
-    replyToId?: string
+    replyToId?: string;
     /**
      * A descriptive label for the activity.
      * @type {string}
      * @memberof Activity
      */
-    label?: string
+    label?: string;
     /**
      * The type of the activity's value object.
      * @type {string}
      * @memberof Activity
      */
-    valueType?: string
+    valueType?: string;
     /**
      * A value that is associated with the activity.
      * @type {any}
      * @memberof Activity
      */
-    value?: any
+    value?: any;
     /**
      * The name of the operation associated with an invoke or event activity.
      * @type {string}
      * @memberof Activity
      */
-    name?: string
+    name?: string;
     /**
      * A reference to another conversation or activity.
      * @type {ConversationReference}
      * @memberof Activity
      */
-    relatesTo?: ConversationReference
+    relatesTo?: ConversationReference;
     /**
      * The a code for endOfConversation activities that indicates why the conversation ended.
      * @type {EndOfConversationCodes}
      * @memberof Activity
      */
-    code?: EndOfConversationCodes
+    code?: EndOfConversationCodes;
     /**
      * The time at which the activity should be considered to be \"expired\" and should not be presented to the recipient.
      * @type {Date}
      * @memberof Activity
      */
-    expiration?: Date
+    expiration?: Date;
     /**
      * The importance of the activity.
      * @type {ActivityImportance}
      * @memberof Activity
      */
-    importance?: ActivityImportance
+    importance?: ActivityImportance;
     /**
      * A delivery hint to signal to the recipient alternate delivery paths for the activity.  The default delivery mode is \"default\".
      * @type {DeliveryModes}
      * @memberof Activity
      */
-    deliveryMode?: DeliveryModes
+    deliveryMode?: DeliveryModes;
     /**
      * List of phrases and references that speech and language priming systems should listen for
      * @type {Array<string>}
      * @memberof Activity
      */
-    listenFor?: Array<string>
+    listenFor?: Array<string>;
     /**
      * The collection of text fragments to highlight when the activity contains a ReplyToId value.
      * @type {Array<TextHighlight>}
      * @memberof Activity
      */
-    textHighlights?: Array<TextHighlight>
+    textHighlights?: Array<TextHighlight>;
     /**
      * An optional programmatic action accompanying this request
      * @type {SemanticAction}
      * @memberof Activity
      */
-    semanticAction?: SemanticAction
+    semanticAction?: SemanticAction;
 }
 /**
  * Defines the importance of an Activity
@@ -349,7 +345,7 @@ export interface Activity {
 export declare enum ActivityImportance {
     Low,
     Normal,
-    High,
+    High
 }
 /**
  * Types of Activities
@@ -374,7 +370,7 @@ export declare enum ActivityTypes {
     Handoff,
     Call,
     MessageStatus,
-    CallStatus,
+    CallStatus
 }
 /**
  * An animation card (Ex: gif or short video clip)
@@ -387,73 +383,73 @@ export interface AnimationCard {
      * @type {string}
      * @memberof AnimationCard
      */
-    title?: string
+    title?: string;
     /**
      * Subtitle of this card
      * @type {string}
      * @memberof AnimationCard
      */
-    subtitle?: string
+    subtitle?: string;
     /**
      * Text of this card
      * @type {string}
      * @memberof AnimationCard
      */
-    text?: string
+    text?: string;
     /**
      * Thumbnail placeholder
      * @type {ThumbnailUrl}
      * @memberof AnimationCard
      */
-    image?: ThumbnailUrl
+    image?: ThumbnailUrl;
     /**
      * Media URLs for this card. When this field contains more than one URL, each URL is an alternative format of the same content.
      * @type {Array<MediaUrl>}
      * @memberof AnimationCard
      */
-    media?: Array<MediaUrl>
+    media?: Array<MediaUrl>;
     /**
      * Actions on this card
      * @type {Array<CardAction>}
      * @memberof AnimationCard
      */
-    buttons?: Array<CardAction>
+    buttons?: Array<CardAction>;
     /**
      * This content may be shared with others (default:true)
      * @type {boolean}
      * @memberof AnimationCard
      */
-    shareable?: boolean
+    shareable?: boolean;
     /**
      * Should the client loop playback at end of content (default:true)
      * @type {boolean}
      * @memberof AnimationCard
      */
-    autoloop?: boolean
+    autoloop?: boolean;
     /**
      * Should the client automatically start playback of media in this card (default:true)
      * @type {boolean}
      * @memberof AnimationCard
      */
-    autostart?: boolean
+    autostart?: boolean;
     /**
      * Aspect ratio of thumbnail/media placeholder. Allowed values are \"16:9\" and \"4:3\"
      * @type {string}
      * @memberof AnimationCard
      */
-    aspect?: string
+    aspect?: string;
     /**
      * Describes the length of the media content without requiring a receiver to open the content. Formatted as an ISO 8601 Duration field.
      * @type {string}
      * @memberof AnimationCard
      */
-    duration?: string
+    duration?: string;
     /**
      * Supplementary parameter for this card
      * @type {any}
      * @memberof AnimationCard
      */
-    value?: any
+    value?: any;
 }
 /**
  * An attachment within an activity
@@ -466,31 +462,31 @@ export interface Attachment {
      * @type {string}
      * @memberof Attachment
      */
-    contentType?: string
+    contentType?: string;
     /**
      * Content Url
      * @type {string}
      * @memberof Attachment
      */
-    contentUrl?: string
+    contentUrl?: string;
     /**
      * Embedded content
      * @type {any}
      * @memberof Attachment
      */
-    content?: any
+    content?: any;
     /**
      * (OPTIONAL) The name of the attachment
      * @type {string}
      * @memberof Attachment
      */
-    name?: string
+    name?: string;
     /**
      * (OPTIONAL) Thumbnail associated with attachment
      * @type {string}
      * @memberof Attachment
      */
-    thumbnailUrl?: string
+    thumbnailUrl?: string;
 }
 /**
  * Attachment data
@@ -503,25 +499,25 @@ export interface AttachmentData {
      * @type {string}
      * @memberof AttachmentData
      */
-    type?: string
+    type?: string;
     /**
      * Name of the attachment
      * @type {string}
      * @memberof AttachmentData
      */
-    name?: string
+    name?: string;
     /**
      * Attachment content
      * @type {string}
      * @memberof AttachmentData
      */
-    originalBase64?: string
+    originalBase64?: string;
     /**
      * Attachment thumbnail
      * @type {string}
      * @memberof AttachmentData
      */
-    thumbnailBase64?: string
+    thumbnailBase64?: string;
 }
 /**
  * Metadata for an attachment
@@ -534,19 +530,19 @@ export interface AttachmentInfo {
      * @type {string}
      * @memberof AttachmentInfo
      */
-    name?: string
+    name?: string;
     /**
      * ContentType of the attachment
      * @type {string}
      * @memberof AttachmentInfo
      */
-    type?: string
+    type?: string;
     /**
      * attachment views
      * @type {Array<AttachmentView>}
      * @memberof AttachmentInfo
      */
-    views?: Array<AttachmentView>
+    views?: Array<AttachmentView>;
 }
 /**
  * Attachment layout types
@@ -555,7 +551,7 @@ export interface AttachmentInfo {
  */
 export declare enum AttachmentLayoutTypes {
     List,
-    Carousel,
+    Carousel
 }
 /**
  * Attachment View name and size
@@ -568,13 +564,13 @@ export interface AttachmentView {
      * @type {string}
      * @memberof AttachmentView
      */
-    viewId?: string
+    viewId?: string;
     /**
      * Size of the attachment
      * @type {number}
      * @memberof AttachmentView
      */
-    size?: number
+    size?: number;
 }
 /**
  * Audio card
@@ -587,73 +583,73 @@ export interface AudioCard {
      * @type {string}
      * @memberof AudioCard
      */
-    title?: string
+    title?: string;
     /**
      * Subtitle of this card
      * @type {string}
      * @memberof AudioCard
      */
-    subtitle?: string
+    subtitle?: string;
     /**
      * Text of this card
      * @type {string}
      * @memberof AudioCard
      */
-    text?: string
+    text?: string;
     /**
      * Thumbnail placeholder
      * @type {ThumbnailUrl}
      * @memberof AudioCard
      */
-    image?: ThumbnailUrl
+    image?: ThumbnailUrl;
     /**
      * Media URLs for this card. When this field contains more than one URL, each URL is an alternative format of the same content.
      * @type {Array<MediaUrl>}
      * @memberof AudioCard
      */
-    media?: Array<MediaUrl>
+    media?: Array<MediaUrl>;
     /**
      * Actions on this card
      * @type {Array<CardAction>}
      * @memberof AudioCard
      */
-    buttons?: Array<CardAction>
+    buttons?: Array<CardAction>;
     /**
      * This content may be shared with others (default:true)
      * @type {boolean}
      * @memberof AudioCard
      */
-    shareable?: boolean
+    shareable?: boolean;
     /**
      * Should the client loop playback at end of content (default:true)
      * @type {boolean}
      * @memberof AudioCard
      */
-    autoloop?: boolean
+    autoloop?: boolean;
     /**
      * Should the client automatically start playback of media in this card (default:true)
      * @type {boolean}
      * @memberof AudioCard
      */
-    autostart?: boolean
+    autostart?: boolean;
     /**
      * Aspect ratio of thumbnail/media placeholder. Allowed values are \"16:9\" and \"4:3\"
      * @type {string}
      * @memberof AudioCard
      */
-    aspect?: string
+    aspect?: string;
     /**
      * Describes the length of the media content without requiring a receiver to open the content. Formatted as an ISO 8601 Duration field.
      * @type {string}
      * @memberof AudioCard
      */
-    duration?: string
+    duration?: string;
     /**
      * Supplementary parameter for this card
      * @type {any}
      * @memberof AudioCard
      */
-    value?: any
+    value?: any;
 }
 /**
  * A basic card
@@ -666,37 +662,37 @@ export interface BasicCard {
      * @type {string}
      * @memberof BasicCard
      */
-    title?: string
+    title?: string;
     /**
      * Subtitle of the card
      * @type {string}
      * @memberof BasicCard
      */
-    subtitle?: string
+    subtitle?: string;
     /**
      * Text for the card
      * @type {string}
      * @memberof BasicCard
      */
-    text?: string
+    text?: string;
     /**
      * Array of images for the card
      * @type {Array<CardImage>}
      * @memberof BasicCard
      */
-    images?: Array<CardImage>
+    images?: Array<CardImage>;
     /**
      * Set of actions applicable to the current card
      * @type {Array<CardAction>}
      * @memberof BasicCard
      */
-    buttons?: Array<CardAction>
+    buttons?: Array<CardAction>;
     /**
      * This action will be activated when user taps on the card itself
      * @type {CardAction}
      * @memberof BasicCard
      */
-    tap?: CardAction
+    tap?: CardAction;
 }
 /**
  * A clickable action
@@ -709,43 +705,43 @@ export interface CardAction {
      * @type {ActionTypes}
      * @memberof CardAction
      */
-    type?: ActionTypes
+    type?: ActionTypes;
     /**
      * Text description which appears on the button
      * @type {string}
      * @memberof CardAction
      */
-    title?: string
+    title?: string;
     /**
      * Image URL which will appear on the button, next to text label
      * @type {string}
      * @memberof CardAction
      */
-    image?: string
+    image?: string;
     /**
      * Text for this action
      * @type {string}
      * @memberof CardAction
      */
-    text?: string
+    text?: string;
     /**
      * (Optional) text to display in the chat feed if the button is clicked
      * @type {string}
      * @memberof CardAction
      */
-    displayText?: string
+    displayText?: string;
     /**
      * Supplementary parameter for action. Content of this property depends on the ActionType
      * @type {any}
      * @memberof CardAction
      */
-    value?: any
+    value?: any;
     /**
      * Channel-specific data associated with this action
      * @type {any}
      * @memberof CardAction
      */
-    channelData?: any
+    channelData?: any;
 }
 /**
  * An image on a card
@@ -758,19 +754,19 @@ export interface CardImage {
      * @type {string}
      * @memberof CardImage
      */
-    url?: string
+    url?: string;
     /**
      * Image description intended for screen readers
      * @type {string}
      * @memberof CardImage
      */
-    alt?: string
+    alt?: string;
     /**
      * Action assigned to specific Attachment
      * @type {CardAction}
      * @memberof CardImage
      */
-    tap?: CardAction
+    tap?: CardAction;
 }
 /**
  * Channel account information needed to route a message
@@ -783,25 +779,25 @@ export interface ChannelAccount {
      * @type {string}
      * @memberof ChannelAccount
      */
-    id?: string
+    id?: string;
     /**
      * Display friendly name
      * @type {string}
      * @memberof ChannelAccount
      */
-    name?: string
+    name?: string;
     /**
      * This account's object ID within Azure Active Directory (AAD)
      * @type {string}
      * @memberof ChannelAccount
      */
-    aadObjectId?: string
+    aadObjectId?: string;
     /**
      * Role of the entity behind the account (Example: User, Bot, etc.)
      * @type {RoleTypes}
      * @memberof ChannelAccount
      */
-    role?: RoleTypes
+    role?: RoleTypes;
 }
 /**
  * Action types valid for ContactRelationUpdate activities
@@ -810,7 +806,7 @@ export interface ChannelAccount {
  */
 export declare enum ContactRelationUpdateActionTypes {
     Add,
-    Remove,
+    Remove
 }
 /**
  * Conversation account represents the identity of the conversation within a channel
@@ -823,43 +819,43 @@ export interface ConversationAccount {
      * @type {boolean}
      * @memberof ConversationAccount
      */
-    isGroup?: boolean
+    isGroup?: boolean;
     /**
      * Indicates the type of the conversation in channels that distinguish between conversation types
      * @type {string}
      * @memberof ConversationAccount
      */
-    conversationType?: string
+    conversationType?: string;
     /**
      * This conversation's tenant ID
      * @type {string}
      * @memberof ConversationAccount
      */
-    tenantId?: string
+    tenantId?: string;
     /**
      * Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or 123456)
      * @type {string}
      * @memberof ConversationAccount
      */
-    id?: string
+    id?: string;
     /**
      * Display friendly name
      * @type {string}
      * @memberof ConversationAccount
      */
-    name?: string
+    name?: string;
     /**
      * This account's object ID within Azure Active Directory (AAD)
      * @type {string}
      * @memberof ConversationAccount
      */
-    aadObjectId?: string
+    aadObjectId?: string;
     /**
      * Role of the entity behind the account (Example: User, Bot, etc.)
      * @type {RoleTypes}
      * @memberof ConversationAccount
      */
-    role?: RoleTypes
+    role?: RoleTypes;
 }
 /**
  * Conversation and its members
@@ -872,13 +868,13 @@ export interface ConversationMembers {
      * @type {string}
      * @memberof ConversationMembers
      */
-    id?: string
+    id?: string;
     /**
      * List of members in this conversation
      * @type {Array<ChannelAccount>}
      * @memberof ConversationMembers
      */
-    members?: Array<ChannelAccount>
+    members?: Array<ChannelAccount>;
 }
 /**
  * Parameters for creating a new conversation
@@ -891,43 +887,43 @@ export interface ConversationParameters {
      * @type {boolean}
      * @memberof ConversationParameters
      */
-    isGroup?: boolean
+    isGroup?: boolean;
     /**
      * The bot address for this conversation
      * @type {ChannelAccount}
      * @memberof ConversationParameters
      */
-    bot?: ChannelAccount
+    bot?: ChannelAccount;
     /**
      * Members to add to the conversation
      * @type {Array<ChannelAccount>}
      * @memberof ConversationParameters
      */
-    members?: Array<ChannelAccount>
+    members?: Array<ChannelAccount>;
     /**
      * (Optional) Topic of the conversation (if supported by the channel)
      * @type {string}
      * @memberof ConversationParameters
      */
-    topicName?: string
+    topicName?: string;
     /**
      * (Optional) The tenant ID in which the conversation should be created
      * @type {string}
      * @memberof ConversationParameters
      */
-    tenantId?: string
+    tenantId?: string;
     /**
      * (Optional) When creating a new conversation, use this activity as the initial message to the conversation
      * @type {Activity}
      * @memberof ConversationParameters
      */
-    activity?: Activity
+    activity?: Activity;
     /**
      * Channel specific payload for creating the conversation
      * @type {any}
      * @memberof ConversationParameters
      */
-    channelData?: any
+    channelData?: any;
 }
 /**
  * An object relating to a particular point in a conversation
@@ -940,37 +936,37 @@ export interface ConversationReference {
      * @type {string}
      * @memberof ConversationReference
      */
-    activityId?: string
+    activityId?: string;
     /**
      * (Optional) User participating in this conversation
      * @type {ChannelAccount}
      * @memberof ConversationReference
      */
-    user?: ChannelAccount
+    user?: ChannelAccount;
     /**
      * Bot participating in this conversation
      * @type {ChannelAccount}
      * @memberof ConversationReference
      */
-    bot?: ChannelAccount
+    bot?: ChannelAccount;
     /**
      * Conversation reference
      * @type {ConversationAccount}
      * @memberof ConversationReference
      */
-    conversation?: ConversationAccount
+    conversation?: ConversationAccount;
     /**
      * Channel ID
      * @type {string}
      * @memberof ConversationReference
      */
-    channelId?: string
+    channelId?: string;
     /**
      * Service endpoint where operations concerning the referenced conversation may be performed
      * @type {string}
      * @memberof ConversationReference
      */
-    serviceUrl?: string
+    serviceUrl?: string;
 }
 /**
  * A response containing a resource
@@ -983,19 +979,19 @@ export interface ConversationResourceResponse {
      * @type {string}
      * @memberof ConversationResourceResponse
      */
-    activityId?: string
+    activityId?: string;
     /**
      * Service endpoint where operations concerning the conversation may be performed
      * @type {string}
      * @memberof ConversationResourceResponse
      */
-    serviceUrl?: string
+    serviceUrl?: string;
     /**
      * Id of the resource
      * @type {string}
      * @memberof ConversationResourceResponse
      */
-    id?: string
+    id?: string;
 }
 /**
  * Conversations result
@@ -1008,13 +1004,13 @@ export interface ConversationsResult {
      * @type {string}
      * @memberof ConversationsResult
      */
-    continuationToken?: string
+    continuationToken?: string;
     /**
      * List of conversations
      * @type {Array<ConversationMembers>}
      * @memberof ConversationsResult
      */
-    conversations?: Array<ConversationMembers>
+    conversations?: Array<ConversationMembers>;
 }
 /**
  * Values for deliveryMode field
@@ -1023,7 +1019,7 @@ export interface ConversationsResult {
  */
 export declare enum DeliveryModes {
     Normal,
-    Notification,
+    Notification
 }
 /**
  * Codes indicating why a conversation has ended
@@ -1036,7 +1032,7 @@ export declare enum EndOfConversationCodes {
     UserCancelled,
     BotTimedOut,
     BotIssuedInvalidMessage,
-    ChannelFailed,
+    ChannelFailed
 }
 /**
  * Metadata object pertaining to an activity
@@ -1049,7 +1045,7 @@ export interface Entity {
      * @type {string}
      * @memberof Entity
      */
-    type?: string
+    type?: string;
 }
 /**
  * An HTTP API response
@@ -1062,7 +1058,7 @@ export interface ErrorResponse {
      * @type {Error}
      * @memberof ErrorResponse
      */
-    error?: Error
+    error?: Error;
 }
 /**
  * Set of key-value pairs. Advantage of this section is that key and value properties will be   rendered with default style information with some delimiter between them. So there is no need for developer to specify style information.
@@ -1075,13 +1071,13 @@ export interface Fact {
      * @type {string}
      * @memberof Fact
      */
-    key?: string
+    key?: string;
     /**
      * The value for this Fact
      * @type {string}
      * @memberof Fact
      */
-    value?: string
+    value?: string;
 }
 /**
  * GeoCoordinates (entity type: \"https://schema.org/GeoCoordinates\")
@@ -1094,31 +1090,31 @@ export interface GeoCoordinates {
      * @type {number}
      * @memberof GeoCoordinates
      */
-    elevation?: number
+    elevation?: number;
     /**
      * Latitude of the location [WGS 84](https://en.wikipedia.org/wiki/World_Geodetic_System)
      * @type {number}
      * @memberof GeoCoordinates
      */
-    latitude?: number
+    latitude?: number;
     /**
      * Longitude of the location [WGS 84](https://en.wikipedia.org/wiki/World_Geodetic_System)
      * @type {number}
      * @memberof GeoCoordinates
      */
-    longitude?: number
+    longitude?: number;
     /**
      * The type of the thing
      * @type {string}
      * @memberof GeoCoordinates
      */
-    type?: string
+    type?: string;
     /**
      * The name of the thing
      * @type {string}
      * @memberof GeoCoordinates
      */
-    name?: string
+    name?: string;
 }
 /**
  * A Hero card (card with a single, large image)
@@ -1131,37 +1127,37 @@ export interface HeroCard {
      * @type {string}
      * @memberof HeroCard
      */
-    title?: string
+    title?: string;
     /**
      * Subtitle of the card
      * @type {string}
      * @memberof HeroCard
      */
-    subtitle?: string
+    subtitle?: string;
     /**
      * Text for the card
      * @type {string}
      * @memberof HeroCard
      */
-    text?: string
+    text?: string;
     /**
      * Array of images for the card
      * @type {Array<CardImage>}
      * @memberof HeroCard
      */
-    images?: Array<CardImage>
+    images?: Array<CardImage>;
     /**
      * Set of actions applicable to the current card
      * @type {Array<CardAction>}
      * @memberof HeroCard
      */
-    buttons?: Array<CardAction>
+    buttons?: Array<CardAction>;
     /**
      * This action will be activated when user taps on the card itself
      * @type {CardAction}
      * @memberof HeroCard
      */
-    tap?: CardAction
+    tap?: CardAction;
 }
 /**
  * Object representing inner http error
@@ -1174,13 +1170,13 @@ export interface InnerHttpError {
      * @type {number}
      * @memberof InnerHttpError
      */
-    statusCode?: number
+    statusCode?: number;
     /**
      * Body from failed request
      * @type {any}
      * @memberof InnerHttpError
      */
-    body?: any
+    body?: any;
 }
 /**
  * Indicates whether the bot is accepting, expecting, or ignoring input
@@ -1190,7 +1186,7 @@ export interface InnerHttpError {
 export declare enum InputHints {
     AcceptingInput,
     IgnoringInput,
-    ExpectingInput,
+    ExpectingInput
 }
 /**
  * Action types valid for InstallationUpdate activities
@@ -1199,7 +1195,7 @@ export declare enum InputHints {
  */
 export declare enum InstallationUpdateActionTypes {
     Add,
-    Remove,
+    Remove
 }
 /**
  * Media card
@@ -1212,73 +1208,73 @@ export interface MediaCard {
      * @type {string}
      * @memberof MediaCard
      */
-    title?: string
+    title?: string;
     /**
      * Subtitle of this card
      * @type {string}
      * @memberof MediaCard
      */
-    subtitle?: string
+    subtitle?: string;
     /**
      * Text of this card
      * @type {string}
      * @memberof MediaCard
      */
-    text?: string
+    text?: string;
     /**
      * Thumbnail placeholder
      * @type {ThumbnailUrl}
      * @memberof MediaCard
      */
-    image?: ThumbnailUrl
+    image?: ThumbnailUrl;
     /**
      * Media URLs for this card. When this field contains more than one URL, each URL is an alternative format of the same content.
      * @type {Array<MediaUrl>}
      * @memberof MediaCard
      */
-    media?: Array<MediaUrl>
+    media?: Array<MediaUrl>;
     /**
      * Actions on this card
      * @type {Array<CardAction>}
      * @memberof MediaCard
      */
-    buttons?: Array<CardAction>
+    buttons?: Array<CardAction>;
     /**
      * This content may be shared with others (default:true)
      * @type {boolean}
      * @memberof MediaCard
      */
-    shareable?: boolean
+    shareable?: boolean;
     /**
      * Should the client loop playback at end of content (default:true)
      * @type {boolean}
      * @memberof MediaCard
      */
-    autoloop?: boolean
+    autoloop?: boolean;
     /**
      * Should the client automatically start playback of media in this card (default:true)
      * @type {boolean}
      * @memberof MediaCard
      */
-    autostart?: boolean
+    autostart?: boolean;
     /**
      * Aspect ratio of thumbnail/media placeholder. Allowed values are \"16:9\" and \"4:3\"
      * @type {string}
      * @memberof MediaCard
      */
-    aspect?: string
+    aspect?: string;
     /**
      * Describes the length of the media content without requiring a receiver to open the content. Formatted as an ISO 8601 Duration field.
      * @type {string}
      * @memberof MediaCard
      */
-    duration?: string
+    duration?: string;
     /**
      * Supplementary parameter for this card
      * @type {any}
      * @memberof MediaCard
      */
-    value?: any
+    value?: any;
 }
 /**
  * Supplementary parameter for media events
@@ -1291,7 +1287,7 @@ export interface MediaEventValue {
      * @type {any}
      * @memberof MediaEventValue
      */
-    cardValue?: any
+    cardValue?: any;
 }
 /**
  * Media URL
@@ -1304,13 +1300,13 @@ export interface MediaUrl {
      * @type {string}
      * @memberof MediaUrl
      */
-    url?: string
+    url?: string;
     /**
      * Optional profile hint to the client to differentiate multiple MediaUrl objects from each other
      * @type {string}
      * @memberof MediaUrl
      */
-    profile?: string
+    profile?: string;
 }
 /**
  * Mention information (entity type: \"mention\")
@@ -1323,19 +1319,19 @@ export interface Mention {
      * @type {ChannelAccount}
      * @memberof Mention
      */
-    mentioned?: ChannelAccount
+    mentioned?: ChannelAccount;
     /**
      * Sub Text which represents the mention (can be null or empty)
      * @type {string}
      * @memberof Mention
      */
-    text?: string
+    text?: string;
     /**
      * Type of this entity (RFC 3987 IRI)
      * @type {string}
      * @memberof Mention
      */
-    type?: string
+    type?: string;
 }
 /**
  * Message reaction object
@@ -1348,7 +1344,7 @@ export interface MessageReaction {
      * @type {MessageReactionTypes}
      * @memberof MessageReaction
      */
-    type?: MessageReactionTypes
+    type?: MessageReactionTypes;
 }
 /**
  * Message reaction types
@@ -1357,7 +1353,7 @@ export interface MessageReaction {
  */
 export declare enum MessageReactionTypes {
     Like,
-    PlusOne,
+    PlusOne
 }
 /**
  * W3C Payment Method Data for Microsoft Pay
@@ -1370,19 +1366,19 @@ export interface MicrosoftPayMethodData {
      * @type {string}
      * @memberof MicrosoftPayMethodData
      */
-    merchantId?: string
+    merchantId?: string;
     /**
      * Supported payment networks (e.g., \"visa\" and \"mastercard\")
      * @type {Array<string>}
      * @memberof MicrosoftPayMethodData
      */
-    supportedNetworks?: Array<string>
+    supportedNetworks?: Array<string>;
     /**
      * Supported payment types (e.g., \"credit\")
      * @type {Array<string>}
      * @memberof MicrosoftPayMethodData
      */
-    supportedTypes?: Array<string>
+    supportedTypes?: Array<string>;
 }
 /**
  * Object representing error information
@@ -1395,19 +1391,19 @@ export interface ModelError {
      * @type {string}
      * @memberof ModelError
      */
-    code?: string
+    code?: string;
     /**
      * Error message
      * @type {string}
      * @memberof ModelError
      */
-    message?: string
+    message?: string;
     /**
      * Error from inner http call
      * @type {InnerHttpError}
      * @memberof ModelError
      */
-    innerHttpError?: InnerHttpError
+    innerHttpError?: InnerHttpError;
 }
 /**
  * A card representing a request to perform a sign in via OAuth
@@ -1420,19 +1416,19 @@ export interface OAuthCard {
      * @type {string}
      * @memberof OAuthCard
      */
-    text?: string
+    text?: string;
     /**
      * The name of the registered connection
      * @type {string}
      * @memberof OAuthCard
      */
-    connectionName?: string
+    connectionName?: string;
     /**
      * Action to use to perform signin
      * @type {Array<CardAction>}
      * @memberof OAuthCard
      */
-    buttons?: Array<CardAction>
+    buttons?: Array<CardAction>;
 }
 /**
  * Page of members.
@@ -1445,13 +1441,13 @@ export interface PagedMembersResult {
      * @type {string}
      * @memberof PagedMembersResult
      */
-    continuationToken?: string
+    continuationToken?: string;
     /**
      * The Channel Accounts.
      * @type {Array<ChannelAccount>}
      * @memberof PagedMembersResult
      */
-    members?: Array<ChannelAccount>
+    members?: Array<ChannelAccount>;
 }
 /**
  * Address within a Payment Request
@@ -1464,67 +1460,67 @@ export interface PaymentAddress {
      * @type {string}
      * @memberof PaymentAddress
      */
-    country?: string
+    country?: string;
     /**
      * This is the most specific part of the address. It can include, for example, a street name, a house number, apartment number, a rural delivery route, descriptive instructions, or a post office box number.
      * @type {Array<string>}
      * @memberof PaymentAddress
      */
-    addressLine?: Array<string>
+    addressLine?: Array<string>;
     /**
      * This is the top level administrative subdivision of the country. For example, this can be a state, a province, an oblast, or a prefecture.
      * @type {string}
      * @memberof PaymentAddress
      */
-    region?: string
+    region?: string;
     /**
      * This is the city/town portion of the address.
      * @type {string}
      * @memberof PaymentAddress
      */
-    city?: string
+    city?: string;
     /**
      * This is the dependent locality or sublocality within a city. For example, used for neighborhoods, boroughs, districts, or UK dependent localities.
      * @type {string}
      * @memberof PaymentAddress
      */
-    dependentLocality?: string
+    dependentLocality?: string;
     /**
      * This is the postal code or ZIP code, also known as PIN code in India.
      * @type {string}
      * @memberof PaymentAddress
      */
-    postalCode?: string
+    postalCode?: string;
     /**
      * This is the sorting code as used in, for example, France.
      * @type {string}
      * @memberof PaymentAddress
      */
-    sortingCode?: string
+    sortingCode?: string;
     /**
      * This is the BCP-47 language code for the address. It's used to determine the field separators and the order of fields when formatting the address for display.
      * @type {string}
      * @memberof PaymentAddress
      */
-    languageCode?: string
+    languageCode?: string;
     /**
      * This is the organization, firm, company, or institution at this address.
      * @type {string}
      * @memberof PaymentAddress
      */
-    organization?: string
+    organization?: string;
     /**
      * This is the name of the recipient or contact person.
      * @type {string}
      * @memberof PaymentAddress
      */
-    recipient?: string
+    recipient?: string;
     /**
      * This is the phone number of the recipient or contact person.
      * @type {string}
      * @memberof PaymentAddress
      */
-    phone?: string
+    phone?: string;
 }
 /**
  * Supplies monetary amounts
@@ -1537,19 +1533,19 @@ export interface PaymentCurrencyAmount {
      * @type {string}
      * @memberof PaymentCurrencyAmount
      */
-    currency?: string
+    currency?: string;
     /**
      * Decimal monetary value
      * @type {string}
      * @memberof PaymentCurrencyAmount
      */
-    value?: string
+    value?: string;
     /**
      * Currency system
      * @type {string}
      * @memberof PaymentCurrencyAmount
      */
-    currencySystem?: string
+    currencySystem?: string;
 }
 /**
  * Provides information about the requested transaction
@@ -1562,31 +1558,31 @@ export interface PaymentDetails {
      * @type {PaymentItem}
      * @memberof PaymentDetails
      */
-    total?: PaymentItem
+    total?: PaymentItem;
     /**
      * Contains line items for the payment request that the user agent may display
      * @type {Array<PaymentItem>}
      * @memberof PaymentDetails
      */
-    displayItems?: Array<PaymentItem>
+    displayItems?: Array<PaymentItem>;
     /**
      * A sequence containing the different shipping options for the user to choose from
      * @type {Array<PaymentShippingOption>}
      * @memberof PaymentDetails
      */
-    shippingOptions?: Array<PaymentShippingOption>
+    shippingOptions?: Array<PaymentShippingOption>;
     /**
      * Contains modifiers for particular payment method identifiers
      * @type {Array<PaymentDetailsModifier>}
      * @memberof PaymentDetails
      */
-    modifiers?: Array<PaymentDetailsModifier>
+    modifiers?: Array<PaymentDetailsModifier>;
     /**
      * Error description
      * @type {string}
      * @memberof PaymentDetails
      */
-    error?: string
+    error?: string;
 }
 /**
  * Provides details that modify the PaymentDetails based on payment method identifier
@@ -1599,25 +1595,25 @@ export interface PaymentDetailsModifier {
      * @type {Array<string>}
      * @memberof PaymentDetailsModifier
      */
-    supportedMethods?: Array<string>
+    supportedMethods?: Array<string>;
     /**
      * This value overrides the total field in the PaymentDetails dictionary for the payment method identifiers in the supportedMethods field
      * @type {PaymentItem}
      * @memberof PaymentDetailsModifier
      */
-    total?: PaymentItem
+    total?: PaymentItem;
     /**
      * Provides additional display items that are appended to the displayItems field in the PaymentDetails dictionary for the payment method identifiers in the supportedMethods field
      * @type {Array<PaymentItem>}
      * @memberof PaymentDetailsModifier
      */
-    additionalDisplayItems?: Array<PaymentItem>
+    additionalDisplayItems?: Array<PaymentItem>;
     /**
      * A JSON-serializable object that provides optional information that might be needed by the supported payment methods
      * @type {any}
      * @memberof PaymentDetailsModifier
      */
-    data?: any
+    data?: any;
 }
 /**
  * Indicates what the payment request is for and the value asked for
@@ -1630,19 +1626,19 @@ export interface PaymentItem {
      * @type {string}
      * @memberof PaymentItem
      */
-    label?: string
+    label?: string;
     /**
      * Monetary amount for the item
      * @type {PaymentCurrencyAmount}
      * @memberof PaymentItem
      */
-    amount?: PaymentCurrencyAmount
+    amount?: PaymentCurrencyAmount;
     /**
      * When set to true this flag means that the amount field is not final.
      * @type {boolean}
      * @memberof PaymentItem
      */
-    pending?: boolean
+    pending?: boolean;
 }
 /**
  * Indicates a set of supported payment methods and any associated payment method specific data for those methods
@@ -1655,13 +1651,13 @@ export interface PaymentMethodData {
      * @type {Array<string>}
      * @memberof PaymentMethodData
      */
-    supportedMethods?: Array<string>
+    supportedMethods?: Array<string>;
     /**
      * A JSON-serializable object that provides optional information that might be needed by the supported payment methods
      * @type {any}
      * @memberof PaymentMethodData
      */
-    data?: any
+    data?: any;
 }
 /**
  * Provides information about the options desired for the payment request
@@ -1674,31 +1670,31 @@ export interface PaymentOptions {
      * @type {boolean}
      * @memberof PaymentOptions
      */
-    requestPayerName?: boolean
+    requestPayerName?: boolean;
     /**
      * Indicates whether the user agent should collect and return the payer's email address as part of the payment request
      * @type {boolean}
      * @memberof PaymentOptions
      */
-    requestPayerEmail?: boolean
+    requestPayerEmail?: boolean;
     /**
      * Indicates whether the user agent should collect and return the payer's phone number as part of the payment request
      * @type {boolean}
      * @memberof PaymentOptions
      */
-    requestPayerPhone?: boolean
+    requestPayerPhone?: boolean;
     /**
      * Indicates whether the user agent should collect and return a shipping address as part of the payment request
      * @type {boolean}
      * @memberof PaymentOptions
      */
-    requestShipping?: boolean
+    requestShipping?: boolean;
     /**
      * If requestShipping is set to true, then the shippingType field may be used to influence the way the user agent presents the user interface for gathering the shipping address
      * @type {string}
      * @memberof PaymentOptions
      */
-    shippingType?: string
+    shippingType?: string;
 }
 /**
  * A request to make a payment
@@ -1711,31 +1707,31 @@ export interface PaymentRequest {
      * @type {string}
      * @memberof PaymentRequest
      */
-    id?: string
+    id?: string;
     /**
      * Allowed payment methods for this request
      * @type {Array<PaymentMethodData>}
      * @memberof PaymentRequest
      */
-    methodData?: Array<PaymentMethodData>
+    methodData?: Array<PaymentMethodData>;
     /**
      * Details for this request
      * @type {PaymentDetails}
      * @memberof PaymentRequest
      */
-    details?: PaymentDetails
+    details?: PaymentDetails;
     /**
      * Provides information about the options desired for the payment request
      * @type {PaymentOptions}
      * @memberof PaymentRequest
      */
-    options?: PaymentOptions
+    options?: PaymentOptions;
     /**
      * Expiration for this request, in ISO 8601 duration format (e.g., 'P1D')
      * @type {string}
      * @memberof PaymentRequest
      */
-    expires?: string
+    expires?: string;
 }
 /**
  * Payload delivered when completing a payment request
@@ -1748,19 +1744,19 @@ export interface PaymentRequestComplete {
      * @type {string}
      * @memberof PaymentRequestComplete
      */
-    id?: string
+    id?: string;
     /**
      * Initial payment request
      * @type {PaymentRequest}
      * @memberof PaymentRequestComplete
      */
-    paymentRequest?: PaymentRequest
+    paymentRequest?: PaymentRequest;
     /**
      * Corresponding payment response
      * @type {PaymentResponse}
      * @memberof PaymentRequestComplete
      */
-    paymentResponse?: PaymentResponse
+    paymentResponse?: PaymentResponse;
 }
 /**
  * Result from a completed payment request
@@ -1773,7 +1769,7 @@ export interface PaymentRequestCompleteResult {
      * @type {string}
      * @memberof PaymentRequestCompleteResult
      */
-    result?: string
+    result?: string;
 }
 /**
  * An update to a payment request
@@ -1786,25 +1782,25 @@ export interface PaymentRequestUpdate {
      * @type {string}
      * @memberof PaymentRequestUpdate
      */
-    id?: string
+    id?: string;
     /**
      * Update payment details
      * @type {PaymentDetails}
      * @memberof PaymentRequestUpdate
      */
-    details?: PaymentDetails
+    details?: PaymentDetails;
     /**
      * Updated shipping address
      * @type {PaymentAddress}
      * @memberof PaymentRequestUpdate
      */
-    shippingAddress?: PaymentAddress
+    shippingAddress?: PaymentAddress;
     /**
      * Updated shipping options
      * @type {string}
      * @memberof PaymentRequestUpdate
      */
-    shippingOption?: string
+    shippingOption?: string;
 }
 /**
  * A result object from a Payment Request Update invoke operation
@@ -1817,7 +1813,7 @@ export interface PaymentRequestUpdateResult {
      * @type {PaymentDetails}
      * @memberof PaymentRequestUpdateResult
      */
-    details?: PaymentDetails
+    details?: PaymentDetails;
 }
 /**
  * A PaymentResponse is returned when a user has selected a payment method and approved a payment request
@@ -1830,37 +1826,37 @@ export interface PaymentResponse {
      * @type {string}
      * @memberof PaymentResponse
      */
-    methodName?: string
+    methodName?: string;
     /**
      * A JSON-serializable object that provides a payment method specific message used by the merchant to process the transaction and determine successful fund transfer
      * @type {any}
      * @memberof PaymentResponse
      */
-    details?: any
+    details?: any;
     /**
      * If the requestShipping flag was set to true in the PaymentOptions passed to the PaymentRequest constructor, then shippingAddress will be the full and final shipping address chosen by the user
      * @type {PaymentAddress}
      * @memberof PaymentResponse
      */
-    shippingAddress?: PaymentAddress
+    shippingAddress?: PaymentAddress;
     /**
      * If the requestShipping flag was set to true in the PaymentOptions passed to the PaymentRequest constructor, then shippingOption will be the id attribute of the selected shipping option
      * @type {string}
      * @memberof PaymentResponse
      */
-    shippingOption?: string
+    shippingOption?: string;
     /**
      * If the requestPayerEmail flag was set to true in the PaymentOptions passed to the PaymentRequest constructor, then payerEmail will be the email address chosen by the user
      * @type {string}
      * @memberof PaymentResponse
      */
-    payerEmail?: string
+    payerEmail?: string;
     /**
      * If the requestPayerPhone flag was set to true in the PaymentOptions passed to the PaymentRequest constructor, then payerPhone will be the phone number chosen by the user
      * @type {string}
      * @memberof PaymentResponse
      */
-    payerPhone?: string
+    payerPhone?: string;
 }
 /**
  * Describes a shipping option
@@ -1873,25 +1869,25 @@ export interface PaymentShippingOption {
      * @type {string}
      * @memberof PaymentShippingOption
      */
-    id?: string
+    id?: string;
     /**
      * Human-readable description of the item
      * @type {string}
      * @memberof PaymentShippingOption
      */
-    label?: string
+    label?: string;
     /**
      * Contains the monetary amount for the item
      * @type {PaymentCurrencyAmount}
      * @memberof PaymentShippingOption
      */
-    amount?: PaymentCurrencyAmount
+    amount?: PaymentCurrencyAmount;
     /**
      * Indicates whether this is the default selected PaymentShippingOption
      * @type {boolean}
      * @memberof PaymentShippingOption
      */
-    selected?: boolean
+    selected?: boolean;
 }
 /**
  * Place (entity type: \"https://schema.org/Place\")
@@ -1904,31 +1900,31 @@ export interface Place {
      * @type {any}
      * @memberof Place
      */
-    address?: any
+    address?: any;
     /**
      * Geo coordinates of the place (may be complex object of type `GeoCoordinates` or `GeoShape`)
      * @type {any}
      * @memberof Place
      */
-    geo?: any
+    geo?: any;
     /**
      * Map to the place (may be `string` (URL) or complex object of type `Map`)
      * @type {any}
      * @memberof Place
      */
-    hasMap?: any
+    hasMap?: any;
     /**
      * The type of the thing
      * @type {string}
      * @memberof Place
      */
-    type?: string
+    type?: string;
     /**
      * The name of the thing
      * @type {string}
      * @memberof Place
      */
-    name?: string
+    name?: string;
 }
 /**
  * A receipt card
@@ -1941,49 +1937,49 @@ export interface ReceiptCard {
      * @type {string}
      * @memberof ReceiptCard
      */
-    title?: string
+    title?: string;
     /**
      * Array of Fact objects
      * @type {Array<Fact>}
      * @memberof ReceiptCard
      */
-    facts?: Array<Fact>
+    facts?: Array<Fact>;
     /**
      * Array of Receipt Items
      * @type {Array<ReceiptItem>}
      * @memberof ReceiptCard
      */
-    items?: Array<ReceiptItem>
+    items?: Array<ReceiptItem>;
     /**
      * This action will be activated when user taps on the card
      * @type {CardAction}
      * @memberof ReceiptCard
      */
-    tap?: CardAction
+    tap?: CardAction;
     /**
      * Total amount of money paid (or to be paid)
      * @type {string}
      * @memberof ReceiptCard
      */
-    total?: string
+    total?: string;
     /**
      * Total amount of tax paid (or to be paid)
      * @type {string}
      * @memberof ReceiptCard
      */
-    tax?: string
+    tax?: string;
     /**
      * Total amount of VAT paid (or to be paid)
      * @type {string}
      * @memberof ReceiptCard
      */
-    vat?: string
+    vat?: string;
     /**
      * Set of actions applicable to the current card
      * @type {Array<CardAction>}
      * @memberof ReceiptCard
      */
-    buttons?: Array<CardAction>
+    buttons?: Array<CardAction>;
 }
 /**
  * An item on a receipt card
@@ -1996,43 +1992,43 @@ export interface ReceiptItem {
      * @type {string}
      * @memberof ReceiptItem
      */
-    title?: string
+    title?: string;
     /**
      * Subtitle appears just below Title field, differs from Title in font styling only
      * @type {string}
      * @memberof ReceiptItem
      */
-    subtitle?: string
+    subtitle?: string;
     /**
      * Text field appears just below subtitle, differs from Subtitle in font styling only
      * @type {string}
      * @memberof ReceiptItem
      */
-    text?: string
+    text?: string;
     /**
      * Image
      * @type {CardImage}
      * @memberof ReceiptItem
      */
-    image?: CardImage
+    image?: CardImage;
     /**
      * Amount with currency
      * @type {string}
      * @memberof ReceiptItem
      */
-    price?: string
+    price?: string;
     /**
      * Number of items of given kind
      * @type {string}
      * @memberof ReceiptItem
      */
-    quantity?: string
+    quantity?: string;
     /**
      * This action will be activated when user taps on the Item bubble.
      * @type {CardAction}
      * @memberof ReceiptItem
      */
-    tap?: CardAction
+    tap?: CardAction;
 }
 /**
  * A response containing a resource ID
@@ -2045,7 +2041,7 @@ export interface ResourceResponse {
      * @type {string}
      * @memberof ResourceResponse
      */
-    id?: string
+    id?: string;
 }
 /**
  * Role of the entity behind the account (Example: User, Bot, etc.)
@@ -2054,7 +2050,7 @@ export interface ResourceResponse {
  */
 export declare enum RoleTypes {
     User,
-    Bot,
+    Bot
 }
 /**
  * Represents a reference to a programmatic action
@@ -2067,21 +2063,21 @@ export interface SemanticAction {
      * @type {SemanticActionStates}
      * @memberof SemanticAction
      */
-    state?: SemanticActionStates
+    state?: SemanticActionStates;
     /**
      * ID of this action
      * @type {string}
      * @memberof SemanticAction
      */
-    id?: string
+    id?: string;
     /**
      * Entities associated with this action
      * @type {{ [key: string]: Entity; }}
      * @memberof SemanticAction
      */
     entities?: {
-        [key: string]: Entity
-    }
+        [key: string]: Entity;
+    };
 }
 /**
  * Indicates whether the semantic action is starting, continuing, or done
@@ -2091,7 +2087,7 @@ export interface SemanticAction {
 export declare enum SemanticActionStates {
     Start,
     Continue,
-    Done,
+    Done
 }
 /**
  * A card representing a request to sign in
@@ -2104,13 +2100,13 @@ export interface SigninCard {
      * @type {string}
      * @memberof SigninCard
      */
-    text?: string
+    text?: string;
     /**
      * Action to use to perform signin
      * @type {Array<CardAction>}
      * @memberof SigninCard
      */
-    buttons?: Array<CardAction>
+    buttons?: Array<CardAction>;
 }
 /**
  * SuggestedActions that can be performed
@@ -2123,13 +2119,13 @@ export interface SuggestedActions {
      * @type {Array<string>}
      * @memberof SuggestedActions
      */
-    to?: Array<string>
+    to?: Array<string>;
     /**
      * Actions that can be shown to the user
      * @type {Array<CardAction>}
      * @memberof SuggestedActions
      */
-    actions?: Array<CardAction>
+    actions?: Array<CardAction>;
 }
 /**
  * Text format types
@@ -2139,7 +2135,7 @@ export interface SuggestedActions {
 export declare enum TextFormatTypes {
     Markdown,
     Plain,
-    Xml,
+    Xml
 }
 /**
  * Refers to a substring of content within another field
@@ -2152,13 +2148,13 @@ export interface TextHighlight {
      * @type {string}
      * @memberof TextHighlight
      */
-    text?: string
+    text?: string;
     /**
      * Occurrence of the text field within the referenced text, if multiple exist.
      * @type {number}
      * @memberof TextHighlight
      */
-    occurrence?: number
+    occurrence?: number;
 }
 /**
  * Thing (entity type: \"https://schema.org/Thing\")
@@ -2171,13 +2167,13 @@ export interface Thing {
      * @type {string}
      * @memberof Thing
      */
-    type?: string
+    type?: string;
     /**
      * The name of the thing
      * @type {string}
      * @memberof Thing
      */
-    name?: string
+    name?: string;
 }
 /**
  * A thumbnail card (card with a single, small thumbnail image)
@@ -2190,37 +2186,37 @@ export interface ThumbnailCard {
      * @type {string}
      * @memberof ThumbnailCard
      */
-    title?: string
+    title?: string;
     /**
      * Subtitle of the card
      * @type {string}
      * @memberof ThumbnailCard
      */
-    subtitle?: string
+    subtitle?: string;
     /**
      * Text for the card
      * @type {string}
      * @memberof ThumbnailCard
      */
-    text?: string
+    text?: string;
     /**
      * Array of images for the card
      * @type {Array<CardImage>}
      * @memberof ThumbnailCard
      */
-    images?: Array<CardImage>
+    images?: Array<CardImage>;
     /**
      * Set of actions applicable to the current card
      * @type {Array<CardAction>}
      * @memberof ThumbnailCard
      */
-    buttons?: Array<CardAction>
+    buttons?: Array<CardAction>;
     /**
      * This action will be activated when user taps on the card itself
      * @type {CardAction}
      * @memberof ThumbnailCard
      */
-    tap?: CardAction
+    tap?: CardAction;
 }
 /**
  * Thumbnail URL
@@ -2233,13 +2229,13 @@ export interface ThumbnailUrl {
      * @type {string}
      * @memberof ThumbnailUrl
      */
-    url?: string
+    url?: string;
     /**
      * HTML alt text to include on this thumbnail image
      * @type {string}
      * @memberof ThumbnailUrl
      */
-    alt?: string
+    alt?: string;
 }
 /**
  * A request to receive a user token
@@ -2252,15 +2248,15 @@ export interface TokenRequest {
      * @type {string}
      * @memberof TokenRequest
      */
-    provider?: string
+    provider?: string;
     /**
      * A collection of settings for the specific provider for this request
      * @type {{ [key: string]: any; }}
      * @memberof TokenRequest
      */
     settings?: {
-        [key: string]: any
-    }
+        [key: string]: any;
+    };
 }
 /**
  * A response that includes a user token
@@ -2273,25 +2269,25 @@ export interface TokenResponse {
      * @type {string}
      * @memberof TokenResponse
      */
-    channelId?: string
+    channelId?: string;
     /**
      * The connection name
      * @type {string}
      * @memberof TokenResponse
      */
-    connectionName?: string
+    connectionName?: string;
     /**
      * The user token
      * @type {string}
      * @memberof TokenResponse
      */
-    token?: string
+    token?: string;
     /**
      * Expiration for the token, in ISO 8601 format (e.g. \"2007-04-05T14:30Z\")
      * @type {string}
      * @memberof TokenResponse
      */
-    expiration?: string
+    expiration?: string;
 }
 /**
  * Transcript
@@ -2304,7 +2300,7 @@ export interface Transcript {
      * @type {Array<Activity>}
      * @memberof Transcript
      */
-    activities?: Array<Activity>
+    activities?: Array<Activity>;
 }
 /**
  * Video card
@@ -2317,81 +2313,79 @@ export interface VideoCard {
      * @type {string}
      * @memberof VideoCard
      */
-    title?: string
+    title?: string;
     /**
      * Subtitle of this card
      * @type {string}
      * @memberof VideoCard
      */
-    subtitle?: string
+    subtitle?: string;
     /**
      * Text of this card
      * @type {string}
      * @memberof VideoCard
      */
-    text?: string
+    text?: string;
     /**
      * Thumbnail placeholder
      * @type {ThumbnailUrl}
      * @memberof VideoCard
      */
-    image?: ThumbnailUrl
+    image?: ThumbnailUrl;
     /**
      * Media URLs for this card. When this field contains more than one URL, each URL is an alternative format of the same content.
      * @type {Array<MediaUrl>}
      * @memberof VideoCard
      */
-    media?: Array<MediaUrl>
+    media?: Array<MediaUrl>;
     /**
      * Actions on this card
      * @type {Array<CardAction>}
      * @memberof VideoCard
      */
-    buttons?: Array<CardAction>
+    buttons?: Array<CardAction>;
     /**
      * This content may be shared with others (default:true)
      * @type {boolean}
      * @memberof VideoCard
      */
-    shareable?: boolean
+    shareable?: boolean;
     /**
      * Should the client loop playback at end of content (default:true)
      * @type {boolean}
      * @memberof VideoCard
      */
-    autoloop?: boolean
+    autoloop?: boolean;
     /**
      * Should the client automatically start playback of media in this card (default:true)
      * @type {boolean}
      * @memberof VideoCard
      */
-    autostart?: boolean
+    autostart?: boolean;
     /**
      * Aspect ratio of thumbnail/media placeholder. Allowed values are \"16:9\" and \"4:3\"
      * @type {string}
      * @memberof VideoCard
      */
-    aspect?: string
+    aspect?: string;
     /**
      * Describes the length of the media content without requiring a receiver to open the content. Formatted as an ISO 8601 Duration field.
      * @type {string}
      * @memberof VideoCard
      */
-    duration?: string
+    duration?: string;
     /**
      * Supplementary parameter for this card
      * @type {any}
      * @memberof VideoCard
      */
-    value?: any
+    value?: any;
 }
 /**
  * AttachmentsApi - fetch parameter creator
  * @export
  */
-export declare const AttachmentsApiFetchParamCreator: (
-    configuration?: Configuration
-) => {
+export declare const AttachmentsApiFetchParamCreator: (configuration?: Configuration) => {
     /**
      * Get the named view as binary content
      * @summary GetAttachment
@@ -2400,11 +2394,7 @@ export declare const AttachmentsApiFetchParamCreator: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    attachmentsGetAttachment(
-        attachmentId: string,
-        viewId: string,
-        options?: any
-    ): FetchArgs
+    attachmentsGetAttachment(attachmentId: string, viewId: string, options?: any): FetchArgs;
     /**
      * Get AttachmentInfo structure describing the attachment views
      * @summary GetAttachmentInfo
@@ -2412,15 +2402,13 @@ export declare const AttachmentsApiFetchParamCreator: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    attachmentsGetAttachmentInfo(attachmentId: string, options?: any): FetchArgs
-}
+    attachmentsGetAttachmentInfo(attachmentId: string, options?: any): FetchArgs;
+};
 /**
  * AttachmentsApi - functional programming interface
  * @export
  */
-export declare const AttachmentsApiFp: (
-    configuration?: Configuration
-) => {
+export declare const AttachmentsApiFp: (configuration?: Configuration) => {
     /**
      * Get the named view as binary content
      * @summary GetAttachment
@@ -2429,11 +2417,7 @@ export declare const AttachmentsApiFp: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    attachmentsGetAttachment(
-        attachmentId: string,
-        viewId: string,
-        options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<any>
+    attachmentsGetAttachment(attachmentId: string, viewId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<any>;
     /**
      * Get AttachmentInfo structure describing the attachment views
      * @summary GetAttachmentInfo
@@ -2441,20 +2425,13 @@ export declare const AttachmentsApiFp: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    attachmentsGetAttachmentInfo(
-        attachmentId: string,
-        options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<AttachmentInfo>
-}
+    attachmentsGetAttachmentInfo(attachmentId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<AttachmentInfo>;
+};
 /**
  * AttachmentsApi - factory interface
  * @export
  */
-export declare const AttachmentsApiFactory: (
-    configuration?: Configuration,
-    fetch?: FetchAPI,
-    basePath?: string
-) => {
+export declare const AttachmentsApiFactory: (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) => {
     /**
      * Get the named view as binary content
      * @summary GetAttachment
@@ -2463,11 +2440,7 @@ export declare const AttachmentsApiFactory: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    attachmentsGetAttachment(
-        attachmentId: string,
-        viewId: string,
-        options?: any
-    ): Promise<any>
+    attachmentsGetAttachment(attachmentId: string, viewId: string, options?: any): Promise<any>;
     /**
      * Get AttachmentInfo structure describing the attachment views
      * @summary GetAttachmentInfo
@@ -2475,11 +2448,8 @@ export declare const AttachmentsApiFactory: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    attachmentsGetAttachmentInfo(
-        attachmentId: string,
-        options?: any
-    ): Promise<AttachmentInfo>
-}
+    attachmentsGetAttachmentInfo(attachmentId: string, options?: any): Promise<AttachmentInfo>;
+};
 /**
  * AttachmentsApi - interface
  * @export
@@ -2495,11 +2465,7 @@ export interface AttachmentsApiInterface {
      * @throws {RequiredError}
      * @memberof AttachmentsApiInterface
      */
-    attachmentsGetAttachment(
-        attachmentId: string,
-        viewId: string,
-        options?: any
-    ): Promise<any>
+    attachmentsGetAttachment(attachmentId: string, viewId: string, options?: any): Promise<any>;
     /**
      * Get AttachmentInfo structure describing the attachment views
      * @summary GetAttachmentInfo
@@ -2508,10 +2474,7 @@ export interface AttachmentsApiInterface {
      * @throws {RequiredError}
      * @memberof AttachmentsApiInterface
      */
-    attachmentsGetAttachmentInfo(
-        attachmentId: string,
-        options?: any
-    ): Promise<AttachmentInfo>
+    attachmentsGetAttachmentInfo(attachmentId: string, options?: any): Promise<AttachmentInfo>;
 }
 /**
  * AttachmentsApi - object-oriented interface
@@ -2519,8 +2482,7 @@ export interface AttachmentsApiInterface {
  * @class AttachmentsApi
  * @extends {BaseAPI}
  */
-export declare class AttachmentsApi extends BaseAPI
-    implements AttachmentsApiInterface {
+export declare class AttachmentsApi extends BaseAPI implements AttachmentsApiInterface {
     /**
      * Get the named view as binary content
      * @summary GetAttachment
@@ -2530,11 +2492,7 @@ export declare class AttachmentsApi extends BaseAPI
      * @throws {RequiredError}
      * @memberof AttachmentsApi
      */
-    attachmentsGetAttachment(
-        attachmentId: string,
-        viewId: string,
-        options?: any
-    ): Promise<any>
+    attachmentsGetAttachment(attachmentId: string, viewId: string, options?: any): Promise<any>;
     /**
      * Get AttachmentInfo structure describing the attachment views
      * @summary GetAttachmentInfo
@@ -2543,18 +2501,13 @@ export declare class AttachmentsApi extends BaseAPI
      * @throws {RequiredError}
      * @memberof AttachmentsApi
      */
-    attachmentsGetAttachmentInfo(
-        attachmentId: string,
-        options?: any
-    ): Promise<AttachmentInfo>
+    attachmentsGetAttachmentInfo(attachmentId: string, options?: any): Promise<AttachmentInfo>;
 }
 /**
  * ConversationsApi - fetch parameter creator
  * @export
  */
-export declare const ConversationsApiFetchParamCreator: (
-    configuration?: Configuration
-) => {
+export declare const ConversationsApiFetchParamCreator: (configuration?: Configuration) => {
     /**
      * Create a new Conversation.    POST to this method with a  * Bot being the bot creating the conversation  * IsGroup set to true if this is not a direct message (default is false)  * Array containing the members to include in the conversation    The return value is a ResourceResponse which contains a conversation id which is suitable for use  in the message payload and REST API uris.    Most channels only support the semantics of bots initiating a direct message conversation.  An example of how to do that would be:    ```  var resource = await connector.conversations.CreateConversation(new ConversationParameters(){ Bot = bot, members = new ChannelAccount[] { new ChannelAccount(\"user1\") } );  await connect.Conversations.SendToConversationAsync(resource.Id, new Activity() ... ) ;    ```
      * @summary CreateConversation
@@ -2562,10 +2515,7 @@ export declare const ConversationsApiFetchParamCreator: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsCreateConversation(
-        parameters: ConversationParameters,
-        options?: any
-    ): FetchArgs
+    conversationsCreateConversation(parameters: ConversationParameters, options?: any): FetchArgs;
     /**
      * Delete an existing activity.    Some channels allow you to delete an existing activity, and if successful this method will remove the specified activity.
      * @summary DeleteActivity
@@ -2574,11 +2524,7 @@ export declare const ConversationsApiFetchParamCreator: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsDeleteActivity(
-        conversationId: string,
-        activityId: string,
-        options?: any
-    ): FetchArgs
+    conversationsDeleteActivity(conversationId: string, activityId: string, options?: any): FetchArgs;
     /**
      * Deletes a member from a conversation.     This REST API takes a ConversationId and a memberId (of type string) and removes that member from the conversation. If that member was the last member  of the conversation, the conversation will also be deleted.
      * @summary DeleteConversationMember
@@ -2587,11 +2533,7 @@ export declare const ConversationsApiFetchParamCreator: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsDeleteConversationMember(
-        conversationId: string,
-        memberId: string,
-        options?: any
-    ): FetchArgs
+    conversationsDeleteConversationMember(conversationId: string, memberId: string, options?: any): FetchArgs;
     /**
      * Enumerate the members of an activity.     This REST API takes a ConversationId and a ActivityId, returning an array of ChannelAccount objects representing the members of the particular activity in the conversation.
      * @summary GetActivityMembers
@@ -2600,11 +2542,7 @@ export declare const ConversationsApiFetchParamCreator: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsGetActivityMembers(
-        conversationId: string,
-        activityId: string,
-        options?: any
-    ): FetchArgs
+    conversationsGetActivityMembers(conversationId: string, activityId: string, options?: any): FetchArgs;
     /**
      * Enumerate the members of a conversation.     This REST API takes a ConversationId and returns an array of ChannelAccount objects representing the members of the conversation.
      * @summary GetConversationMembers
@@ -2612,10 +2550,7 @@ export declare const ConversationsApiFetchParamCreator: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsGetConversationMembers(
-        conversationId: string,
-        options?: any
-    ): FetchArgs
+    conversationsGetConversationMembers(conversationId: string, options?: any): FetchArgs;
     /**
      * Enumerate the members of a conversation one page at a time.    This REST API takes a ConversationId. Optionally a pageSize and/or continuationToken can be provided. It returns a PagedMembersResult, which contains an array  of ChannelAccounts representing the members of the conversation and a continuation token that can be used to get more values.    One page of ChannelAccounts records are returned with each call. The number of records in a page may vary between channels and calls. The pageSize parameter can be used as   a suggestion. If there are no additional results the response will not contain a continuation token. If there are no members in the conversation the Members will be empty or not present in the response.    A response to a request that has a continuation token from a prior request may rarely return members from a previous request.
      * @summary GetConversationPagedMembers
@@ -2625,12 +2560,7 @@ export declare const ConversationsApiFetchParamCreator: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsGetConversationPagedMembers(
-        conversationId: string,
-        pageSize?: number,
-        continuationToken?: string,
-        options?: any
-    ): FetchArgs
+    conversationsGetConversationPagedMembers(conversationId: string, pageSize?: number, continuationToken?: string, options?: any): FetchArgs;
     /**
      * List the Conversations in which this bot has participated.    GET from this method with a skip token    The return value is a ConversationsResult, which contains an array of ConversationMembers and a skip token.  If the skip token is not empty, then   there are further values to be returned. Call this method again with the returned token to get more values.    Each ConversationMembers object contains the ID of the conversation and an array of ChannelAccounts that describe the members of the conversation.
      * @summary GetConversations
@@ -2638,10 +2568,7 @@ export declare const ConversationsApiFetchParamCreator: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsGetConversations(
-        continuationToken?: string,
-        options?: any
-    ): FetchArgs
+    conversationsGetConversations(continuationToken?: string, options?: any): FetchArgs;
     /**
      * This method allows you to reply to an activity.    This is slightly different from SendToConversation().  * SendToConversation(conversationId) - will append the activity to the end of the conversation according to the timestamp or semantics of the channel.  * ReplyToActivity(conversationId,ActivityId) - adds the activity as a reply to another activity, if the channel supports it. If the channel does not support nested replies, ReplyToActivity falls back to SendToConversation.    Use ReplyToActivity when replying to a specific activity in the conversation.    Use SendToConversation in all other cases.
      * @summary ReplyToActivity
@@ -2651,12 +2578,7 @@ export declare const ConversationsApiFetchParamCreator: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsReplyToActivity(
-        conversationId: string,
-        activityId: string,
-        activity: Activity,
-        options?: any
-    ): FetchArgs
+    conversationsReplyToActivity(conversationId: string, activityId: string, activity: Activity, options?: any): FetchArgs;
     /**
      * This method allows you to upload the historic activities to the conversation.    Sender must ensure that the historic activities have unique ids and appropriate timestamps. The ids are used by the client to deal with duplicate activities and the timestamps are used by the client to render the activities in the right order.
      * @summary SendConversationHistory
@@ -2665,11 +2587,7 @@ export declare const ConversationsApiFetchParamCreator: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsSendConversationHistory(
-        conversationId: string,
-        history: Transcript,
-        options?: any
-    ): FetchArgs
+    conversationsSendConversationHistory(conversationId: string, history: Transcript, options?: any): FetchArgs;
     /**
      * This method allows you to send an activity to the end of a conversation.    This is slightly different from ReplyToActivity().  * SendToConversation(conversationId) - will append the activity to the end of the conversation according to the timestamp or semantics of the channel.  * ReplyToActivity(conversationId,ActivityId) - adds the activity as a reply to another activity, if the channel supports it. If the channel does not support nested replies, ReplyToActivity falls back to SendToConversation.    Use ReplyToActivity when replying to a specific activity in the conversation.    Use SendToConversation in all other cases.
      * @summary SendToConversation
@@ -2678,11 +2596,7 @@ export declare const ConversationsApiFetchParamCreator: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsSendToConversation(
-        conversationId: string,
-        activity: Activity,
-        options?: any
-    ): FetchArgs
+    conversationsSendToConversation(conversationId: string, activity: Activity, options?: any): FetchArgs;
     /**
      * Edit an existing activity.    Some channels allow you to edit an existing activity to reflect the new state of a bot conversation.    For example, you can remove buttons after someone has clicked \"Approve\" button.
      * @summary UpdateActivity
@@ -2692,12 +2606,7 @@ export declare const ConversationsApiFetchParamCreator: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsUpdateActivity(
-        conversationId: string,
-        activityId: string,
-        activity: Activity,
-        options?: any
-    ): FetchArgs
+    conversationsUpdateActivity(conversationId: string, activityId: string, activity: Activity, options?: any): FetchArgs;
     /**
      * Upload an attachment directly into a channel's blob storage.    This is useful because it allows you to store data in a compliant store when dealing with enterprises.    The response is a ResourceResponse which contains an AttachmentId which is suitable for using with the attachments API.
      * @summary UploadAttachment
@@ -2706,19 +2615,13 @@ export declare const ConversationsApiFetchParamCreator: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsUploadAttachment(
-        conversationId: string,
-        attachmentUpload: AttachmentData,
-        options?: any
-    ): FetchArgs
-}
+    conversationsUploadAttachment(conversationId: string, attachmentUpload: AttachmentData, options?: any): FetchArgs;
+};
 /**
  * ConversationsApi - functional programming interface
  * @export
  */
-export declare const ConversationsApiFp: (
-    configuration?: Configuration
-) => {
+export declare const ConversationsApiFp: (configuration?: Configuration) => {
     /**
      * Create a new Conversation.    POST to this method with a  * Bot being the bot creating the conversation  * IsGroup set to true if this is not a direct message (default is false)  * Array containing the members to include in the conversation    The return value is a ResourceResponse which contains a conversation id which is suitable for use  in the message payload and REST API uris.    Most channels only support the semantics of bots initiating a direct message conversation.  An example of how to do that would be:    ```  var resource = await connector.conversations.CreateConversation(new ConversationParameters(){ Bot = bot, members = new ChannelAccount[] { new ChannelAccount(\"user1\") } );  await connect.Conversations.SendToConversationAsync(resource.Id, new Activity() ... ) ;    ```
      * @summary CreateConversation
@@ -2726,13 +2629,7 @@ export declare const ConversationsApiFp: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsCreateConversation(
-        parameters: ConversationParameters,
-        options?: any
-    ): (
-        fetch?: FetchAPI,
-        basePath?: string
-    ) => Promise<ConversationResourceResponse>
+    conversationsCreateConversation(parameters: ConversationParameters, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ConversationResourceResponse>;
     /**
      * Delete an existing activity.    Some channels allow you to delete an existing activity, and if successful this method will remove the specified activity.
      * @summary DeleteActivity
@@ -2741,11 +2638,7 @@ export declare const ConversationsApiFp: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsDeleteActivity(
-        conversationId: string,
-        activityId: string,
-        options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<Response>
+    conversationsDeleteActivity(conversationId: string, activityId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response>;
     /**
      * Deletes a member from a conversation.     This REST API takes a ConversationId and a memberId (of type string) and removes that member from the conversation. If that member was the last member  of the conversation, the conversation will also be deleted.
      * @summary DeleteConversationMember
@@ -2754,11 +2647,7 @@ export declare const ConversationsApiFp: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsDeleteConversationMember(
-        conversationId: string,
-        memberId: string,
-        options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<Response>
+    conversationsDeleteConversationMember(conversationId: string, memberId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response>;
     /**
      * Enumerate the members of an activity.     This REST API takes a ConversationId and a ActivityId, returning an array of ChannelAccount objects representing the members of the particular activity in the conversation.
      * @summary GetActivityMembers
@@ -2767,11 +2656,7 @@ export declare const ConversationsApiFp: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsGetActivityMembers(
-        conversationId: string,
-        activityId: string,
-        options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<ChannelAccount[]>
+    conversationsGetActivityMembers(conversationId: string, activityId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<ChannelAccount>>;
     /**
      * Enumerate the members of a conversation.     This REST API takes a ConversationId and returns an array of ChannelAccount objects representing the members of the conversation.
      * @summary GetConversationMembers
@@ -2779,10 +2664,7 @@ export declare const ConversationsApiFp: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsGetConversationMembers(
-        conversationId: string,
-        options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<ChannelAccount[]>
+    conversationsGetConversationMembers(conversationId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<ChannelAccount>>;
     /**
      * Enumerate the members of a conversation one page at a time.    This REST API takes a ConversationId. Optionally a pageSize and/or continuationToken can be provided. It returns a PagedMembersResult, which contains an array  of ChannelAccounts representing the members of the conversation and a continuation token that can be used to get more values.    One page of ChannelAccounts records are returned with each call. The number of records in a page may vary between channels and calls. The pageSize parameter can be used as   a suggestion. If there are no additional results the response will not contain a continuation token. If there are no members in the conversation the Members will be empty or not present in the response.    A response to a request that has a continuation token from a prior request may rarely return members from a previous request.
      * @summary GetConversationPagedMembers
@@ -2792,12 +2674,7 @@ export declare const ConversationsApiFp: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsGetConversationPagedMembers(
-        conversationId: string,
-        pageSize?: number,
-        continuationToken?: string,
-        options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<PagedMembersResult>
+    conversationsGetConversationPagedMembers(conversationId: string, pageSize?: number, continuationToken?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<PagedMembersResult>;
     /**
      * List the Conversations in which this bot has participated.    GET from this method with a skip token    The return value is a ConversationsResult, which contains an array of ConversationMembers and a skip token.  If the skip token is not empty, then   there are further values to be returned. Call this method again with the returned token to get more values.    Each ConversationMembers object contains the ID of the conversation and an array of ChannelAccounts that describe the members of the conversation.
      * @summary GetConversations
@@ -2805,10 +2682,7 @@ export declare const ConversationsApiFp: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsGetConversations(
-        continuationToken?: string,
-        options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<ConversationsResult>
+    conversationsGetConversations(continuationToken?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ConversationsResult>;
     /**
      * This method allows you to reply to an activity.    This is slightly different from SendToConversation().  * SendToConversation(conversationId) - will append the activity to the end of the conversation according to the timestamp or semantics of the channel.  * ReplyToActivity(conversationId,ActivityId) - adds the activity as a reply to another activity, if the channel supports it. If the channel does not support nested replies, ReplyToActivity falls back to SendToConversation.    Use ReplyToActivity when replying to a specific activity in the conversation.    Use SendToConversation in all other cases.
      * @summary ReplyToActivity
@@ -2818,12 +2692,7 @@ export declare const ConversationsApiFp: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsReplyToActivity(
-        conversationId: string,
-        activityId: string,
-        activity: Activity,
-        options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<ResourceResponse>
+    conversationsReplyToActivity(conversationId: string, activityId: string, activity: Activity, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ResourceResponse>;
     /**
      * This method allows you to upload the historic activities to the conversation.    Sender must ensure that the historic activities have unique ids and appropriate timestamps. The ids are used by the client to deal with duplicate activities and the timestamps are used by the client to render the activities in the right order.
      * @summary SendConversationHistory
@@ -2832,11 +2701,7 @@ export declare const ConversationsApiFp: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsSendConversationHistory(
-        conversationId: string,
-        history: Transcript,
-        options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<ResourceResponse>
+    conversationsSendConversationHistory(conversationId: string, history: Transcript, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ResourceResponse>;
     /**
      * This method allows you to send an activity to the end of a conversation.    This is slightly different from ReplyToActivity().  * SendToConversation(conversationId) - will append the activity to the end of the conversation according to the timestamp or semantics of the channel.  * ReplyToActivity(conversationId,ActivityId) - adds the activity as a reply to another activity, if the channel supports it. If the channel does not support nested replies, ReplyToActivity falls back to SendToConversation.    Use ReplyToActivity when replying to a specific activity in the conversation.    Use SendToConversation in all other cases.
      * @summary SendToConversation
@@ -2845,11 +2710,7 @@ export declare const ConversationsApiFp: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsSendToConversation(
-        conversationId: string,
-        activity: Activity,
-        options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<ResourceResponse>
+    conversationsSendToConversation(conversationId: string, activity: Activity, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ResourceResponse>;
     /**
      * Edit an existing activity.    Some channels allow you to edit an existing activity to reflect the new state of a bot conversation.    For example, you can remove buttons after someone has clicked \"Approve\" button.
      * @summary UpdateActivity
@@ -2859,12 +2720,7 @@ export declare const ConversationsApiFp: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsUpdateActivity(
-        conversationId: string,
-        activityId: string,
-        activity: Activity,
-        options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<ResourceResponse>
+    conversationsUpdateActivity(conversationId: string, activityId: string, activity: Activity, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ResourceResponse>;
     /**
      * Upload an attachment directly into a channel's blob storage.    This is useful because it allows you to store data in a compliant store when dealing with enterprises.    The response is a ResourceResponse which contains an AttachmentId which is suitable for using with the attachments API.
      * @summary UploadAttachment
@@ -2873,21 +2729,13 @@ export declare const ConversationsApiFp: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsUploadAttachment(
-        conversationId: string,
-        attachmentUpload: AttachmentData,
-        options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<ResourceResponse>
-}
+    conversationsUploadAttachment(conversationId: string, attachmentUpload: AttachmentData, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ResourceResponse>;
+};
 /**
  * ConversationsApi - factory interface
  * @export
  */
-export declare const ConversationsApiFactory: (
-    configuration?: Configuration,
-    fetch?: FetchAPI,
-    basePath?: string
-) => {
+export declare const ConversationsApiFactory: (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) => {
     /**
      * Create a new Conversation.    POST to this method with a  * Bot being the bot creating the conversation  * IsGroup set to true if this is not a direct message (default is false)  * Array containing the members to include in the conversation    The return value is a ResourceResponse which contains a conversation id which is suitable for use  in the message payload and REST API uris.    Most channels only support the semantics of bots initiating a direct message conversation.  An example of how to do that would be:    ```  var resource = await connector.conversations.CreateConversation(new ConversationParameters(){ Bot = bot, members = new ChannelAccount[] { new ChannelAccount(\"user1\") } );  await connect.Conversations.SendToConversationAsync(resource.Id, new Activity() ... ) ;    ```
      * @summary CreateConversation
@@ -2895,10 +2743,7 @@ export declare const ConversationsApiFactory: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsCreateConversation(
-        parameters: ConversationParameters,
-        options?: any
-    ): Promise<ConversationResourceResponse>
+    conversationsCreateConversation(parameters: ConversationParameters, options?: any): Promise<ConversationResourceResponse>;
     /**
      * Delete an existing activity.    Some channels allow you to delete an existing activity, and if successful this method will remove the specified activity.
      * @summary DeleteActivity
@@ -2907,11 +2752,7 @@ export declare const ConversationsApiFactory: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsDeleteActivity(
-        conversationId: string,
-        activityId: string,
-        options?: any
-    ): Promise<Response>
+    conversationsDeleteActivity(conversationId: string, activityId: string, options?: any): Promise<Response>;
     /**
      * Deletes a member from a conversation.     This REST API takes a ConversationId and a memberId (of type string) and removes that member from the conversation. If that member was the last member  of the conversation, the conversation will also be deleted.
      * @summary DeleteConversationMember
@@ -2920,11 +2761,7 @@ export declare const ConversationsApiFactory: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsDeleteConversationMember(
-        conversationId: string,
-        memberId: string,
-        options?: any
-    ): Promise<Response>
+    conversationsDeleteConversationMember(conversationId: string, memberId: string, options?: any): Promise<Response>;
     /**
      * Enumerate the members of an activity.     This REST API takes a ConversationId and a ActivityId, returning an array of ChannelAccount objects representing the members of the particular activity in the conversation.
      * @summary GetActivityMembers
@@ -2933,11 +2770,7 @@ export declare const ConversationsApiFactory: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsGetActivityMembers(
-        conversationId: string,
-        activityId: string,
-        options?: any
-    ): Promise<ChannelAccount[]>
+    conversationsGetActivityMembers(conversationId: string, activityId: string, options?: any): Promise<ChannelAccount[]>;
     /**
      * Enumerate the members of a conversation.     This REST API takes a ConversationId and returns an array of ChannelAccount objects representing the members of the conversation.
      * @summary GetConversationMembers
@@ -2945,10 +2778,7 @@ export declare const ConversationsApiFactory: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsGetConversationMembers(
-        conversationId: string,
-        options?: any
-    ): Promise<ChannelAccount[]>
+    conversationsGetConversationMembers(conversationId: string, options?: any): Promise<ChannelAccount[]>;
     /**
      * Enumerate the members of a conversation one page at a time.    This REST API takes a ConversationId. Optionally a pageSize and/or continuationToken can be provided. It returns a PagedMembersResult, which contains an array  of ChannelAccounts representing the members of the conversation and a continuation token that can be used to get more values.    One page of ChannelAccounts records are returned with each call. The number of records in a page may vary between channels and calls. The pageSize parameter can be used as   a suggestion. If there are no additional results the response will not contain a continuation token. If there are no members in the conversation the Members will be empty or not present in the response.    A response to a request that has a continuation token from a prior request may rarely return members from a previous request.
      * @summary GetConversationPagedMembers
@@ -2958,12 +2788,7 @@ export declare const ConversationsApiFactory: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsGetConversationPagedMembers(
-        conversationId: string,
-        pageSize?: number,
-        continuationToken?: string,
-        options?: any
-    ): Promise<PagedMembersResult>
+    conversationsGetConversationPagedMembers(conversationId: string, pageSize?: number, continuationToken?: string, options?: any): Promise<PagedMembersResult>;
     /**
      * List the Conversations in which this bot has participated.    GET from this method with a skip token    The return value is a ConversationsResult, which contains an array of ConversationMembers and a skip token.  If the skip token is not empty, then   there are further values to be returned. Call this method again with the returned token to get more values.    Each ConversationMembers object contains the ID of the conversation and an array of ChannelAccounts that describe the members of the conversation.
      * @summary GetConversations
@@ -2971,10 +2796,7 @@ export declare const ConversationsApiFactory: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsGetConversations(
-        continuationToken?: string,
-        options?: any
-    ): Promise<ConversationsResult>
+    conversationsGetConversations(continuationToken?: string, options?: any): Promise<ConversationsResult>;
     /**
      * This method allows you to reply to an activity.    This is slightly different from SendToConversation().  * SendToConversation(conversationId) - will append the activity to the end of the conversation according to the timestamp or semantics of the channel.  * ReplyToActivity(conversationId,ActivityId) - adds the activity as a reply to another activity, if the channel supports it. If the channel does not support nested replies, ReplyToActivity falls back to SendToConversation.    Use ReplyToActivity when replying to a specific activity in the conversation.    Use SendToConversation in all other cases.
      * @summary ReplyToActivity
@@ -2984,12 +2806,7 @@ export declare const ConversationsApiFactory: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsReplyToActivity(
-        conversationId: string,
-        activityId: string,
-        activity: Activity,
-        options?: any
-    ): Promise<ResourceResponse>
+    conversationsReplyToActivity(conversationId: string, activityId: string, activity: Activity, options?: any): Promise<ResourceResponse>;
     /**
      * This method allows you to upload the historic activities to the conversation.    Sender must ensure that the historic activities have unique ids and appropriate timestamps. The ids are used by the client to deal with duplicate activities and the timestamps are used by the client to render the activities in the right order.
      * @summary SendConversationHistory
@@ -2998,11 +2815,7 @@ export declare const ConversationsApiFactory: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsSendConversationHistory(
-        conversationId: string,
-        history: Transcript,
-        options?: any
-    ): Promise<ResourceResponse>
+    conversationsSendConversationHistory(conversationId: string, history: Transcript, options?: any): Promise<ResourceResponse>;
     /**
      * This method allows you to send an activity to the end of a conversation.    This is slightly different from ReplyToActivity().  * SendToConversation(conversationId) - will append the activity to the end of the conversation according to the timestamp or semantics of the channel.  * ReplyToActivity(conversationId,ActivityId) - adds the activity as a reply to another activity, if the channel supports it. If the channel does not support nested replies, ReplyToActivity falls back to SendToConversation.    Use ReplyToActivity when replying to a specific activity in the conversation.    Use SendToConversation in all other cases.
      * @summary SendToConversation
@@ -3011,11 +2824,7 @@ export declare const ConversationsApiFactory: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsSendToConversation(
-        conversationId: string,
-        activity: Activity,
-        options?: any
-    ): Promise<ResourceResponse>
+    conversationsSendToConversation(conversationId: string, activity: Activity, options?: any): Promise<ResourceResponse>;
     /**
      * Edit an existing activity.    Some channels allow you to edit an existing activity to reflect the new state of a bot conversation.    For example, you can remove buttons after someone has clicked \"Approve\" button.
      * @summary UpdateActivity
@@ -3025,12 +2834,7 @@ export declare const ConversationsApiFactory: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsUpdateActivity(
-        conversationId: string,
-        activityId: string,
-        activity: Activity,
-        options?: any
-    ): Promise<ResourceResponse>
+    conversationsUpdateActivity(conversationId: string, activityId: string, activity: Activity, options?: any): Promise<ResourceResponse>;
     /**
      * Upload an attachment directly into a channel's blob storage.    This is useful because it allows you to store data in a compliant store when dealing with enterprises.    The response is a ResourceResponse which contains an AttachmentId which is suitable for using with the attachments API.
      * @summary UploadAttachment
@@ -3039,12 +2843,8 @@ export declare const ConversationsApiFactory: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    conversationsUploadAttachment(
-        conversationId: string,
-        attachmentUpload: AttachmentData,
-        options?: any
-    ): Promise<ResourceResponse>
-}
+    conversationsUploadAttachment(conversationId: string, attachmentUpload: AttachmentData, options?: any): Promise<ResourceResponse>;
+};
 /**
  * ConversationsApi - interface
  * @export
@@ -3059,10 +2859,7 @@ export interface ConversationsApiInterface {
      * @throws {RequiredError}
      * @memberof ConversationsApiInterface
      */
-    conversationsCreateConversation(
-        parameters: ConversationParameters,
-        options?: any
-    ): Promise<ConversationResourceResponse>
+    conversationsCreateConversation(parameters: ConversationParameters, options?: any): Promise<ConversationResourceResponse>;
     /**
      * Delete an existing activity.    Some channels allow you to delete an existing activity, and if successful this method will remove the specified activity.
      * @summary DeleteActivity
@@ -3072,11 +2869,7 @@ export interface ConversationsApiInterface {
      * @throws {RequiredError}
      * @memberof ConversationsApiInterface
      */
-    conversationsDeleteActivity(
-        conversationId: string,
-        activityId: string,
-        options?: any
-    ): Promise<{}>
+    conversationsDeleteActivity(conversationId: string, activityId: string, options?: any): Promise<{}>;
     /**
      * Deletes a member from a conversation.     This REST API takes a ConversationId and a memberId (of type string) and removes that member from the conversation. If that member was the last member  of the conversation, the conversation will also be deleted.
      * @summary DeleteConversationMember
@@ -3086,11 +2879,7 @@ export interface ConversationsApiInterface {
      * @throws {RequiredError}
      * @memberof ConversationsApiInterface
      */
-    conversationsDeleteConversationMember(
-        conversationId: string,
-        memberId: string,
-        options?: any
-    ): Promise<{}>
+    conversationsDeleteConversationMember(conversationId: string, memberId: string, options?: any): Promise<{}>;
     /**
      * Enumerate the members of an activity.     This REST API takes a ConversationId and a ActivityId, returning an array of ChannelAccount objects representing the members of the particular activity in the conversation.
      * @summary GetActivityMembers
@@ -3100,11 +2889,7 @@ export interface ConversationsApiInterface {
      * @throws {RequiredError}
      * @memberof ConversationsApiInterface
      */
-    conversationsGetActivityMembers(
-        conversationId: string,
-        activityId: string,
-        options?: any
-    ): Promise<Array<ChannelAccount>>
+    conversationsGetActivityMembers(conversationId: string, activityId: string, options?: any): Promise<Array<ChannelAccount>>;
     /**
      * Enumerate the members of a conversation.     This REST API takes a ConversationId and returns an array of ChannelAccount objects representing the members of the conversation.
      * @summary GetConversationMembers
@@ -3113,10 +2898,7 @@ export interface ConversationsApiInterface {
      * @throws {RequiredError}
      * @memberof ConversationsApiInterface
      */
-    conversationsGetConversationMembers(
-        conversationId: string,
-        options?: any
-    ): Promise<Array<ChannelAccount>>
+    conversationsGetConversationMembers(conversationId: string, options?: any): Promise<Array<ChannelAccount>>;
     /**
      * Enumerate the members of a conversation one page at a time.    This REST API takes a ConversationId. Optionally a pageSize and/or continuationToken can be provided. It returns a PagedMembersResult, which contains an array  of ChannelAccounts representing the members of the conversation and a continuation token that can be used to get more values.    One page of ChannelAccounts records are returned with each call. The number of records in a page may vary between channels and calls. The pageSize parameter can be used as   a suggestion. If there are no additional results the response will not contain a continuation token. If there are no members in the conversation the Members will be empty or not present in the response.    A response to a request that has a continuation token from a prior request may rarely return members from a previous request.
      * @summary GetConversationPagedMembers
@@ -3127,12 +2909,7 @@ export interface ConversationsApiInterface {
      * @throws {RequiredError}
      * @memberof ConversationsApiInterface
      */
-    conversationsGetConversationPagedMembers(
-        conversationId: string,
-        pageSize?: number,
-        continuationToken?: string,
-        options?: any
-    ): Promise<PagedMembersResult>
+    conversationsGetConversationPagedMembers(conversationId: string, pageSize?: number, continuationToken?: string, options?: any): Promise<PagedMembersResult>;
     /**
      * List the Conversations in which this bot has participated.    GET from this method with a skip token    The return value is a ConversationsResult, which contains an array of ConversationMembers and a skip token.  If the skip token is not empty, then   there are further values to be returned. Call this method again with the returned token to get more values.    Each ConversationMembers object contains the ID of the conversation and an array of ChannelAccounts that describe the members of the conversation.
      * @summary GetConversations
@@ -3141,10 +2918,7 @@ export interface ConversationsApiInterface {
      * @throws {RequiredError}
      * @memberof ConversationsApiInterface
      */
-    conversationsGetConversations(
-        continuationToken?: string,
-        options?: any
-    ): Promise<ConversationsResult>
+    conversationsGetConversations(continuationToken?: string, options?: any): Promise<ConversationsResult>;
     /**
      * This method allows you to reply to an activity.    This is slightly different from SendToConversation().  * SendToConversation(conversationId) - will append the activity to the end of the conversation according to the timestamp or semantics of the channel.  * ReplyToActivity(conversationId,ActivityId) - adds the activity as a reply to another activity, if the channel supports it. If the channel does not support nested replies, ReplyToActivity falls back to SendToConversation.    Use ReplyToActivity when replying to a specific activity in the conversation.    Use SendToConversation in all other cases.
      * @summary ReplyToActivity
@@ -3155,12 +2929,7 @@ export interface ConversationsApiInterface {
      * @throws {RequiredError}
      * @memberof ConversationsApiInterface
      */
-    conversationsReplyToActivity(
-        conversationId: string,
-        activityId: string,
-        activity: Activity,
-        options?: any
-    ): Promise<ResourceResponse>
+    conversationsReplyToActivity(conversationId: string, activityId: string, activity: Activity, options?: any): Promise<ResourceResponse>;
     /**
      * This method allows you to upload the historic activities to the conversation.    Sender must ensure that the historic activities have unique ids and appropriate timestamps. The ids are used by the client to deal with duplicate activities and the timestamps are used by the client to render the activities in the right order.
      * @summary SendConversationHistory
@@ -3170,11 +2939,7 @@ export interface ConversationsApiInterface {
      * @throws {RequiredError}
      * @memberof ConversationsApiInterface
      */
-    conversationsSendConversationHistory(
-        conversationId: string,
-        history: Transcript,
-        options?: any
-    ): Promise<ResourceResponse>
+    conversationsSendConversationHistory(conversationId: string, history: Transcript, options?: any): Promise<ResourceResponse>;
     /**
      * This method allows you to send an activity to the end of a conversation.    This is slightly different from ReplyToActivity().  * SendToConversation(conversationId) - will append the activity to the end of the conversation according to the timestamp or semantics of the channel.  * ReplyToActivity(conversationId,ActivityId) - adds the activity as a reply to another activity, if the channel supports it. If the channel does not support nested replies, ReplyToActivity falls back to SendToConversation.    Use ReplyToActivity when replying to a specific activity in the conversation.    Use SendToConversation in all other cases.
      * @summary SendToConversation
@@ -3184,11 +2949,7 @@ export interface ConversationsApiInterface {
      * @throws {RequiredError}
      * @memberof ConversationsApiInterface
      */
-    conversationsSendToConversation(
-        conversationId: string,
-        activity: Activity,
-        options?: any
-    ): Promise<ResourceResponse>
+    conversationsSendToConversation(conversationId: string, activity: Activity, options?: any): Promise<ResourceResponse>;
     /**
      * Edit an existing activity.    Some channels allow you to edit an existing activity to reflect the new state of a bot conversation.    For example, you can remove buttons after someone has clicked \"Approve\" button.
      * @summary UpdateActivity
@@ -3199,12 +2960,7 @@ export interface ConversationsApiInterface {
      * @throws {RequiredError}
      * @memberof ConversationsApiInterface
      */
-    conversationsUpdateActivity(
-        conversationId: string,
-        activityId: string,
-        activity: Activity,
-        options?: any
-    ): Promise<ResourceResponse>
+    conversationsUpdateActivity(conversationId: string, activityId: string, activity: Activity, options?: any): Promise<ResourceResponse>;
     /**
      * Upload an attachment directly into a channel's blob storage.    This is useful because it allows you to store data in a compliant store when dealing with enterprises.    The response is a ResourceResponse which contains an AttachmentId which is suitable for using with the attachments API.
      * @summary UploadAttachment
@@ -3214,11 +2970,7 @@ export interface ConversationsApiInterface {
      * @throws {RequiredError}
      * @memberof ConversationsApiInterface
      */
-    conversationsUploadAttachment(
-        conversationId: string,
-        attachmentUpload: AttachmentData,
-        options?: any
-    ): Promise<ResourceResponse>
+    conversationsUploadAttachment(conversationId: string, attachmentUpload: AttachmentData, options?: any): Promise<ResourceResponse>;
 }
 /**
  * ConversationsApi - object-oriented interface
@@ -3226,8 +2978,7 @@ export interface ConversationsApiInterface {
  * @class ConversationsApi
  * @extends {BaseAPI}
  */
-export declare class ConversationsApi extends BaseAPI
-    implements ConversationsApiInterface {
+export declare class ConversationsApi extends BaseAPI implements ConversationsApiInterface {
     /**
      * Create a new Conversation.    POST to this method with a  * Bot being the bot creating the conversation  * IsGroup set to true if this is not a direct message (default is false)  * Array containing the members to include in the conversation    The return value is a ResourceResponse which contains a conversation id which is suitable for use  in the message payload and REST API uris.    Most channels only support the semantics of bots initiating a direct message conversation.  An example of how to do that would be:    ```  var resource = await connector.conversations.CreateConversation(new ConversationParameters(){ Bot = bot, members = new ChannelAccount[] { new ChannelAccount(\"user1\") } );  await connect.Conversations.SendToConversationAsync(resource.Id, new Activity() ... ) ;    ```
      * @summary CreateConversation
@@ -3236,10 +2987,7 @@ export declare class ConversationsApi extends BaseAPI
      * @throws {RequiredError}
      * @memberof ConversationsApi
      */
-    conversationsCreateConversation(
-        parameters: ConversationParameters,
-        options?: any
-    ): Promise<ConversationResourceResponse>
+    conversationsCreateConversation(parameters: ConversationParameters, options?: any): Promise<ConversationResourceResponse>;
     /**
      * Delete an existing activity.    Some channels allow you to delete an existing activity, and if successful this method will remove the specified activity.
      * @summary DeleteActivity
@@ -3249,11 +2997,7 @@ export declare class ConversationsApi extends BaseAPI
      * @throws {RequiredError}
      * @memberof ConversationsApi
      */
-    conversationsDeleteActivity(
-        conversationId: string,
-        activityId: string,
-        options?: any
-    ): Promise<Response>
+    conversationsDeleteActivity(conversationId: string, activityId: string, options?: any): Promise<Response>;
     /**
      * Deletes a member from a conversation.     This REST API takes a ConversationId and a memberId (of type string) and removes that member from the conversation. If that member was the last member  of the conversation, the conversation will also be deleted.
      * @summary DeleteConversationMember
@@ -3263,11 +3007,7 @@ export declare class ConversationsApi extends BaseAPI
      * @throws {RequiredError}
      * @memberof ConversationsApi
      */
-    conversationsDeleteConversationMember(
-        conversationId: string,
-        memberId: string,
-        options?: any
-    ): Promise<Response>
+    conversationsDeleteConversationMember(conversationId: string, memberId: string, options?: any): Promise<Response>;
     /**
      * Enumerate the members of an activity.     This REST API takes a ConversationId and a ActivityId, returning an array of ChannelAccount objects representing the members of the particular activity in the conversation.
      * @summary GetActivityMembers
@@ -3277,11 +3017,7 @@ export declare class ConversationsApi extends BaseAPI
      * @throws {RequiredError}
      * @memberof ConversationsApi
      */
-    conversationsGetActivityMembers(
-        conversationId: string,
-        activityId: string,
-        options?: any
-    ): Promise<ChannelAccount[]>
+    conversationsGetActivityMembers(conversationId: string, activityId: string, options?: any): Promise<ChannelAccount[]>;
     /**
      * Enumerate the members of a conversation.     This REST API takes a ConversationId and returns an array of ChannelAccount objects representing the members of the conversation.
      * @summary GetConversationMembers
@@ -3290,10 +3026,7 @@ export declare class ConversationsApi extends BaseAPI
      * @throws {RequiredError}
      * @memberof ConversationsApi
      */
-    conversationsGetConversationMembers(
-        conversationId: string,
-        options?: any
-    ): Promise<ChannelAccount[]>
+    conversationsGetConversationMembers(conversationId: string, options?: any): Promise<ChannelAccount[]>;
     /**
      * Enumerate the members of a conversation one page at a time.    This REST API takes a ConversationId. Optionally a pageSize and/or continuationToken can be provided. It returns a PagedMembersResult, which contains an array  of ChannelAccounts representing the members of the conversation and a continuation token that can be used to get more values.    One page of ChannelAccounts records are returned with each call. The number of records in a page may vary between channels and calls. The pageSize parameter can be used as   a suggestion. If there are no additional results the response will not contain a continuation token. If there are no members in the conversation the Members will be empty or not present in the response.    A response to a request that has a continuation token from a prior request may rarely return members from a previous request.
      * @summary GetConversationPagedMembers
@@ -3304,12 +3037,7 @@ export declare class ConversationsApi extends BaseAPI
      * @throws {RequiredError}
      * @memberof ConversationsApi
      */
-    conversationsGetConversationPagedMembers(
-        conversationId: string,
-        pageSize?: number,
-        continuationToken?: string,
-        options?: any
-    ): Promise<PagedMembersResult>
+    conversationsGetConversationPagedMembers(conversationId: string, pageSize?: number, continuationToken?: string, options?: any): Promise<PagedMembersResult>;
     /**
      * List the Conversations in which this bot has participated.    GET from this method with a skip token    The return value is a ConversationsResult, which contains an array of ConversationMembers and a skip token.  If the skip token is not empty, then   there are further values to be returned. Call this method again with the returned token to get more values.    Each ConversationMembers object contains the ID of the conversation and an array of ChannelAccounts that describe the members of the conversation.
      * @summary GetConversations
@@ -3318,10 +3046,7 @@ export declare class ConversationsApi extends BaseAPI
      * @throws {RequiredError}
      * @memberof ConversationsApi
      */
-    conversationsGetConversations(
-        continuationToken?: string,
-        options?: any
-    ): Promise<ConversationsResult>
+    conversationsGetConversations(continuationToken?: string, options?: any): Promise<ConversationsResult>;
     /**
      * This method allows you to reply to an activity.    This is slightly different from SendToConversation().  * SendToConversation(conversationId) - will append the activity to the end of the conversation according to the timestamp or semantics of the channel.  * ReplyToActivity(conversationId,ActivityId) - adds the activity as a reply to another activity, if the channel supports it. If the channel does not support nested replies, ReplyToActivity falls back to SendToConversation.    Use ReplyToActivity when replying to a specific activity in the conversation.    Use SendToConversation in all other cases.
      * @summary ReplyToActivity
@@ -3332,12 +3057,7 @@ export declare class ConversationsApi extends BaseAPI
      * @throws {RequiredError}
      * @memberof ConversationsApi
      */
-    conversationsReplyToActivity(
-        conversationId: string,
-        activityId: string,
-        activity: Activity,
-        options?: any
-    ): Promise<ResourceResponse>
+    conversationsReplyToActivity(conversationId: string, activityId: string, activity: Activity, options?: any): Promise<ResourceResponse>;
     /**
      * This method allows you to upload the historic activities to the conversation.    Sender must ensure that the historic activities have unique ids and appropriate timestamps. The ids are used by the client to deal with duplicate activities and the timestamps are used by the client to render the activities in the right order.
      * @summary SendConversationHistory
@@ -3347,11 +3067,7 @@ export declare class ConversationsApi extends BaseAPI
      * @throws {RequiredError}
      * @memberof ConversationsApi
      */
-    conversationsSendConversationHistory(
-        conversationId: string,
-        history: Transcript,
-        options?: any
-    ): Promise<ResourceResponse>
+    conversationsSendConversationHistory(conversationId: string, history: Transcript, options?: any): Promise<ResourceResponse>;
     /**
      * This method allows you to send an activity to the end of a conversation.    This is slightly different from ReplyToActivity().  * SendToConversation(conversationId) - will append the activity to the end of the conversation according to the timestamp or semantics of the channel.  * ReplyToActivity(conversationId,ActivityId) - adds the activity as a reply to another activity, if the channel supports it. If the channel does not support nested replies, ReplyToActivity falls back to SendToConversation.    Use ReplyToActivity when replying to a specific activity in the conversation.    Use SendToConversation in all other cases.
      * @summary SendToConversation
@@ -3361,11 +3077,7 @@ export declare class ConversationsApi extends BaseAPI
      * @throws {RequiredError}
      * @memberof ConversationsApi
      */
-    conversationsSendToConversation(
-        conversationId: string,
-        activity: Activity,
-        options?: any
-    ): Promise<ResourceResponse>
+    conversationsSendToConversation(conversationId: string, activity: Activity, options?: any): Promise<ResourceResponse>;
     /**
      * Edit an existing activity.    Some channels allow you to edit an existing activity to reflect the new state of a bot conversation.    For example, you can remove buttons after someone has clicked \"Approve\" button.
      * @summary UpdateActivity
@@ -3376,12 +3088,7 @@ export declare class ConversationsApi extends BaseAPI
      * @throws {RequiredError}
      * @memberof ConversationsApi
      */
-    conversationsUpdateActivity(
-        conversationId: string,
-        activityId: string,
-        activity: Activity,
-        options?: any
-    ): Promise<ResourceResponse>
+    conversationsUpdateActivity(conversationId: string, activityId: string, activity: Activity, options?: any): Promise<ResourceResponse>;
     /**
      * Upload an attachment directly into a channel's blob storage.    This is useful because it allows you to store data in a compliant store when dealing with enterprises.    The response is a ResourceResponse which contains an AttachmentId which is suitable for using with the attachments API.
      * @summary UploadAttachment
@@ -3391,9 +3098,5 @@ export declare class ConversationsApi extends BaseAPI
      * @throws {RequiredError}
      * @memberof ConversationsApi
      */
-    conversationsUploadAttachment(
-        conversationId: string,
-        attachmentUpload: AttachmentData,
-        options?: any
-    ): Promise<ResourceResponse>
+    conversationsUploadAttachment(conversationId: string, attachmentUpload: AttachmentData, options?: any): Promise<ResourceResponse>;
 }

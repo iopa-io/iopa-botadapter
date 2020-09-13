@@ -70,10 +70,10 @@ export default class ShowTypingMiddleware {
 
                     // Sending the Activity directly via the Adapter avoids other middleware and avoids setting the
                     // responded flag. However this also requires tha tthe conversation reference details are explicitly added.
-                    const conversationReference: Partial<ConversationReference> = context.botːCapability.adapter.getConversationReference(
+                    const conversationReference: Partial<ConversationReference> = context["bot.Capability"].adapter.getConversationReference(
                         turnContext.activity
                     )
-                    typingActivity = context.botːCapability.adapter.applyConversationReference(
+                    typingActivity = context["bot.Capability"].adapter.applyConversationReference(
                         typingActivity,
                         conversationReference
                     )

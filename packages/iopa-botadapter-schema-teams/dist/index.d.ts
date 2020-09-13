@@ -1,2 +1,2 @@
-export * from './extension/index'
-export * from './api'
+export * from './extension/index';
+export * from './api';

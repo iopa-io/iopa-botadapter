@@ -15,9 +15,8 @@ import {
     ConversationList,
     TeamsChannelAccount,
     TeamDetails,
+    TeamsApi,
 } from 'iopa-botadapter-schema-teams'
-
-import { TeamsApi } from 'iopa-botadapter-schema-teams'
 
 import {
     TeamsHelpers as ITeamsHelpers,
@@ -25,40 +24,40 @@ import {
 } from 'iopa-botadapter-types'
 
 export class TeamsHelpers implements ITeamsHelpers {
-    private context: IopaBotAdapterContext
+    private _context: IopaBotAdapterContext
 
     constructor(context: IopaBotAdapterContext) {
-        this.context = context
+        this._context = context
     }
 
     public getChannelId(): string {
-        if (!this.context.botːCapability.activity) {
+        if (!this._context['bot.Capability'].activity) {
             throw new Error('Missing activity on context')
         }
 
-        const channelData: TeamsChannelData = this.context.botːCapability
+        const channelData: TeamsChannelData = this._context['bot.Capability']
             .activity.channelData as TeamsChannelData
         const channel: ChannelInfo = channelData ? channelData.channel : null
         return channel && channel.id ? channel.id : null
     }
 
     public getChannelName(): string {
-        if (!this.context.botːCapability.activity) {
+        if (!this._context['bot.Capability'].activity) {
             throw new Error('Missing activity on context')
         }
 
-        const channelData: TeamsChannelData = this.context.botːCapability
+        const channelData: TeamsChannelData = this._context['bot.Capability']
             .activity.channelData as TeamsChannelData
         const channel: ChannelInfo = channelData ? channelData.channel : null
         return channel && channel.name ? channel.name : undefined
     }
 
     public getTeamId(): string {
-        if (!this.context.botːCapability.activity) {
+        if (!this._context['bot.Capability'].activity) {
             throw new Error('Missing activity on context')
         }
 
-        const channelData = this.context.botːCapability.activity
+        const channelData = this._context['bot.Capability'].activity
             .channelData as TeamsChannelData
         const team: TeamInfo =
             channelData && channelData.team ? channelData.team : null
@@ -94,7 +93,7 @@ export class TeamsHelpers implements ITeamsHelpers {
             )
         }
 
-        return await this.getTeamsConnectorClient().teamsFetchTeamDetails(t)
+        return this.getTeamsConnectorClient().teamsFetchTeamDetails(t)
     }
 
     public async getTeamChannels(teamId?: string): Promise<ChannelInfo[]> {
@@ -114,17 +113,15 @@ export class TeamsHelpers implements ITeamsHelpers {
     public async getMembers(): Promise<TeamsChannelAccount[]> {
         const teamId = this.getTeamId()
         if (teamId) {
-            return await this.getTeamMembers(teamId)
-        } else {
-            const conversation = this.context.botːCapability.activity
-                .conversation
-            const conversationId =
-                conversation && conversation.id ? conversation.id : undefined
-            return await this.getMembersInternal(
-                this.getConnectorClient(),
-                conversationId
-            )
+            return this.getTeamMembers(teamId)
         }
+        const { conversation } = this._context['bot.Capability'].activity
+        const conversationId =
+            conversation && conversation.id ? conversation.id : undefined
+        return this.getMembersInternal(
+            this.getConnectorClient(),
+            conversationId
+        )
     }
 
     public async getTeamMembers(
@@ -158,9 +155,9 @@ export class TeamsHelpers implements ITeamsHelpers {
             } as TeamsChannelData,
             activity: message,
         } as ConversationParameters
-        const adapter = this.context.botːCapability.adapter
+        const { adapter } = this._context['bot.Capability']
         const conversationsApiClient = adapter.createConversationsApiClient(
-            this.context.botːCapability.activity.serviceUrl
+            this._context['bot.Capability'].activity.serviceUrl
         )
 
         // This call does NOT send the outbound Activity is not being sent through the middleware stack.
@@ -169,7 +166,7 @@ export class TeamsHelpers implements ITeamsHelpers {
             conversationParameters
         )
         const conversationReference = adapter.getConversationReference(
-            this.context.botːCapability.activity
+            this._context['bot.Capability'].activity
         ) as ConversationReference
         conversationReference.conversation.id = conversationResourceResponse.id
         return [conversationReference, conversationResourceResponse.activityId]
@@ -211,22 +208,24 @@ export class TeamsHelpers implements ITeamsHelpers {
 
     private getConnectorClient(): ConversationsApi {
         if (
-            !this.context.botːCapability.adapter ||
+            !this._context['bot.Capability'].adapter ||
             !(
                 'createConversationsApiClient' in
-                this.context.botːCapability.adapter
+                this._context['bot.Capability'].adapter
             )
         ) {
             throw new Error('This method requires a connector client.')
         }
 
-        return this.context.botːCapability.adapter.createConversationsApiClient(
-            this.context.botːCapability.activity.serviceUrl
+        return this._context[
+            'bot.Capability'
+        ].adapter.createConversationsApiClient(
+            this._context['bot.Capability'].activity.serviceUrl
         )
     }
 
     private getTeamsConnectorClient(): TeamsApi {
-        const credentials = this.context.botːCapability.adapter.credentials
+        const { credentials } = this._context['bot.Capability'].adapter
 
         const fetchProxy = async (url: string, init: any) => {
             await credentials.signRequest(url, init)
@@ -235,7 +234,10 @@ export class TeamsHelpers implements ITeamsHelpers {
 
         const client = new TeamsApi(
             {},
-            this.context.botːCapability.activity.serviceUrl.replace(/\/+$/, ''),
+            this._context['bot.Capability'].activity.serviceUrl.replace(
+                /\/+$/,
+                ''
+            ),
             fetchProxy
         )
 

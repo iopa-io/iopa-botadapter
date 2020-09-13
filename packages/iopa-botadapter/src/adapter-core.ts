@@ -1,3 +1,6 @@
+/* eslint-disable no-async-promise-executor */
+/* eslint-disable no-case-declarations */
+/* eslint-disable no-await-in-loop */
 import {
     Activity,
     ActivityTypes,
@@ -14,7 +17,6 @@ import {
 
 import {
     IopaBotAdapterContext,
-    InvokeResponse,
     Adapter,
     AdapterCore as IAdapterCore,
     BotAdapterApp,
@@ -22,24 +24,24 @@ import {
 
 import { IopaContext, RouterApp } from 'iopa-types'
 
+import retry from 'async-retry'
 import { toIopaBotAdapterContext } from './context'
 
-import * as retry from 'async-retry'
-
 // This key is exported internally so that the TeamsActivityHandler will not overwrite any already set InvokeResponses.
-export const INVOKE_RESPONSE_KEY: string = 'urn:io.iopa.invokeResponse'
-export const URN_BOTADAPTER: string = 'urn:io.iopa:botadapater'
+export const INVOKE_RESPONSE_KEY = 'urn:io.iopa.invokeResponse'
+export const URN_BOTADAPTER = 'urn:io.iopa:botadapater'
 export const URN_BOTINTENT_LITERAL = 'urn:io.iopa.bot:intent:literal'
 
 /** The Iopa BotFrameworkAdapter */
 export class AdapterCore implements IAdapterCore {
-    protected readonly app: RouterApp
+    protected readonly _app: RouterApp<{}, IopaBotAdapterContext>
 
     public readonly credentials: HttpAuthAppCredentials
+
     protected readonly credentialsProvider: SimpleCredentialProvider
 
-    constructor(app: RouterApp) {
-        this.app = app
+    constructor(app: RouterApp<{}, IopaBotAdapterContext>) {
+        this._app = app
         ;(app as BotAdapterApp).botadapter = (this as unknown) as Adapter
 
         // Relocate the tenantId field used by MS Teams to a new location (from channelData to conversation)
@@ -50,11 +52,11 @@ export class AdapterCore implements IAdapterCore {
                 context: IopaBotAdapterContext,
                 next: () => Promise<void>
             ) => {
-                if (!('botːCapability' in context)) {
+                if (!context['bot.Capability']) {
                     return next()
                 }
 
-                const activity = context.botːCapability.activity
+                const { activity } = context['bot.Capability']
 
                 if (
                     activity.channelId === 'msteams' &&
@@ -68,8 +70,9 @@ export class AdapterCore implements IAdapterCore {
                         activity.channelData.tenant.id
                 }
 
-                await next()
-            }, 'iopa-botadapter.AdapterCore'
+                return next()
+            },
+            'iopa-botadapter.AdapterCore'
         )
 
         const appId = process.env.MSAPP_ID
@@ -91,11 +94,12 @@ export class AdapterCore implements IAdapterCore {
      * for an incoming activity from HTTP wire */
     public async invokeActivity(
         context: IopaContext,
-        next: () => Promise<any>
+        next: () => Promise<void>
     ): Promise<void> {
-        if (context.iopaːProtocol == URN_BOTADAPTER) {
+        if (context['iopa.Protocol'] === URN_BOTADAPTER) {
             // skip validation and parsing for synthetic contexts created by this framework
-            return next()
+            await next()
+            return
         }
 
         let body: any
@@ -107,36 +111,38 @@ export class AdapterCore implements IAdapterCore {
             const activity: Activity = await _parseRequest(context)
 
             if (!activity) {
-                return next()
+                await next()
+                return
             }
 
             // Authenticate the incoming request
             status = 401
-            const authHeader: string =
-                context.iopaːHeaders.get('authorization') ||
-                context.iopaːHeaders.get('Authorization') ||
-                ''
+            const authHeader: string = context['iopa.Headers'].get(
+                'authorization'
+            )
             await this.authenticateRequest(activity, authHeader)
 
             // Expand Context with Iopa Turn Context from
             status = 500
-            const context_expanded: IopaBotAdapterContext = toIopaBotAdapterContext(
+            const contextExpanded: IopaBotAdapterContext = toIopaBotAdapterContext(
                 context,
                 (this as unknown) as Adapter,
                 activity
             )
 
-            context_expanded.botːSource = URN_BOTADAPTER
+            contextExpanded['bot.Source'] = URN_BOTADAPTER
 
             console.log(
-                `[BotAdapter] Authorization Complete ${context.serverːgetTimeElapsed()}ms`
+                `[BotAdapter] Authorization Complete ${context.get(
+                    'server.TimeElapsed'
+                )}ms`
             )
 
             if (
-                context_expanded.botːCapability.activity.type ==
+                contextExpanded['bot.Capability'].activity.type ===
                 ActivityTypes.Message
             ) {
-                // await context_expanded.response.showTypingIndicator()
+                // await contextExpanded.response.showTypingIndicator()
             }
 
             // Main processing of received activity
@@ -144,7 +150,7 @@ export class AdapterCore implements IAdapterCore {
                 await next()
             } catch (err) {
                 if (this.onTurnError) {
-                    await this.onTurnError(context_expanded, err)
+                    await this.onTurnError(contextExpanded, err)
                 } else {
                     throw err
                 }
@@ -152,11 +158,11 @@ export class AdapterCore implements IAdapterCore {
 
             // Retrieve cached invoke response
             if (activity.type === ActivityTypes.Invoke) {
-                const invokeResponse: any = context_expanded.botːCapability.turnState.get(
-                    INVOKE_RESPONSE_KEY
-                )
+                const invokeResponse: any = contextExpanded[
+                    'bot.Capability'
+                ].turnState.get(INVOKE_RESPONSE_KEY)
                 if (invokeResponse && invokeResponse.value) {
-                    const value: InvokeResponse = invokeResponse.value
+                    const { value } = invokeResponse
                     status = value.status
                     body = value.body
                 } else {
@@ -172,7 +178,7 @@ export class AdapterCore implements IAdapterCore {
         }
 
         // Return status
-        context.response.iopaːStatusCode = status
+        context.response['iopa.StatusCode'] = status
         if (body) {
             context.response.end(body)
         } else {
@@ -212,7 +218,7 @@ export class AdapterCore implements IAdapterCore {
                     break
                 case 'invokeResponse':
                     // Cache response to context object. This will be retrieved when turn completes.
-                    context.botːCapability.turnState.set(
+                    context['bot.Capability'].turnState.set(
                         INVOKE_RESPONSE_KEY,
                         activity
                     )
@@ -317,15 +323,15 @@ export class AdapterCore implements IAdapterCore {
                 await this.credentials.signRequest(url, init)
 
                 const result = await retry(
-                    async bail => {
+                    async (bail) => {
                         const result = await fetch(url, init)
 
-                        if (result.status == 403) {
+                        if (result.status === 403) {
                             bail(new Error('Unauthorized'))
                         }
 
                         // override json in case of empty successful (202) responses
-                        if (result.status == 202) {
+                        if (result.status === 202) {
                             result.json = async () => ({})
                         }
 
@@ -378,7 +384,7 @@ export class AdapterCore implements IAdapterCore {
 
     /**  Creates a turn context */
     public createContext(activity: Partial<Activity>): IopaBotAdapterContext {
-        const plaincontext = this.app.createContext(activity.serviceUrl, {
+        const plaincontext = this._app.createContext(activity.serviceUrl, {
             withResponse: true,
             protocol: URN_BOTADAPTER,
         })
@@ -416,7 +422,7 @@ export class AdapterCore implements IAdapterCore {
 function _parseRequest(context: IopaContext): Promise<Activity> {
     return new Promise(
         async (resolve: any, reject: any): Promise<void> => {
-            const activity = await context.iopaːBody
+            const activity = await context['iopa.Body']
             try {
                 if (typeof activity !== 'object') {
                     throw new Error(
@@ -447,14 +453,14 @@ function _parseRequest(context: IopaContext): Promise<Activity> {
 }
 
 function delay(/** timeout in ms */ timeout: number): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         setTimeout(resolve, timeout)
     })
 }
 
 function timeout<T>(promise: Promise<T>, ms: number): Promise<T> {
-    return new Promise(function(resolve, reject) {
-        setTimeout(function() {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
             reject(new Error('timeout'))
         }, ms)
         promise.then(resolve, reject)

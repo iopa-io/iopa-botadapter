@@ -42,6 +42,7 @@ export interface ICredentialProvider {
 
 export class SimpleCredentialProvider implements ICredentialProvider {
     private readonly appId: string
+
     private readonly appPassword: string
 
     constructor(appId: string, appPassword: string) {
@@ -83,12 +84,12 @@ export class SimpleCredentialProvider implements ICredentialProvider {
      */
     public isAuthenticationDisabled(): Promise<boolean> {
         if (
-            process.env.NODE_ENV == 'localhost' ||
-            process.env.NODE_ENV == 'development'
+            process.env.NODE_ENV === 'localhost' ||
+            process.env.NODE_ENV === 'development' ||
+            process.env.NODE_ENV === 'test'
         ) {
             return Promise.resolve(true)
-        } else {
-            return Promise.resolve(false)
         }
+        return Promise.resolve(false)
     }
 }

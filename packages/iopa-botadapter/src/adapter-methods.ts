@@ -15,15 +15,18 @@ import {
     IopaBotAdapterContext,
 } from 'iopa-botadapter-types'
 
+import { RouterApp, IopaBotContext } from 'iopa-types'
+import { HttpAuthAppCredentials } from 'iopa-botadapter-schema-auth'
 import { shallowCopy } from './util'
 import { AdapterWithEvents } from './adapter-events'
-import { RouterApp } from 'iopa-types'
-import { HttpAuthAppCredentials } from 'iopa-botadapter-schema-auth'
 
-export class AdapterWithEventsAndMethods extends AdapterWithEvents
+export class AdapterWithEventsAndMethods
+    extends AdapterWithEvents
     implements IAdapterMethods {
-    constructor(app: RouterApp) {
+    // eslint-disable-next-line no-useless-constructor
+    constructor(app: RouterApp<{}, IopaBotContext>) {
         super(app)
+        /** noop, needed for IOPA app.use */
     }
 
     /**
@@ -53,9 +56,9 @@ export class AdapterWithEventsAndMethods extends AdapterWithEvents
 
     /** Returns the mentions on an activity */
     public getMentions(activity: Partial<Activity>): Mention[] {
-        var result: Mention[] = []
+        const result: Mention[] = []
         if (activity.entities !== undefined) {
-            for (var i = 0; i < activity.entities.length; i++) {
+            for (let i = 0; i < activity.entities.length; i++) {
                 if (activity.entities[i].type.toLowerCase() === 'mention') {
                     result.push(activity.entities[i] as Mention)
                 }
@@ -83,7 +86,7 @@ export class AdapterWithEventsAndMethods extends AdapterWithEvents
     public applyConversationReference(
         activity: Partial<Activity>,
         reference: Partial<ConversationReference>,
-        isIncoming: boolean = false
+        isIncoming = false
     ): Partial<Activity> {
         activity.channelId = reference.channelId
         activity.serviceUrl = reference.serviceUrl
@@ -137,7 +140,7 @@ export class AdapterWithEventsAndMethods extends AdapterWithEvents
         HttpAuthAppCredentials.trustServiceUrl(reference.serviceUrl)
 
         try {
-            await this.app.invoke(context)
+            await this._app.invoke(context)
             await logic(context)
         } catch (err) {
             if (this.onTurnError) {
@@ -212,7 +215,7 @@ export class AdapterWithEventsAndMethods extends AdapterWithEvents
         const context: IopaBotAdapterContext = this.createContext(request)
 
         try {
-            await this.app.invoke(context)
+            await this._app.invoke(context)
             await logic(context)
         } catch (err) {
             if (this.onTurnError) {
@@ -236,7 +239,7 @@ export class AdapterWithEventsAndMethods extends AdapterWithEvents
 
         // Create conversation
         const conversationParameters: ConversationParameters = {
-            activity: activity,
+            activity,
             bot: reference.bot,
             isGroup: reference.isGroup,
             channelData: reference.channelData,
@@ -306,7 +309,7 @@ export class AdapterWithEventsAndMethods extends AdapterWithEvents
         context: IopaBotAdapterContext,
         memberId: string
     ): Promise<void> {
-        const activity = context.botːCapability.activity
+        const { activity } = context['bot.Capability']
         if (!activity.serviceUrl) {
             throw new Error(
                 `ActivityHelpers.deleteConversationMember(): missing serviceUrl`
@@ -317,7 +320,7 @@ export class AdapterWithEventsAndMethods extends AdapterWithEvents
                 `ActivityHelpers.deleteConversationMember(): missing conversation or conversation.id`
             )
         }
-        const serviceUrl: string = activity.serviceUrl
+        const { serviceUrl } = activity
         const conversationId: string = activity.conversation.id
         const client = this.createConversationsApiClient(serviceUrl)
         await client.conversationsDeleteConversationMember(
@@ -331,7 +334,7 @@ export class AdapterWithEventsAndMethods extends AdapterWithEvents
         context: IopaBotAdapterContext,
         activityId?: string
     ): Promise<ChannelAccount[]> {
-        const activity = context.botːCapability.activity
+        const { activity } = context['bot.Capability']
         if (!activityId) {
             activityId = activity.id
         }
@@ -347,14 +350,14 @@ export class AdapterWithEventsAndMethods extends AdapterWithEvents
         }
         if (!activityId) {
             throw new Error(
-                `ActivityHelpers.getActivityMembers(): missing both activityId and context.botːCapability.activity.id`
+                `ActivityHelpers.getActivityMembers(): missing both activityId and context["bot.Capability"].activity.id`
             )
         }
-        const serviceUrl: string = activity.serviceUrl
+        const { serviceUrl } = activity
         const conversationId: string = activity.conversation.id
         const client = this.createConversationsApiClient(serviceUrl)
 
-        return await client.conversationsGetActivityMembers(
+        return client.conversationsGetActivityMembers(
             conversationId,
             activityId
         )
@@ -367,11 +370,11 @@ export class AdapterWithEventsAndMethods extends AdapterWithEvents
     ): Promise<ConversationsResult> {
         const url: string =
             typeof contextOrServiceUrl === 'object'
-                ? contextOrServiceUrl.botːCapability.activity.serviceUrl
+                ? contextOrServiceUrl['bot.Capability'].activity.serviceUrl
                 : contextOrServiceUrl
         const client = this.createConversationsApiClient(url)
 
-        return await client.conversationsGetConversations(
+        return client.conversationsGetConversations(
             continuationToken || undefined
         )
     }

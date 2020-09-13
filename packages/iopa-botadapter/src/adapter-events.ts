@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import {
     AdapterEvents as IAdapterEvents,
     IopaBotAdapterContext,
@@ -12,25 +13,6 @@ import {
     ConversationReference,
     ResourceResponse,
 } from 'iopa-botadapter-schema'
-
-export type IopaEventHandlerNoArgs = (
-    context: IopaBotAdapterContext,
-    next: () => Promise<any>
-) => Promise<any>
-
-export type IopaEventHandlerArgs = (
-    context: IopaBotAdapterContext,
-    args: { [key: string]: any },
-    next: () => Promise<any>
-) => Promise<any>
-
-export type IopaEventHandler = IopaEventHandlerNoArgs | IopaEventHandlerArgs
-
-import {
-    INVOKE_RESPONSE_KEY,
-    URN_BOTADAPTER,
-    AdapterCore,
-} from './adapter-core'
 
 import {
     AppBasedLinkQuery,
@@ -48,12 +30,35 @@ import {
     TeamInfo,
 } from 'iopa-botadapter-schema-teams'
 
-import { RouterApp, BotReading, BotActivityTypes } from 'iopa-types'
+import {
+    RouterApp,
+    IopaBotReading,
+    BotActivityTypes,
+    IopaBotContext,
+} from 'iopa-types'
+import {
+    INVOKE_RESPONSE_KEY,
+    URN_BOTADAPTER,
+    AdapterCore,
+} from './adapter-core'
+
+export type IopaEventHandlerNoArgs = (
+    context: IopaBotAdapterContext,
+    next: () => Promise<any>
+) => Promise<any>
+
+export type IopaEventHandlerArgs = (
+    context: IopaBotAdapterContext,
+    args: { [key: string]: any },
+    next: () => Promise<any>
+) => Promise<any>
+
+export type IopaEventHandler = IopaEventHandlerNoArgs | IopaEventHandlerArgs
 
 export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
     protected readonly handlers: { [type: string]: IopaEventHandler[] } = {}
 
-    public constructor(app: RouterApp) {
+    public constructor(app: RouterApp<{}, IopaBotContext>) {
         super(app)
         app.use(this.invokeEvents, 'iopa-botadapter.AdapterWithEvents')
     }
@@ -66,23 +71,25 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         context: IopaBotAdapterContext,
         next: () => Promise<void>
     ) => {
-        if (context.botːSource !== URN_BOTADAPTER) {
+        if (context['bot.Source'] !== URN_BOTADAPTER) {
             return next()
         }
 
-        const { activity } = context.botːCapability
+        const { activity } = context['bot.Capability']
 
         switch (activity.type) {
             case ActivityTypes.Invoke:
-                const invokeResponse = await this.invoke_TeamsInvokeActivity(
+                const invokeResponse = await this.invokeTeamsInvokeActivity(
                     context
                 )
                 // If onInvokeActivity has already sent an InvokeResponse, do not send another one.
                 if (
                     invokeResponse &&
-                    !context.botːCapability.turnState.get(INVOKE_RESPONSE_KEY)
+                    !context['bot.Capability'].turnState.get(
+                        INVOKE_RESPONSE_KEY
+                    )
                 ) {
-                    await context.botːCapability.sendActivity({
+                    await context['bot.Capability'].sendActivity({
                         value: invokeResponse,
                         type: ('invokeResponse' as unknown) as ActivityTypes,
                     })
@@ -91,23 +98,21 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
 
             default:
                 await this.emit('Turn', context, async () => {
-                    switch (context.botːCapability.activity.type) {
+                    switch (context['bot.Capability'].activity.type) {
                         case ActivityTypes.Message:
-                            await this.invoke_MessageActivity(context)
+                            await this.invokeMessageActivity(context)
                             break
                         case ActivityTypes.ConversationUpdate:
-                            await this.invoke_ConversationUpdateActivity(
-                                context
-                            )
+                            await this.invokeConversationUpdateActivity(context)
                             break
                         case ActivityTypes.MessageReaction:
-                            await this.invoke_MessageReactionActivity(context)
+                            await this.invokeMessageReactionActivity(context)
                             break
                         case ActivityTypes.Event:
-                            await this.invoke_EventActivity(context)
+                            await this.invokeEventActivity(context)
                             break
                         default:
-                            await this.invoke_UnrecognizedActivity(context)
+                            await this.invokeUnrecognizedActivity(context)
                             break
                     }
                 })
@@ -121,10 +126,10 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
     // INVOKE SUBTYPE HANDLERS
     //
 
-    protected async invoke_MessageActivity(
+    protected async invokeMessageActivity(
         context: IopaBotAdapterContext
     ): Promise<void> {
-        const { activity, adapter } = context.botːCapability
+        const { activity, adapter } = context['bot.Capability']
 
         const mentions = adapter.getMentions(activity)
 
@@ -133,15 +138,15 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
                 activity.text = activity.text
                     .replace(
                         mention.text,
-                        mention.mentioned.id == activity.recipient.id
+                        mention.mentioned.id === activity.recipient.id
                             ? ''
-                            : '@' + mention.mentioned.id
+                            : `@${mention.mentioned.id}`
                     )
                     .trim()
             })
         }
 
-        context.botːText = activity.text // overwrite with updated mentions
+        context['bot.Text'] = activity.text // overwrite with updated mentions
 
         if (
             activity.channelId === 'msteams' &&
@@ -161,10 +166,10 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         }
     }
 
-    protected async invoke_ConversationUpdateActivity(
+    protected async invokeConversationUpdateActivity(
         context: IopaBotAdapterContext
     ): Promise<void> {
-        const activity = context.botːCapability.activity
+        const { activity } = context['bot.Capability']
         await this.emit('ConversationUpdate', context, async () => {
             const channelData = activity.channelData as TeamsChannelData
 
@@ -190,23 +195,23 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
             } else {
                 switch (channelData.eventType) {
                     case 'teamMemberAdded':
-                        return await this.invoke_TeamsMembersAdded(context)
-
+                        await this.invokeTeamsMembersAdded(context)
+                        return
                     case 'teamMemberRemoved':
-                        return await this.invoke_TeamsMembersRemoved(context)
-
+                        await this.invokeTeamsMembersRemoved(context)
+                        return
                     case 'channelCreated':
-                        return await this.invoke_TeamsChannelCreated(context)
-
+                        await this.invokeTeamsChannelCreated(context)
+                        return
                     case 'channelDeleted':
-                        return await this.invoke_TeamsChannelDeleted(context)
-
+                        await this.invokeTeamsChannelDeleted(context)
+                        return
                     case 'channelRenamed':
-                        return await this.invoke_TeamsChannelRenamed(context)
-
+                        await this.invokeTeamsChannelRenamed(context)
+                        return
                     case 'teamRenamed':
-                        return await this.invoke_TeamsTeamRenamed(context)
-
+                        await this.invokeTeamsTeamRenamed(context)
+                        return
                     default:
                         if (
                             activity.membersAdded &&
@@ -234,12 +239,12 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         })
     }
 
-    protected async invoke_TeamsMembersAdded(
+    protected async invokeTeamsMembersAdded(
         context: IopaBotAdapterContext
     ): Promise<void> {
         if (
             'TeamsMembersAdded' in this.handlers &&
-            this.handlers['TeamsMembersAdded'].length > 0
+            this.handlers.TeamsMembersAdded.length > 0
         ) {
             await this.emit(
                 'TeamsMembersAdded',
@@ -255,12 +260,12 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         }
     }
 
-    protected async invoke_TeamsMembersRemoved(
+    protected async invokeTeamsMembersRemoved(
         context: IopaBotAdapterContext
     ): Promise<void> {
         if (
             'TeamsMembersRemoved' in this.handlers &&
-            this.handlers['TeamsMembersRemoved'].length > 0
+            this.handlers.TeamsMembersRemoved.length > 0
         ) {
             await this.emit(
                 'TeamsMembersRemoved',
@@ -276,7 +281,7 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         }
     }
 
-    protected async invoke_TeamsChannelCreated(context): Promise<void> {
+    protected async invokeTeamsChannelCreated(context): Promise<void> {
         await this.emit(
             'TeamsChannelCreated',
             context,
@@ -284,7 +289,7 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         )
     }
 
-    protected async invoke_TeamsChannelDeleted(context): Promise<void> {
+    protected async invokeTeamsChannelDeleted(context): Promise<void> {
         await this.emit(
             'TeamsChannelDeleted',
             context,
@@ -292,7 +297,7 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         )
     }
 
-    protected async invoke_TeamsChannelRenamed(context): Promise<void> {
+    protected async invokeTeamsChannelRenamed(context): Promise<void> {
         await this.emit(
             'TeamsChannelRenamed',
             context,
@@ -300,7 +305,7 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         )
     }
 
-    protected async invoke_TeamsTeamRenamed(context): Promise<void> {
+    protected async invokeTeamsTeamRenamed(context): Promise<void> {
         await this.emit(
             'TeamsTeamRenamed',
             context,
@@ -308,17 +313,17 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         )
     }
 
-    protected async invoke_MessageReactionActivity(
+    protected async invokeMessageReactionActivity(
         context: IopaBotAdapterContext
     ): Promise<void> {
-        const activity = context.botːCapability.activity
+        const { activity } = context['bot.Capability']
         await this.emit('MessageReaction', context, async () => {
             if (activity.reactionsAdded || activity.reactionsRemoved) {
                 if (
                     activity.reactionsAdded &&
                     activity.reactionsAdded.length > 0
                 ) {
-                    await this.invoke_ReactionsAddedActivity(
+                    await this.invokeReactionsAddedActivity(
                         activity.reactionsAdded,
                         context
                     )
@@ -326,7 +331,7 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
                     activity.reactionsRemoved &&
                     activity.reactionsRemoved.length > 0
                 ) {
-                    await this.invoke_ReactionsRemovedActivity(
+                    await this.invokeReactionsRemovedActivity(
                         activity.reactionsRemoved,
                         context
                     )
@@ -337,10 +342,10 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         })
     }
 
-    protected async invoke_EventActivity(
+    protected async invokeEventActivity(
         context: IopaBotAdapterContext
     ): Promise<void> {
-        const activity = context.botːCapability.activity
+        const { activity } = context['bot.Capability']
         await this.emit('Event', context, async () => {
             if (activity.name === 'tokens/response') {
                 await this.emit(
@@ -354,7 +359,7 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         })
     }
 
-    protected async invoke_UnrecognizedActivity(
+    protected async invokeUnrecognizedActivity(
         context: IopaBotAdapterContext
     ): Promise<void> {
         await this.emit(
@@ -364,7 +369,7 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         )
     }
 
-    protected async invoke_ReactionsAddedActivity(
+    protected async invokeReactionsAddedActivity(
         reactionsAdded: MessageReaction[],
         context: IopaBotAdapterContext
     ): Promise<void> {
@@ -375,7 +380,7 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         )
     }
 
-    protected async invoke_ReactionsRemovedActivity(
+    protected async invokeReactionsRemovedActivity(
         reactionsRemoved: MessageReaction[],
         context: IopaBotAdapterContext
     ): Promise<void> {
@@ -394,7 +399,7 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         context: IopaBotAdapterContext
     ): () => Promise<void> {
         const runDialogs = async (): Promise<void> => {
-            if (!context.botːCapability.responded) {
+            if (!context['bot.Capability'].responded) {
                 await this.emit('Dialog', context, async () => {
                     // noop
                 })
@@ -437,10 +442,10 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
             (type as any) !== 'Dialog' &&
             (type as any) !== 'ContextSendActivities'
         ) {
-            context.botːActivityType = type
+            context['bot.ActivityType'] = type
         }
 
-        if (typeof args == 'function') {
+        if (typeof args === 'function') {
             onNext = args as any
             args = null
         }
@@ -491,7 +496,7 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on('Message', handler)
     }
 
-    /** Receives invoke activities where context.botːCapability.activity.name is empty */
+    /** Receives invoke activities where context["bot.Capability"].activity.name is empty */
     public onActionInvoke(
         handler: (
             context: IopaBotAdapterContext,
@@ -558,11 +563,11 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsMembersAdded',
             async (context: IopaBotAdapterContext, next) => {
-                const teamsChannelData = context.botːCapability.activity
+                const teamsChannelData = context['bot.Capability'].activity
                     .channelData as TeamsChannelData
                 await handler(
                     context,
-                    context.botːCapability.activity.membersAdded,
+                    context['bot.Capability'].activity.membersAdded,
                     teamsChannelData.team,
                     next
                 )
@@ -581,11 +586,11 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsMembersRemoved',
             async (context: IopaBotAdapterContext, next) => {
-                const teamsChannelData = context.botːCapability.activity
+                const teamsChannelData = context['bot.Capability'].activity
                     .channelData as TeamsChannelData
                 await handler(
                     context,
-                    context.botːCapability.activity.membersRemoved,
+                    context['bot.Capability'].activity.membersRemoved,
                     teamsChannelData.team,
                     next
                 )
@@ -604,7 +609,7 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsChannelCreated',
             async (context: IopaBotAdapterContext, next) => {
-                const teamsChannelData = context.botːCapability.activity
+                const teamsChannelData = context['bot.Capability'].activity
                     .channelData as TeamsChannelData
                 await handler(
                     context,
@@ -627,7 +632,7 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsChannelDeleted',
             async (context: IopaBotAdapterContext, next) => {
-                const teamsChannelData = context.botːCapability.activity
+                const teamsChannelData = context['bot.Capability'].activity
                     .channelData as TeamsChannelData
                 await handler(
                     context,
@@ -650,7 +655,7 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsChannelRenamed',
             async (context: IopaBotAdapterContext, next) => {
-                const teamsChannelData = context.botːCapability.activity
+                const teamsChannelData = context['bot.Capability'].activity
                     .channelData as TeamsChannelData
                 await handler(
                     context,
@@ -672,140 +677,134 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsTeamRenamed',
             async (context: IopaBotAdapterContext, next) => {
-                const teamsChannelData = context.botːCapability.activity
+                const teamsChannelData = context['bot.Capability'].activity
                     .channelData as TeamsChannelData
                 await handler(context, teamsChannelData.team, next)
             }
         )
     }
 
-    protected async invoke_TeamsInvokeActivity(
+    protected async invokeTeamsInvokeActivity(
         context: IopaBotAdapterContext
     ): Promise<InvokeResponse> {
         try {
             if (
-                !context.botːCapability.activity.name &&
-                context.botːCapability.activity.channelId === 'msteams'
+                !context['bot.Capability'].activity.name &&
+                context['bot.Capability'].activity.channelId === 'msteams'
             ) {
                 return await this.emit('TeamsCardActionInvoke', context)
-            } else {
-                switch (context.botːCapability.activity.name) {
-                    case 'signin/verifyState':
-                        await this.emit('TeamsSigninVerifyState', context)
-                        return this.createInvokeResponse()
+            }
+            switch (context['bot.Capability'].activity.name) {
+                case 'signin/verifyState':
+                    await this.emit('TeamsSigninVerifyState', context)
+                    return this.createInvokeResponse()
 
-                    case 'fileConsent/invoke':
-                        return this.createInvokeResponse(
-                            await this.emit('TeamsFileConsent', context)
-                        )
+                case 'fileConsent/invoke':
+                    return this.createInvokeResponse(
+                        await this.emit('TeamsFileConsent', context)
+                    )
 
-                    case 'actionableMessage/executeAction':
-                        await this.emit('TeamsO365ConnectorCardAction', context)
-                        return this.createInvokeResponse()
+                case 'actionableMessage/executeAction':
+                    await this.emit('TeamsO365ConnectorCardAction', context)
+                    return this.createInvokeResponse()
 
-                    case 'composeExtension/queryLink':
-                        return this.createInvokeResponse(
-                            this.emit('TeamsAppBasedLinkQuery', context)
-                        )
+                case 'composeExtension/queryLink':
+                    return this.createInvokeResponse(
+                        this.emit('TeamsAppBasedLinkQuery', context)
+                    )
 
-                    case 'composeExtension/query':
-                        return this.createInvokeResponse(
-                            this.emit('TeamsMessagingExtensionQuery', context)
-                        )
+                case 'composeExtension/query':
+                    return this.createInvokeResponse(
+                        this.emit('TeamsMessagingExtensionQuery', context)
+                    )
 
-                    case 'composeExtension/selectItem':
-                        return this.createInvokeResponse(
-                            this.emit(
-                                'TeamsMessagingExtensionSelectItem',
-                                context
-                            )
-                        )
+                case 'composeExtension/selectItem':
+                    return this.createInvokeResponse(
+                        this.emit('TeamsMessagingExtensionSelectItem', context)
+                    )
 
-                    case 'composeExtension/submitAction':
-                        const action: MessagingExtensionAction =
-                            context.botːCapability.activity.value
+                case 'composeExtension/submitAction':
+                    const action: MessagingExtensionAction =
+                        context['bot.Capability'].activity.value
 
-                        if (action.botMessagePreviewAction) {
-                            switch (action.botMessagePreviewAction) {
-                                case 'edit':
-                                    return this.createInvokeResponse(
-                                        this.emit(
-                                            'TeamsMessagingExtensionBotMessagePreviewEdit',
-                                            context
-                                        ) as MessagingExtensionActionResponse
-                                    )
-                                case 'send':
-                                    return this.createInvokeResponse(
-                                        this.emit(
-                                            'TeamsMessagingExtensionBotMessagePreviewSend',
-                                            context
-                                        ) as MessagingExtensionActionResponse
-                                    )
-                                default:
-                                    throw new Error('BadRequest')
-                            }
-                        } else {
-                            return this.createInvokeResponse(
-                                this.emit(
-                                    'TeamsMessagingExtensionSubmitAction',
-                                    context
-                                ) as MessagingExtensionActionResponse
-                            )
+                    if (action.botMessagePreviewAction) {
+                        switch (action.botMessagePreviewAction) {
+                            case 'edit':
+                                return this.createInvokeResponse(
+                                    this.emit(
+                                        'TeamsMessagingExtensionBotMessagePreviewEdit',
+                                        context
+                                    ) as MessagingExtensionActionResponse
+                                )
+                            case 'send':
+                                return this.createInvokeResponse(
+                                    this.emit(
+                                        'TeamsMessagingExtensionBotMessagePreviewSend',
+                                        context
+                                    ) as MessagingExtensionActionResponse
+                                )
+                            default:
+                                throw new Error('BadRequest')
                         }
-
-                    case 'composeExtension/fetchTask':
+                    } else {
                         return this.createInvokeResponse(
                             this.emit(
-                                'TeamsMessagingExtensionFetchTask',
+                                'TeamsMessagingExtensionSubmitAction',
                                 context
-                            )
+                            ) as MessagingExtensionActionResponse
                         )
+                    }
 
-                    case 'composeExtension/querySettingUrl':
-                        return this.createInvokeResponse(
-                            this.emit(
-                                'TeamsMessagingExtensionConfigurationQuerySettingUrl',
-                                context
-                            )
-                        )
+                case 'composeExtension/fetchTask':
+                    return this.createInvokeResponse(
+                        this.emit('TeamsMessagingExtensionFetchTask', context)
+                    )
 
-                    case 'composeExtension/setting':
-                        await this.emit(
-                            'TeamsMessagingExtensionConfigurationSetting',
+                case 'composeExtension/querySettingUrl':
+                    return this.createInvokeResponse(
+                        this.emit(
+                            'TeamsMessagingExtensionConfigurationQuerySettingUrl',
                             context
                         )
-                        return this.createInvokeResponse()
+                    )
 
-                    case 'composeExtension/onCardButtonClicked':
-                        await this.emit(
-                            'TeamsMessagingExtensionCardButtonClicked',
-                            context
-                        )
-                        return this.createInvokeResponse()
+                case 'composeExtension/setting':
+                    await this.emit(
+                        'TeamsMessagingExtensionConfigurationSetting',
+                        context
+                    )
+                    return this.createInvokeResponse()
 
-                    case 'task/fetch':
-                        return this.createInvokeResponse(
-                            this.emit('TeamsTaskModuleFetch', context)
-                        )
-                    case 'task/submit':
-                        return this.createInvokeResponse(
-                            this.emit('TeamsTaskModuleSubmit', context)
-                        )
-                    default:
-                        throw new Error('NotImplemented')
-                }
+                case 'composeExtension/onCardButtonClicked':
+                    await this.emit(
+                        'TeamsMessagingExtensionCardButtonClicked',
+                        context
+                    )
+                    return this.createInvokeResponse()
+
+                case 'task/fetch':
+                    return this.createInvokeResponse(
+                        this.emit('TeamsTaskModuleFetch', context)
+                    )
+                case 'task/submit':
+                    return this.createInvokeResponse(
+                        this.emit('TeamsTaskModuleSubmit', context)
+                    )
+                default:
+                    throw new Error('NotImplemented')
             }
         } catch (err) {
             if (err.message === 'NotImplemented') {
                 return { status: 501 }
-            } else if (err.message === 'BadRequest') {
+            }
+            if (err.message === 'BadRequest') {
                 return { status: 400 }
             }
             throw err
         }
     }
 
-    /** Receives invoke activities where context.botːCapability.activity.name is empty */
+    /** Receives invoke activities where context["bot.Capability"].activity.name is empty */
     public onTeamsCardActionInvoke(
         handler: (
             context: IopaBotAdapterContext,
@@ -831,9 +830,9 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsSigninVerifyState',
             async (context: IopaBotAdapterContext, next) => {
-                return await handler(
+                await handler(
                     context,
-                    context.botːCapability.activity.value,
+                    context['bot.Capability'].activity.value,
                     next
                 )
             }
@@ -851,18 +850,18 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsFileConsent',
             async (context: IopaBotAdapterContext, next) => {
-                const fileConsentCardResponse = context.botːCapability.activity
-                    .value as FileConsentCardResponse
+                const fileConsentCardResponse = context['bot.Capability']
+                    .activity.value as FileConsentCardResponse
                 await handler(context, fileConsentCardResponse, async () => {
                     switch (fileConsentCardResponse.action) {
                         case 'accept':
-                            return await this.emit(
+                            return this.emit(
                                 'TeamsFileConsentAccept',
                                 context,
                                 next
                             )
                         case 'decline':
-                            return await this.emit(
+                            return this.emit(
                                 'TeamsFileConsentDecline',
                                 context,
                                 next
@@ -886,9 +885,9 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsFileConsentAccept',
             async (context: IopaBotAdapterContext, next) => {
-                const fileConsentCardResponse = context.botːCapability.activity
-                    .value as FileConsentCardResponse
-                return await handler(context, fileConsentCardResponse, next)
+                const fileConsentCardResponse = context['bot.Capability']
+                    .activity.value as FileConsentCardResponse
+                return handler(context, fileConsentCardResponse, next)
             }
         )
     }
@@ -904,9 +903,9 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsFileConsentAccept',
             async (context: IopaBotAdapterContext, next) => {
-                const fileConsentCardResponse = context.botːCapability.activity
-                    .value as FileConsentCardResponse
-                return await handler(context, fileConsentCardResponse, next)
+                const fileConsentCardResponse = context['bot.Capability']
+                    .activity.value as FileConsentCardResponse
+                return handler(context, fileConsentCardResponse, next)
             }
         )
     }
@@ -922,9 +921,9 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsO365ConnectorCardAction',
             async (context: IopaBotAdapterContext, next) => {
-                return await handler(
+                return handler(
                     context,
-                    context.botːCapability.activity.value,
+                    context['bot.Capability'].activity.value,
                     next
                 )
             }
@@ -942,9 +941,9 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsMessagingExtensionCardButtonClicked',
             async (context: IopaBotAdapterContext, next) => {
-                return await handler(
+                return handler(
                     context,
-                    context.botːCapability.activity.value,
+                    context['bot.Capability'].activity.value,
                     next
                 )
             }
@@ -962,9 +961,9 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsTaskModuleFetch',
             async (context: IopaBotAdapterContext, next) => {
-                return await handler(
+                return handler(
                     context,
-                    context.botːCapability.activity.value,
+                    context['bot.Capability'].activity.value,
                     next
                 )
             }
@@ -982,9 +981,9 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsTaskModuleSubmit',
             async (context: IopaBotAdapterContext, next) => {
-                return await handler(
+                return handler(
                     context,
-                    context.botːCapability.activity.value,
+                    context['bot.Capability'].activity.value,
                     next
                 )
             }
@@ -1002,9 +1001,9 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsAppBasedLinkQuery',
             async (context: IopaBotAdapterContext, next) => {
-                return await handler(
+                return handler(
                     context,
-                    context.botːCapability.activity.value,
+                    context['bot.Capability'].activity.value,
                     next
                 )
             }
@@ -1022,9 +1021,9 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsMessagingExtensionQuery',
             async (context: IopaBotAdapterContext, next) => {
-                return await handler(
+                return handler(
                     context,
-                    context.botːCapability.activity.value,
+                    context['bot.Capability'].activity.value,
                     next
                 )
             }
@@ -1042,9 +1041,9 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsMessagingExtensionSelectItem',
             async (context: IopaBotAdapterContext, next) => {
-                return await handler(
+                return handler(
                     context,
-                    context.botːCapability.activity.value,
+                    context['bot.Capability'].activity.value,
                     next
                 )
             }
@@ -1062,9 +1061,9 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsMessagingExtensionSubmitAction',
             async (context: IopaBotAdapterContext, next) => {
-                return await handler(
+                return handler(
                     context,
-                    context.botːCapability.activity.value,
+                    context['bot.Capability'].activity.value,
                     next
                 )
             }
@@ -1082,9 +1081,9 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsMessagingExtensionBotMessagePreviewEdit',
             async (context: IopaBotAdapterContext, next) => {
-                return await handler(
+                return handler(
                     context,
-                    context.botːCapability.activity.value,
+                    context['bot.Capability'].activity.value,
                     next
                 )
             }
@@ -1102,9 +1101,9 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsMessagingExtensionBotMessagePreviewSend',
             async (context: IopaBotAdapterContext, next) => {
-                return await handler(
+                return handler(
                     context,
-                    context.botːCapability.activity.value,
+                    context['bot.Capability'].activity.value,
                     next
                 )
             }
@@ -1122,9 +1121,9 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsMessagingExtensionFetchTask',
             async (context: IopaBotAdapterContext, next) => {
-                return await handler(
+                return handler(
                     context,
-                    context.botːCapability.activity.value,
+                    context['bot.Capability'].activity.value,
                     next
                 )
             }
@@ -1142,9 +1141,9 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsMessagingExtensionConfigurationQuerySettingUrl',
             async (context: IopaBotAdapterContext, next) => {
-                return await handler(
+                return handler(
                     context,
-                    context.botːCapability.activity.value,
+                    context['bot.Capability'].activity.value,
                     next
                 )
             }
@@ -1162,9 +1161,9 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'TeamsMessagingExtensionConfigurationSetting',
             async (context: IopaBotAdapterContext, next) => {
-                return await handler(
+                return handler(
                     context,
-                    context.botːCapability.activity.value,
+                    context['bot.Capability'].activity.value,
                     next
                 )
             }
@@ -1185,7 +1184,7 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'ContextSendActivities',
             async (context: IopaBotAdapterContext, { activities }, next) => {
-                return await handler(context, activities, next)
+                return handler(context, activities, next)
             }
         )
     }
@@ -1204,7 +1203,7 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'ContextUpdateActivity',
             async (context: IopaBotAdapterContext, { activity }, next) => {
-                return await handler(context, activity, next)
+                return handler(context, activity, next)
             }
         )
     }
@@ -1223,9 +1222,9 @@ export class AdapterWithEvents extends AdapterCore implements IAdapterEvents {
         return this.on(
             'ContextUpdateActivity',
             async (context: IopaBotAdapterContext, next) => {
-                return await handler(
+                return handler(
                     context,
-                    context.botːCapability.activity.value,
+                    context['bot.Capability'].activity.value,
                     next
                 )
             }

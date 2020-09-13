@@ -1,16 +1,12 @@
-import { Attachment } from 'iopa-botadapter-schema'
-import * as teams from '../'
+import { Attachment } from 'iopa-botadapter-schema';
+import * as teams from '../';
 /**
  * Defines values for Type.
  * Possible values include: 'ViewAction', 'OpenUri', 'HttpPOST', 'ActionCard'
  * @readonly
  * @enum {string}
  */
-export declare type O365ConnectorCardActionType =
-    | 'ViewAction'
-    | 'OpenUri'
-    | 'HttpPOST'
-    | 'ActionCard'
+export declare type O365ConnectorCardActionType = 'ViewAction' | 'OpenUri' | 'HttpPOST' | 'ActionCard';
 /**
  * @interface
  * An interface representing O365ConnectorCardActionBase.
@@ -22,16 +18,16 @@ export interface O365ConnectorCardActionBase {
      * @member {Type} [type] Type of the action. Possible values include:
      * 'ViewAction', 'OpenUri', 'HttpPOST', 'ActionCard'
      */
-    '@type'?: O365ConnectorCardActionType
+    '@type'?: O365ConnectorCardActionType;
     /**
      * @member {string} [name] Name of the action that will be used as button
      * title
      */
-    name?: string
+    name?: string;
     /**
      * @member {string} [id] Action Id
      */
-    '@id'?: string
+    '@id'?: string;
 }
 /**
  * Defines values for Type1.
@@ -39,10 +35,7 @@ export interface O365ConnectorCardActionBase {
  * @readonly
  * @enum {string}
  */
-export declare type O365ConnectorCardInputType =
-    | 'textInput'
-    | 'dateInput'
-    | 'multichoiceInput'
+export declare type O365ConnectorCardInputType = 'textInput' | 'dateInput' | 'multichoiceInput';
 /**
  * @interface
  * An interface representing O365ConnectorCardInputBase.
@@ -54,32 +47,30 @@ export interface O365ConnectorCardInputBase {
      * @member {Type1} [type] Input type name. Possible values include:
      * 'textInput', 'dateInput', 'multichoiceInput'
      */
-    '@type'?: O365ConnectorCardInputType
+    '@type'?: O365ConnectorCardInputType;
     /**
      * @member {string} [id] Input Id. It must be unique per entire O365
      * connector card.
      */
-    id?: string
+    id?: string;
     /**
      * @member {boolean} [isRequired] Define if this input is a required field.
      * Default value is false.
      */
-    isRequired?: boolean
+    isRequired?: boolean;
     /**
      * @member {string} [title] Input title that will be shown as the placeholder
      */
-    title?: string
+    title?: string;
     /**
      * @member {string} [value] Default value for this input field
      */
-    value?: string
+    value?: string;
 }
 export interface TeamsAttachment<ContentType> extends Attachment {
-    content: ContentType
+    content: ContentType;
 }
-export declare type FileDownloadInfoAttachment = TeamsAttachment<
-    teams.FileDownloadInfo
->
+export declare type FileDownloadInfoAttachment = TeamsAttachment<teams.FileDownloadInfo>;
 /**
  * @interface
  * An interface representing MessageActionsPayloadBody.
@@ -91,14 +82,14 @@ export interface MessageActionsPayloadBody {
      * @member {ContentType} [contentType] Type of the content. Possible values
      * include: 'html', 'text'
      */
-    contentType?: teams.ContentType
+    contentType?: teams.ContentType;
     /**
      * @member {string} [content] The content of the body.
      */
-    content?: string
+    content?: string;
     /**
      * @member {string} [textContent] The text content of the body after
      * stripping HTML tags.
      */
-    textContent?: string
+    textContent?: string;
 }

@@ -1,10 +1,10 @@
 import * as url from 'url'
-import * as AuthenticationConstants from './authenticationConstants'
 import {
     HttpAuthAppCredentials as IHttpAuthAppCredentials,
     HttpRequest,
     HttpResponse,
 } from 'iopa-botadapter-types'
+import * as AuthenticationConstants from './authenticationConstants'
 
 /**
  * HttpAuthAppCredentials auth implementation and cache
@@ -29,12 +29,16 @@ export class HttpAuthAppCredentials implements IHttpAuthAppCredentials {
     >()
 
     public appPassword: string
+
     public appId: string
 
     public oAuthEndpoint: string
+
     public oAuthScope: string =
         AuthenticationConstants.ToChannelFromBotOAuthScope
+
     public readonly tokenCacheKey: string
+
     private refreshingToken: Promise<Response> | null = null
 
     constructor(
@@ -114,12 +118,12 @@ export class HttpAuthAppCredentials implements IHttpAuthAppCredentials {
             if (request.headers.set) {
                 request.headers.set('authorization', `Bearer ${token}`)
             } else {
-                request.headers['authorization'] = `Bearer ${token}`
+                ;(request.headers as any).authorization = `Bearer ${token}`
             }
         }
     }
 
-    public async getToken(forceRefresh: boolean = false): Promise<string> {
+    public async getToken(forceRefresh = false): Promise<string> {
         if (!forceRefresh) {
             // check the global cache for the token. If we have it, and it's valid, we're done.
             const oAuthToken: OAuthResponse = HttpAuthAppCredentials.cache.get(
@@ -141,7 +145,7 @@ export class HttpAuthAppCredentials implements IHttpAuthAppCredentials {
         this.refreshingToken = null
 
         let oauthResponse: OAuthResponse
-        if (res && res.status == 200) {
+        if (res && res.status === 200) {
             // `res` is equalivent to the results from the cached promise `this.refreshingToken`.
             // Because the promise has been cached, we need to see if the body has been read.
             // If the body has not been read yet, we can call res.json() to get the access_token.
@@ -152,13 +156,14 @@ export class HttpAuthAppCredentials implements IHttpAuthAppCredentials {
                 if (res.bodyUsed) {
                     // ** not in cache but not used so likely just too close
                     // so come round again
-                    return await this.getToken()
+                    return this.getToken()
                 }
 
                 oauthResponse = await res.json()
 
                 // Subtract 5 minutes from expires_in so they'll we'll get a
                 // new token before it expires.
+                // eslint-disable-next-line @typescript-eslint/camelcase
                 oauthResponse.expiration_time =
                     Date.now() + oauthResponse.expires_in * 1000 - 300000
                 HttpAuthAppCredentials.cache.set(
@@ -167,20 +172,19 @@ export class HttpAuthAppCredentials implements IHttpAuthAppCredentials {
                 )
 
                 return oauthResponse.access_token
-            } else {
-                const oAuthToken: OAuthResponse = HttpAuthAppCredentials.cache.get(
-                    this.tokenCacheKey
-                )
-
-                if (oAuthToken) {
-                    return oAuthToken.access_token
-                } else {
-                    return await this.getToken()
-                }
             }
-        } else {
-            throw new Error(res.statusText)
+            const oAuthToken: OAuthResponse = HttpAuthAppCredentials.cache.get(
+                this.tokenCacheKey
+            )
+
+            if (oAuthToken) {
+                return oAuthToken.access_token
+            }
+            return this.getToken()
         }
+        throw new Error(
+            (res && res.statusText) || 'Unknown Fetch Error Getting Token'
+        )
     }
 
     private async refreshToken(): Promise<HttpResponse> {

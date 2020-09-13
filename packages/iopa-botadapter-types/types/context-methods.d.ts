@@ -19,7 +19,7 @@ export interface ContextMethods {
      * make formating and sending individual activities easier.
      *
      * ```JavaScript
-     * await context.botːCapability.sendActivity(`Hello World`);
+     * await context["bot.Capability"].sendActivity(`Hello World`);
      * ```
      * @param activityOrText Activity or text of a message to send the user.
      * @param speak (Optional) SSML that should be spoken to the user for the message.
@@ -42,7 +42,7 @@ export interface ContextMethods {
      * handlers before being passed to `adapter.sendActivities()`.
      *
      * ```JavaScript
-     * await context.botːCapability.sendActivities([
+     * await context["bot.Capability"].sendActivities([
      *    { type: 'typing' },
      *    { type: 'delay', value: 2000 },
      *    { type: 'message', text: 'Hello... How are you?' }

@@ -16,7 +16,7 @@
         "iopa-botadapter-schema": "3.0.0",
         "iopa-botadapter-schema-teams": "3.0.0",
         "iopa-botadapter-schema-tokens": "3.0.0",
-        "reactive-cards": "^0.5.31"
+        "reactive-cards": "^1.1.6"
     },
     "keywords": [
         "botbuilder-js",

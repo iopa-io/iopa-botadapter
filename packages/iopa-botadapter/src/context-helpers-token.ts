@@ -6,18 +6,18 @@ import {
     BotSignInApi,
 } from 'iopa-botadapter-schema-tokens'
 
-const OAUTH_ENDPOINT = 'https://api.botframework.com'
-
 import {
     TokenHelpers as ITokenHelpers,
     IopaBotAdapterContext,
 } from 'iopa-botadapter-types'
 
+const OAUTH_ENDPOINT = 'https://api.botframework.com'
+
 export class TokenHelpers implements ITokenHelpers {
-    private context: IopaBotAdapterContext
+    private _context: IopaBotAdapterContext
 
     constructor(context: IopaBotAdapterContext) {
-        this.context = context
+        this._context = context
     }
 
     /** An asynchronous method that attempts to retrieve the token for a user that's in a login flow.  */
@@ -25,7 +25,7 @@ export class TokenHelpers implements ITokenHelpers {
         connectionName: string,
         magicCode?: string
     ): Promise<TokenResponse> {
-        const activity = this.context.botːCapability.activity
+        const { activity } = this._context['bot.Capability']
 
         if (!activity.from || !activity.from.id) {
             throw new Error(
@@ -38,10 +38,10 @@ export class TokenHelpers implements ITokenHelpers {
             )
         }
         const userId: string = activity.from.id
-        const url: string = this.oauthApiUrl(this.context)
+        const url: string = this.oauthApiUrl(this._context)
         const client: UserTokenApi = this.createUserTokenApiClient(url)
 
-        return await client.userTokenGetToken(
+        return client.userTokenGetToken(
             userId,
             connectionName,
             activity.channelId,
@@ -54,7 +54,7 @@ export class TokenHelpers implements ITokenHelpers {
         connectionName?: string,
         userId?: string
     ): Promise<void> {
-        const activity = this.context.botːCapability.activity
+        const { activity } = this._context['bot.Capability']
 
         if (!activity.from || !activity.from.id) {
             throw new Error(
@@ -65,7 +65,7 @@ export class TokenHelpers implements ITokenHelpers {
             userId = activity.from.id
         }
 
-        const url: string = this.oauthApiUrl(this.context)
+        const url: string = this.oauthApiUrl(this._context)
         const client: UserTokenApi = this.createUserTokenApiClient(url)
         await client.userTokenSignOut(
             userId,
@@ -76,12 +76,12 @@ export class TokenHelpers implements ITokenHelpers {
 
     /** An asynchronous method that gets a sign-in link from the token server that can be sent as part */
     public async getSignInLink(connectionName: string): Promise<string> {
-        const { adapter, activity } = this.context.botːCapability
+        const { adapter, activity } = this._context['bot.Capability']
 
         const conversation: Partial<ConversationReference> = adapter.getConversationReference(
             activity
         )
-        const url: string = this.oauthApiUrl(this.context)
+        const url: string = this.oauthApiUrl(this._context)
         const client: BotSignInApi = this.createBotSignInApiClient(url)
         const state: any = {
             ConnectionName: connectionName,
@@ -100,7 +100,7 @@ export class TokenHelpers implements ITokenHelpers {
         userId?: string,
         includeFilter?: string
     ): Promise<TokenStatus[]> {
-        const activity = this.context.botːCapability.activity
+        const { activity } = this._context['bot.Capability']
 
         if (!userId && (!activity.from || !activity.from.id)) {
             throw new Error(
@@ -108,10 +108,10 @@ export class TokenHelpers implements ITokenHelpers {
             )
         }
         userId = userId || activity.from.id
-        const url: string = this.oauthApiUrl(this.context)
+        const url: string = this.oauthApiUrl(this._context)
         const client: UserTokenApi = this.createUserTokenApiClient(url)
 
-        return await client.userTokenGetTokenStatus(
+        return client.userTokenGetTokenStatus(
             userId,
             activity.channelId,
             includeFilter
@@ -125,7 +125,7 @@ export class TokenHelpers implements ITokenHelpers {
     ): Promise<{
         [propertyName: string]: TokenResponse
     }> {
-        const activity = this.context.botːCapability.activity
+        const { activity } = this._context['bot.Capability']
 
         if (!activity.from || !activity.from.id) {
             throw new Error(
@@ -133,13 +133,13 @@ export class TokenHelpers implements ITokenHelpers {
             )
         }
         const userId: string = activity.from.id
-        const url: string = this.oauthApiUrl(this.context)
+        const url: string = this.oauthApiUrl(this._context)
         const client: UserTokenApi = this.createUserTokenApiClient(url)
 
-        return await client.userTokenGetAadTokens(
+        return client.userTokenGetAadTokens(
             userId,
             connectionName,
-            { resourceUrls: resourceUrls },
+            { resourceUrls },
             activity.channelId
         )
     }
@@ -147,10 +147,9 @@ export class TokenHelpers implements ITokenHelpers {
     /** Creates an OAuth API client. */
     protected createUserTokenApiClient(serviceUrl: string): UserTokenApi {
         const fetchProxy = async (url: string, init: any) => {
-            await this.context.botːCapability.adapter.credentials.signRequest(
-                url,
-                init
-            )
+            await this._context[
+                'bot.Capability'
+            ].adapter.credentials.signRequest(url, init)
             return fetch(url, init)
         }
 
@@ -166,10 +165,9 @@ export class TokenHelpers implements ITokenHelpers {
     /** Creates an OAuth API client. */
     protected createBotSignInApiClient(serviceUrl: string): BotSignInApi {
         const fetchProxy = async (url: string, init: any) => {
-            await this.context.botːCapability.adapter.credentials.signRequest(
-                url,
-                init
-            )
+            await this._context[
+                'bot.Capability'
+            ].adapter.credentials.signRequest(url, init)
             return fetch(url, init)
         }
 
@@ -182,7 +180,7 @@ export class TokenHelpers implements ITokenHelpers {
         return client
     }
 
-    /** Gets the OAuth API endpoint.*/
+    /** Gets the OAuth API endpoint. */
     protected oauthApiUrl(
         contextOrServiceUrl: IopaBotAdapterContext | string
     ): string {

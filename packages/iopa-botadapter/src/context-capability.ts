@@ -12,23 +12,31 @@ import {
     TeamsHelpers as ITeamsHelpers,
     TokenHelpers as ITokenHelpers,
     IBotAdapterCapability,
+    Adapter,
+    IopaBotAdapterContext,
 } from 'iopa-botadapter-types'
 
 import { IopaContext } from 'iopa-types'
-import { Adapter, IopaBotAdapterContext } from 'iopa-botadapter-types'
+
 import { TeamsHelpers } from './context-helpers-teams'
 import { TokenHelpers } from './context-helpers-token'
 
-const s_context: unique symbol = Symbol('urn:io:iopa:bot:response:context')
+const $$context: unique symbol = Symbol('urn:io:iopa:bot:response:context')
 
 export class BotAdapterCapability
     implements IBotAdapterCapability, IContextMethods {
-    private readonly [s_context]: IopaBotAdapterContext
+    private readonly [$$context]: IopaBotAdapterContext
+
     public readonly adapter: Adapter
+
     public readonly activity: Activity
+
     public readonly teams: ITeamsHelpers
+
     public readonly tokens: ITokenHelpers
+
     public readonly turnState: Map<any, any>
+
     public responded: boolean
 
     constructor(
@@ -36,7 +44,7 @@ export class BotAdapterCapability
         adapter: Adapter,
         activity: Activity
     ) {
-        this[s_context] = plaincontext as IopaBotAdapterContext
+        this[$$context] = plaincontext as IopaBotAdapterContext
         this.activity = activity
         this.adapter = adapter
         this.teams = new TeamsHelpers(plaincontext as IopaBotAdapterContext)
@@ -97,11 +105,11 @@ export class BotAdapterCapability
 
         return this.adapter.emit(
             'ContextSendActivities',
-            this[s_context],
+            this[$$context],
             { activities: output },
             () => {
                 return this.adapter
-                    .sendActivities(this[s_context], output)
+                    .sendActivities(this[$$context], output)
                     .then((responses: ResourceResponse[]) => {
                         // Set responded flag
                         if (sentNonTraceActivity) {
@@ -128,7 +136,7 @@ export class BotAdapterCapability
 
         return this.adapter.emit(
             'ContextDeleteActivity',
-            this[s_context],
+            this[$$context],
             { reference },
             () => this.adapter.deleteActivity(reference)
         )
@@ -146,7 +154,7 @@ export class BotAdapterCapability
 
         return this.adapter.emit(
             'ContextUpdateActivity',
-            this[s_context],
+            this[$$context],
             { activity },
             () => this.adapter.updateActivity(a)
         )
@@ -164,11 +172,11 @@ export class BotAdapterCapability
                 `ActivityHelpers.getConversationMembers(): missing conversation or conversation.id`
             )
         }
-        const serviceUrl: string = this.activity.serviceUrl
+        const { serviceUrl } = this.activity
         const conversationId: string = this.activity.conversation.id
         const client = this.adapter.createConversationsApiClient(serviceUrl)
 
-        return await client.conversationsGetConversationMembers(conversationId)
+        return client.conversationsGetConversationMembers(conversationId)
     }
 
     getConversationReference(): Partial<ConversationReference> {

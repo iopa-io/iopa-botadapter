@@ -20,16 +20,16 @@ import { TokenHelpers } from './context-helpers-token'
  * BotFramework extensions to the IopaContext
  *
  * The properties and methods included here are added to the
- * `botːCapability` section of the  IopaContext
+ * ["bot.Capability"]` section of the  IopaContext
  *
  */
 export interface IopaBotAdapterContext extends IopaBotContext {
-    botːCapability?: IBotAdapterCapability
+   ["bot.Capability"]?: IBotAdapterCapability
     response: IopaBotAdapterResponse
 }
 
 export type IopaBotAdapterResponse = IopaBotResponse & {
-    botːCapability?: IBotAdapterCapability
+   ["bot.Capability"]?: IBotAdapterCapability
 }
 
 export interface IBotAdapterCapability extends ContextMethods {
@@ -132,9 +132,9 @@ export interface IBotAdapterCapability extends ContextMethods {
      *
      * ```JavaScript
      * // Send a typing indicator without going through an middleware listeners.
-     * const reference = context.botːCapability.adapter.getConversationReference(context.activity);
-     * const activity = context.botːCapability.adapter.applyConversationReference({ type: 'typing' }, reference);
-     * await context.botːCapability.sendActivities([activity]);
+     * const reference = context["bot.Capability"].adapter.getConversationReference(context.activity);
+     * const activity = context["bot.Capability"].adapter.applyConversationReference({ type: 'typing' }, reference);
+     * await context["bot.Capability"].sendActivities([activity]);
      * ```
      */
     readonly adapter: Adapter
@@ -159,8 +159,8 @@ export interface IBotAdapterCapability extends ContextMethods {
      *
      * ```JavaScript
      * await routeActivity(context);
-     * if (!context.botːCapability.responded) {
-     *    await context.botːCapability.sendActivity(`I'm sorry. I didn't understand.`);
+     * if (!context["bot.Capability"].responded) {
+     *    await context["bot.Capability"].sendActivity(`I'm sorry. I didn't understand.`);
      * }
      * ```
      */
@@ -176,7 +176,7 @@ export interface IBotAdapterCapability extends ContextMethods {
      *
      * ```JavaScript
      * const cart = await loadUsersShoppingCart(context);
-     * context.botːCapability.turnState.set('cart', cart);
+     * context["bot.Capability"].turnState.set('cart', cart);
      * ```
      *
      * > [!TIP]

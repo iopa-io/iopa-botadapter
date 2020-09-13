@@ -10,24 +10,24 @@
  * Do not edit the class manually.
  */
 /// <reference path="../src/custom.d.ts" />
-import { Configuration } from './configuration'
+import { Configuration } from './configuration';
 /**
  *
  * @export
  */
 export declare const COLLECTION_FORMATS: {
-    csv: string
-    ssv: string
-    tsv: string
-    pipes: string
-}
+    csv: string;
+    ssv: string;
+    tsv: string;
+    pipes: string;
+};
 /**
  *
  * @export
  * @interface FetchAPI
  */
 export interface FetchAPI {
-    (url: string, init?: any): Promise<Response>
+    (url: string, init?: any): Promise<Response>;
 }
 /**
  *
@@ -35,8 +35,8 @@ export interface FetchAPI {
  * @interface FetchArgs
  */
 export interface FetchArgs {
-    url: string
-    options: any
+    url: string;
+    options: any;
 }
 /**
  *
@@ -44,14 +44,10 @@ export interface FetchArgs {
  * @class BaseAPI
  */
 export declare class BaseAPI {
-    protected basePath: string
-    protected fetch: FetchAPI
-    protected configuration: Configuration
-    constructor(
-        configuration?: Configuration,
-        basePath?: string,
-        fetch?: FetchAPI
-    )
+    protected basePath: string;
+    protected fetch: FetchAPI;
+    protected configuration: Configuration;
+    constructor(configuration?: Configuration, basePath?: string, fetch?: FetchAPI);
 }
 /**
  *
@@ -60,9 +56,9 @@ export declare class BaseAPI {
  * @extends {Error}
  */
 export declare class RequiredError extends Error {
-    field: string
-    name: 'RequiredError'
-    constructor(field: string, msg?: string)
+    field: string;
+    name: 'RequiredError';
+    constructor(field: string, msg?: string);
 }
 /**
  *
@@ -75,7 +71,7 @@ export interface AadResourceUrls {
      * @type {Array<string>}
      * @memberof AadResourceUrls
      */
-    resourceUrls?: Array<string>
+    resourceUrls?: Array<string>;
 }
 /**
  *
@@ -88,7 +84,7 @@ export interface ErrorResponse {
      * @type {Error}
      * @memberof ErrorResponse
      */
-    error?: Error
+    error?: Error;
 }
 /**
  *
@@ -101,13 +97,13 @@ export interface InnerHttpError {
      * @type {number}
      * @memberof InnerHttpError
      */
-    statusCode?: number
+    statusCode?: number;
     /**
      *
      * @type {any}
      * @memberof InnerHttpError
      */
-    body?: any
+    body?: any;
 }
 /**
  *
@@ -120,26 +116,27 @@ export interface ModelError {
      * @type {string}
      * @memberof ModelError
      */
-    code?: string
+    code?: string;
     /**
      *
      * @type {string}
      * @memberof ModelError
      */
-    message?: string
+    message?: string;
     /**
      *
      * @type {InnerHttpError}
      * @memberof ModelError
      */
-    innerHttpError?: InnerHttpError
+    innerHttpError?: InnerHttpError;
 }
 /**
  *
  * @export
  * @interface ModelVoid
  */
-export interface ModelVoid {}
+export interface ModelVoid {
+}
 /**
  *
  * @export
@@ -151,25 +148,25 @@ export interface TokenResponse {
      * @type {string}
      * @memberof TokenResponse
      */
-    channelId?: string
+    channelId?: string;
     /**
      *
      * @type {string}
      * @memberof TokenResponse
      */
-    connectionName?: string
+    connectionName?: string;
     /**
      *
      * @type {string}
      * @memberof TokenResponse
      */
-    token?: string
+    token?: string;
     /**
      *
      * @type {string}
      * @memberof TokenResponse
      */
-    expiration?: string
+    expiration?: string;
 }
 /**
  * The status of a particular token
@@ -182,33 +179,31 @@ export interface TokenStatus {
      * @type {string}
      * @memberof TokenStatus
      */
-    channelId?: string
+    channelId?: string;
     /**
      * The name of the connection the token status pertains to
      * @type {string}
      * @memberof TokenStatus
      */
-    connectionName?: string
+    connectionName?: string;
     /**
      * True if a token is stored for this ConnectionName
      * @type {boolean}
      * @memberof TokenStatus
      */
-    hasToken?: boolean
+    hasToken?: boolean;
     /**
      * The display name of the service provider for which this Token belongs to
      * @type {string}
      * @memberof TokenStatus
      */
-    serviceProviderDisplayName?: string
+    serviceProviderDisplayName?: string;
 }
 /**
  * BotSignInApi - fetch parameter creator
  * @export
  */
-export declare const BotSignInApiFetchParamCreator: (
-    configuration?: Configuration
-) => {
+export declare const BotSignInApiFetchParamCreator: (configuration?: Configuration) => {
     /**
      *
      * @param {string} state
@@ -218,21 +213,13 @@ export declare const BotSignInApiFetchParamCreator: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    botSignInGetSignInUrl(
-        state: string,
-        codeChallenge?: string,
-        emulatorUrl?: string,
-        finalRedirect?: string,
-        options?: any
-    ): FetchArgs
-}
+    botSignInGetSignInUrl(state: string, codeChallenge?: string, emulatorUrl?: string, finalRedirect?: string, options?: any): FetchArgs;
+};
 /**
  * BotSignInApi - functional programming interface
  * @export
  */
-export declare const BotSignInApiFp: (
-    configuration?: Configuration
-) => {
+export declare const BotSignInApiFp: (configuration?: Configuration) => {
     /**
      *
      * @param {string} state
@@ -242,23 +229,13 @@ export declare const BotSignInApiFp: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    botSignInGetSignInUrl(
-        state: string,
-        codeChallenge?: string,
-        emulatorUrl?: string,
-        finalRedirect?: string,
-        options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<string>
-}
+    botSignInGetSignInUrl(state: string, codeChallenge?: string, emulatorUrl?: string, finalRedirect?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string>;
+};
 /**
  * BotSignInApi - factory interface
  * @export
  */
-export declare const BotSignInApiFactory: (
-    configuration?: Configuration,
-    fetch?: FetchAPI,
-    basePath?: string
-) => {
+export declare const BotSignInApiFactory: (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) => {
     /**
      *
      * @param {string} state
@@ -268,14 +245,8 @@ export declare const BotSignInApiFactory: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    botSignInGetSignInUrl(
-        state: string,
-        codeChallenge?: string,
-        emulatorUrl?: string,
-        finalRedirect?: string,
-        options?: any
-    ): Promise<string>
-}
+    botSignInGetSignInUrl(state: string, codeChallenge?: string, emulatorUrl?: string, finalRedirect?: string, options?: any): Promise<string>;
+};
 /**
  * BotSignInApi - interface
  * @export
@@ -292,13 +263,7 @@ export interface BotSignInApiInterface {
      * @throws {RequiredError}
      * @memberof BotSignInApiInterface
      */
-    botSignInGetSignInUrl(
-        state: string,
-        codeChallenge?: string,
-        emulatorUrl?: string,
-        finalRedirect?: string,
-        options?: any
-    ): Promise<string>
+    botSignInGetSignInUrl(state: string, codeChallenge?: string, emulatorUrl?: string, finalRedirect?: string, options?: any): Promise<string>;
 }
 /**
  * BotSignInApi - object-oriented interface
@@ -306,8 +271,7 @@ export interface BotSignInApiInterface {
  * @class BotSignInApi
  * @extends {BaseAPI}
  */
-export declare class BotSignInApi extends BaseAPI
-    implements BotSignInApiInterface {
+export declare class BotSignInApi extends BaseAPI implements BotSignInApiInterface {
     /**
      *
      * @param {string} state
@@ -318,21 +282,13 @@ export declare class BotSignInApi extends BaseAPI
      * @throws {RequiredError}
      * @memberof BotSignInApi
      */
-    botSignInGetSignInUrl(
-        state: string,
-        codeChallenge?: string,
-        emulatorUrl?: string,
-        finalRedirect?: string,
-        options?: any
-    ): Promise<string>
+    botSignInGetSignInUrl(state: string, codeChallenge?: string, emulatorUrl?: string, finalRedirect?: string, options?: any): Promise<string>;
 }
 /**
  * UserTokenApi - fetch parameter creator
  * @export
  */
-export declare const UserTokenApiFetchParamCreator: (
-    configuration?: Configuration
-) => {
+export declare const UserTokenApiFetchParamCreator: (configuration?: Configuration) => {
     /**
      *
      * @param {string} userId
@@ -342,13 +298,7 @@ export declare const UserTokenApiFetchParamCreator: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userTokenGetAadTokens(
-        userId: string,
-        connectionName: string,
-        aadResourceUrls: AadResourceUrls,
-        channelId?: string,
-        options?: any
-    ): FetchArgs
+    userTokenGetAadTokens(userId: string, connectionName: string, aadResourceUrls: AadResourceUrls, channelId?: string, options?: any): FetchArgs;
     /**
      *
      * @param {string} userId
@@ -358,13 +308,7 @@ export declare const UserTokenApiFetchParamCreator: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userTokenGetToken(
-        userId: string,
-        connectionName: string,
-        channelId?: string,
-        code?: string,
-        options?: any
-    ): FetchArgs
+    userTokenGetToken(userId: string, connectionName: string, channelId?: string, code?: string, options?: any): FetchArgs;
     /**
      *
      * @param {string} userId
@@ -373,12 +317,7 @@ export declare const UserTokenApiFetchParamCreator: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userTokenGetTokenStatus(
-        userId: string,
-        channelId?: string,
-        include?: string,
-        options?: any
-    ): FetchArgs
+    userTokenGetTokenStatus(userId: string, channelId?: string, include?: string, options?: any): FetchArgs;
     /**
      *
      * @param {string} userId
@@ -387,20 +326,13 @@ export declare const UserTokenApiFetchParamCreator: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userTokenSignOut(
-        userId: string,
-        connectionName?: string,
-        channelId?: string,
-        options?: any
-    ): FetchArgs
-}
+    userTokenSignOut(userId: string, connectionName?: string, channelId?: string, options?: any): FetchArgs;
+};
 /**
  * UserTokenApi - functional programming interface
  * @export
  */
-export declare const UserTokenApiFp: (
-    configuration?: Configuration
-) => {
+export declare const UserTokenApiFp: (configuration?: Configuration) => {
     /**
      *
      * @param {string} userId
@@ -410,18 +342,9 @@ export declare const UserTokenApiFp: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userTokenGetAadTokens(
-        userId: string,
-        connectionName: string,
-        aadResourceUrls: AadResourceUrls,
-        channelId?: string,
-        options?: any
-    ): (
-        fetch?: FetchAPI,
-        basePath?: string
-    ) => Promise<{
-        [key: string]: TokenResponse
-    }>
+    userTokenGetAadTokens(userId: string, connectionName: string, aadResourceUrls: AadResourceUrls, channelId?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<{
+        [key: string]: TokenResponse;
+    }>;
     /**
      *
      * @param {string} userId
@@ -431,13 +354,7 @@ export declare const UserTokenApiFp: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userTokenGetToken(
-        userId: string,
-        connectionName: string,
-        channelId?: string,
-        code?: string,
-        options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<TokenResponse>
+    userTokenGetToken(userId: string, connectionName: string, channelId?: string, code?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<TokenResponse>;
     /**
      *
      * @param {string} userId
@@ -446,12 +363,7 @@ export declare const UserTokenApiFp: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userTokenGetTokenStatus(
-        userId: string,
-        channelId?: string,
-        include?: string,
-        options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<TokenStatus[]>
+    userTokenGetTokenStatus(userId: string, channelId?: string, include?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<TokenStatus>>;
     /**
      *
      * @param {string} userId
@@ -460,22 +372,13 @@ export declare const UserTokenApiFp: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userTokenSignOut(
-        userId: string,
-        connectionName?: string,
-        channelId?: string,
-        options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<ModelVoid>
-}
+    userTokenSignOut(userId: string, connectionName?: string, channelId?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ModelVoid>;
+};
 /**
  * UserTokenApi - factory interface
  * @export
  */
-export declare const UserTokenApiFactory: (
-    configuration?: Configuration,
-    fetch?: FetchAPI,
-    basePath?: string
-) => {
+export declare const UserTokenApiFactory: (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) => {
     /**
      *
      * @param {string} userId
@@ -485,15 +388,9 @@ export declare const UserTokenApiFactory: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userTokenGetAadTokens(
-        userId: string,
-        connectionName: string,
-        aadResourceUrls: AadResourceUrls,
-        channelId?: string,
-        options?: any
-    ): Promise<{
-        [key: string]: TokenResponse
-    }>
+    userTokenGetAadTokens(userId: string, connectionName: string, aadResourceUrls: AadResourceUrls, channelId?: string, options?: any): Promise<{
+        [key: string]: TokenResponse;
+    }>;
     /**
      *
      * @param {string} userId
@@ -503,13 +400,7 @@ export declare const UserTokenApiFactory: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userTokenGetToken(
-        userId: string,
-        connectionName: string,
-        channelId?: string,
-        code?: string,
-        options?: any
-    ): Promise<TokenResponse>
+    userTokenGetToken(userId: string, connectionName: string, channelId?: string, code?: string, options?: any): Promise<TokenResponse>;
     /**
      *
      * @param {string} userId
@@ -518,12 +409,7 @@ export declare const UserTokenApiFactory: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userTokenGetTokenStatus(
-        userId: string,
-        channelId?: string,
-        include?: string,
-        options?: any
-    ): Promise<TokenStatus[]>
+    userTokenGetTokenStatus(userId: string, channelId?: string, include?: string, options?: any): Promise<TokenStatus[]>;
     /**
      *
      * @param {string} userId
@@ -532,13 +418,8 @@ export declare const UserTokenApiFactory: (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userTokenSignOut(
-        userId: string,
-        connectionName?: string,
-        channelId?: string,
-        options?: any
-    ): Promise<ModelVoid>
-}
+    userTokenSignOut(userId: string, connectionName?: string, channelId?: string, options?: any): Promise<ModelVoid>;
+};
 /**
  * UserTokenApi - interface
  * @export
@@ -555,15 +436,9 @@ export interface UserTokenApiInterface {
      * @throws {RequiredError}
      * @memberof UserTokenApiInterface
      */
-    userTokenGetAadTokens(
-        userId: string,
-        connectionName: string,
-        aadResourceUrls: AadResourceUrls,
-        channelId?: string,
-        options?: any
-    ): Promise<{
-        [key: string]: TokenResponse
-    }>
+    userTokenGetAadTokens(userId: string, connectionName: string, aadResourceUrls: AadResourceUrls, channelId?: string, options?: any): Promise<{
+        [key: string]: TokenResponse;
+    }>;
     /**
      *
      * @param {string} userId
@@ -574,13 +449,7 @@ export interface UserTokenApiInterface {
      * @throws {RequiredError}
      * @memberof UserTokenApiInterface
      */
-    userTokenGetToken(
-        userId: string,
-        connectionName: string,
-        channelId?: string,
-        code?: string,
-        options?: any
-    ): Promise<TokenResponse>
+    userTokenGetToken(userId: string, connectionName: string, channelId?: string, code?: string, options?: any): Promise<TokenResponse>;
     /**
      *
      * @param {string} userId
@@ -590,12 +459,7 @@ export interface UserTokenApiInterface {
      * @throws {RequiredError}
      * @memberof UserTokenApiInterface
      */
-    userTokenGetTokenStatus(
-        userId: string,
-        channelId?: string,
-        include?: string,
-        options?: any
-    ): Promise<Array<TokenStatus>>
+    userTokenGetTokenStatus(userId: string, channelId?: string, include?: string, options?: any): Promise<Array<TokenStatus>>;
     /**
      *
      * @param {string} userId
@@ -605,12 +469,7 @@ export interface UserTokenApiInterface {
      * @throws {RequiredError}
      * @memberof UserTokenApiInterface
      */
-    userTokenSignOut(
-        userId: string,
-        connectionName?: string,
-        channelId?: string,
-        options?: any
-    ): Promise<ModelVoid>
+    userTokenSignOut(userId: string, connectionName?: string, channelId?: string, options?: any): Promise<ModelVoid>;
 }
 /**
  * UserTokenApi - object-oriented interface
@@ -618,8 +477,7 @@ export interface UserTokenApiInterface {
  * @class UserTokenApi
  * @extends {BaseAPI}
  */
-export declare class UserTokenApi extends BaseAPI
-    implements UserTokenApiInterface {
+export declare class UserTokenApi extends BaseAPI implements UserTokenApiInterface {
     /**
      *
      * @param {string} userId
@@ -630,15 +488,9 @@ export declare class UserTokenApi extends BaseAPI
      * @throws {RequiredError}
      * @memberof UserTokenApi
      */
-    userTokenGetAadTokens(
-        userId: string,
-        connectionName: string,
-        aadResourceUrls: AadResourceUrls,
-        channelId?: string,
-        options?: any
-    ): Promise<{
-        [key: string]: TokenResponse
-    }>
+    userTokenGetAadTokens(userId: string, connectionName: string, aadResourceUrls: AadResourceUrls, channelId?: string, options?: any): Promise<{
+        [key: string]: TokenResponse;
+    }>;
     /**
      *
      * @param {string} userId
@@ -649,13 +501,7 @@ export declare class UserTokenApi extends BaseAPI
      * @throws {RequiredError}
      * @memberof UserTokenApi
      */
-    userTokenGetToken(
-        userId: string,
-        connectionName: string,
-        channelId?: string,
-        code?: string,
-        options?: any
-    ): Promise<TokenResponse>
+    userTokenGetToken(userId: string, connectionName: string, channelId?: string, code?: string, options?: any): Promise<TokenResponse>;
     /**
      *
      * @param {string} userId
@@ -665,12 +511,7 @@ export declare class UserTokenApi extends BaseAPI
      * @throws {RequiredError}
      * @memberof UserTokenApi
      */
-    userTokenGetTokenStatus(
-        userId: string,
-        channelId?: string,
-        include?: string,
-        options?: any
-    ): Promise<TokenStatus[]>
+    userTokenGetTokenStatus(userId: string, channelId?: string, include?: string, options?: any): Promise<TokenStatus[]>;
     /**
      *
      * @param {string} userId
@@ -680,10 +521,5 @@ export declare class UserTokenApi extends BaseAPI
      * @throws {RequiredError}
      * @memberof UserTokenApi
      */
-    userTokenSignOut(
-        userId: string,
-        connectionName?: string,
-        channelId?: string,
-        options?: any
-    ): Promise<ModelVoid>
+    userTokenSignOut(userId: string, connectionName?: string, channelId?: string, options?: any): Promise<ModelVoid>;
 }

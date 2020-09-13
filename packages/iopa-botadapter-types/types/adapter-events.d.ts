@@ -12,11 +12,6 @@ import {
     ConversationReference,
 } from 'iopa-botadapter-schema'
 
-export declare type IopaHandler = (
-    context: IopaBotAdapterContext,
-    next: () => Promise<any>
-) => Promise<any>
-
 import {
     AppBasedLinkQuery,
     ChannelInfo,
@@ -31,6 +26,11 @@ import {
     TaskModuleResponse,
     TeamInfo,
 } from 'iopa-botadapter-schema-teams'
+
+export declare type IopaHandler = (
+    context: IopaBotAdapterContext,
+    next: () => Promise<any>
+) => Promise<any>
 
 export declare class AdapterEvents {
     /**
