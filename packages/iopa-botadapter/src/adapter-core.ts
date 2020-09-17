@@ -24,8 +24,9 @@ import {
 
 import { IopaContext, RouterApp } from 'iopa-types'
 
-import retry from 'async-retry'
 import { toIopaBotAdapterContext } from './context'
+
+const retry = require('async-retry')
 
 // This key is exported internally so that the TeamsActivityHandler will not overwrite any already set InvokeResponses.
 export const INVOKE_RESPONSE_KEY = 'urn:io.iopa.invokeResponse'
@@ -226,6 +227,7 @@ export class AdapterCore implements IAdapterCore {
                     break
                 default:
                     if (!activity.serviceUrl) {
+                        break
                         throw new Error(
                             `AdapterCore.sendActivities(): missing serviceUrl.`
                         )

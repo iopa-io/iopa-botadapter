@@ -17,7 +17,7 @@ export async function authenticateRequest(
     authHeader: string,
     credentials: ICredentialProvider
 ): Promise<ClaimsIdentity> {
-    if (!authHeader.trim()) {
+    if (!authHeader || !authHeader.trim()) {
         const isAuthDisabled: boolean = await credentials.isAuthenticationDisabled()
 
         if (isAuthDisabled) {
@@ -40,10 +40,10 @@ export async function authenticateRequest(
 }
 
 export async function validateAuthHeader(
-    authHeader: string,
+    authHeader,
     credentials: ICredentialProvider,
     channelId: string,
-    serviceUrl: string = ''
+    serviceUrl = ''
 ): Promise<ClaimsIdentity> {
     try {
         if (!authHeader.trim()) {
