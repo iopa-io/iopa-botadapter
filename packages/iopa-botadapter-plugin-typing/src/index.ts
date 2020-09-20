@@ -18,6 +18,7 @@ import { IopaBotAdapterContext } from 'iopa-botadapter-types'
  */
 export default class ShowTypingMiddleware {
     private readonly delay: number
+
     private readonly period: number
 
     /**
@@ -25,7 +26,7 @@ export default class ShowTypingMiddleware {
      * @param delay {number} Number of milliseconds to wait before sending the first typing indicator.
      * @param period {number} Number of milliseconds to wait before sending each following indicator.
      */
-    constructor(delay: number = 500, period: number = 2000) {
+    constructor(delay = 500, period = 2000) {
         if (delay < 0) {
             throw new Error('Delay must be greater than or equal to zero')
         }
@@ -46,10 +47,10 @@ export default class ShowTypingMiddleware {
         _context: IopaBotAdapterContext,
         next: () => Promise<void>
     ): Promise<void> {
-        let turnContext = _context['io.iopa.msbotframework.context']
+        const turnContext = _context['io.iopa.msbotframework.context']
 
         let finished = false
-        let hTimeout: any = undefined
+        let hTimeout: any
 
         /**
          * @param context TurnContext object representing incoming message.
@@ -70,10 +71,12 @@ export default class ShowTypingMiddleware {
 
                     // Sending the Activity directly via the Adapter avoids other middleware and avoids setting the
                     // responded flag. However this also requires tha tthe conversation reference details are explicitly added.
-                    const conversationReference: Partial<ConversationReference> = context["bot.Capability"].adapter.getConversationReference(
-                        turnContext.activity
-                    )
-                    typingActivity = context["bot.Capability"].adapter.applyConversationReference(
+                    const conversationReference: Partial<ConversationReference> = context[
+                        'bot.Capability'
+                    ].adapter.getConversationReference(turnContext.activity)
+                    typingActivity = context[
+                        'bot.Capability'
+                    ].adapter.applyConversationReference(
                         typingActivity,
                         conversationReference
                     )
@@ -106,6 +109,6 @@ export default class ShowTypingMiddleware {
 
         // Let the rest of the process run.
         // After everything has run, stop the indicator!
-        return await next().then(stopInterval, stopInterval)
+        return next().then(stopInterval, stopInterval)
     }
 }
