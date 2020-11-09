@@ -198,6 +198,7 @@ export class CardFactory {
         buttons?: (CardAction | string)[],
         other?: Partial<HeroCard>
     ): Attachment
+
     public static heroCard(
         title: string,
         text: string,
@@ -205,6 +206,7 @@ export class CardFactory {
         buttons?: (CardAction | string)[],
         other?: Partial<HeroCard>
     ): Attachment
+
     public static heroCard(
         title: string,
         text?: any,
@@ -242,12 +244,12 @@ export class CardFactory {
             buttons: [
                 {
                     type: ActionTypes.Signin,
-                    title: title,
+                    title,
                     value: link,
                     channelData: undefined,
                 },
             ],
-            connectionName: connectionName,
+            connectionName,
         }
         if (text) {
             card.text = text
@@ -317,7 +319,7 @@ export class CardFactory {
             buttons: [
                 {
                     type: ActionTypes.Signin,
-                    title: title,
+                    title,
                     value: url,
                     channelData: undefined,
                 },
@@ -353,6 +355,7 @@ export class CardFactory {
         buttons?: (CardAction | string)[],
         other?: Partial<ThumbnailCard>
     ): Attachment
+
     public static thumbnailCard(
         title: string,
         text: string,
@@ -360,6 +363,7 @@ export class CardFactory {
         buttons?: (CardAction | string)[],
         other?: Partial<ThumbnailCard>
     ): Attachment
+
     public static thumbnailCard(
         title: string,
         text?: any,
@@ -499,5 +503,5 @@ function mediaCard(
         card.buttons = CardFactory.actions(buttons)
     }
 
-    return { contentType: contentType, content: card }
+    return { contentType, content: card }
 }

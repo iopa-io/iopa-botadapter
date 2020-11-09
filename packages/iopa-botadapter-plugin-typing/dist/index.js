@@ -30,9 +30,9 @@ export default class ShowTypingMiddleware {
      * @param next {function} The next delegate function.
      */
     async invoke(_context, next) {
-        let turnContext = _context['io.iopa.msbotframework.context'];
+        const turnContext = _context['io.iopa.msbotframework.context'];
         let finished = false;
-        let hTimeout = undefined;
+        let hTimeout;
         /**
          * @param context TurnContext object representing incoming message.
          * @param delay The initial delay before sending the first indicator.
@@ -47,8 +47,8 @@ export default class ShowTypingMiddleware {
                     };
                     // Sending the Activity directly via the Adapter avoids other middleware and avoids setting the
                     // responded flag. However this also requires tha tthe conversation reference details are explicitly added.
-                    const conversationReference = context["bot.Capability"].adapter.getConversationReference(turnContext.activity);
-                    typingActivity = context["bot.Capability"].adapter.applyConversationReference(typingActivity, conversationReference);
+                    const conversationReference = context['bot.Capability'].adapter.getConversationReference(turnContext.activity);
+                    typingActivity = context['bot.Capability'].adapter.applyConversationReference(typingActivity, conversationReference);
                     await turnContext.adapter.sendActivities(turnContext, [
                         typingActivity,
                     ]);
@@ -74,7 +74,7 @@ export default class ShowTypingMiddleware {
         }
         // Let the rest of the process run.
         // After everything has run, stop the indicator!
-        return await next().then(stopInterval, stopInterval);
+        return next().then(stopInterval, stopInterval);
     }
 }
 //# sourceMappingURL=index.js.map

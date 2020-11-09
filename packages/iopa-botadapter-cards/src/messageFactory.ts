@@ -49,7 +49,7 @@ export class MessageFactory {
     ): Partial<Activity> {
         const msg: Partial<Activity> = {
             type: ActivityTypes.Message,
-            text: text,
+            text,
             inputHint: (inputHint as InputHints) || InputHints.AcceptingInput,
         }
         if (speak) {
@@ -221,7 +221,7 @@ export class MessageFactory {
         speak?: string,
         inputHint?: InputHints | string
     ): Partial<Activity> {
-        const a: Attachment = { contentType: contentType, contentUrl: url }
+        const a: Attachment = { contentType, contentUrl: url }
         if (name) {
             a.name = name
         }
@@ -253,8 +253,8 @@ function attachmentActivity(
 ): Partial<Activity> {
     const msg: Partial<Activity> = {
         type: ActivityTypes.Message,
-        attachmentLayout: attachmentLayout,
-        attachments: attachments,
+        attachmentLayout,
+        attachments,
         inputHint: (inputHint as InputHints) || InputHints.AcceptingInput,
     }
     if (text) {
