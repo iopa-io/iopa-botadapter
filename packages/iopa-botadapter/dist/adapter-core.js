@@ -3,8 +3,8 @@
 /* eslint-disable no-await-in-loop */
 import { ActivityTypes, ConversationsApi, } from 'iopa-botadapter-schema';
 import { HttpAuthAppCredentials, SimpleCredentialProvider, JwtTokenValidation, } from 'iopa-botadapter-schema-auth';
-import * as retry from 'async-retry';
 import { toIopaBotAdapterContext } from './context';
+const retry = require('async-retry');
 // This key is exported internally so that the TeamsActivityHandler will not overwrite any already set InvokeResponses.
 export const INVOKE_RESPONSE_KEY = 'urn:io.iopa.invokeResponse';
 export const URN_BOTADAPTER = 'urn:io.iopa:botadapater';
@@ -12,7 +12,7 @@ export const URN_BOTINTENT_LITERAL = 'urn:io.iopa.bot:intent:literal';
 /** The Iopa BotFrameworkAdapter */
 export class AdapterCore {
     constructor(app) {
-        this.app = app;
+        this._app = app;
         app.botadapter = this;
         // Relocate the tenantId field used by MS Teams to a new location (from channelData to conversation)
         // This will only occur on activities from teams that include tenant info in channelData but NOT in conversation,
@@ -59,9 +59,7 @@ export class AdapterCore {
             }
             // Authenticate the incoming request
             status = 401;
-            const authHeader = context['iopa.Headers'].get('authorization') ||
-                context['iopa.Headers'].get('Authorization') ||
-                '';
+            const authHeader = context['iopa.Headers'].get('authorization');
             await this.authenticateRequest(activity, authHeader);
             // Expand Context with Iopa Turn Context from
             status = 500;
@@ -147,6 +145,7 @@ export class AdapterCore {
                     break;
                 default:
                     if (!activity.serviceUrl) {
+                        break;
                         throw new Error(`AdapterCore.sendActivities(): missing serviceUrl.`);
                     }
                     if (!activity.conversation || !activity.conversation.id) {
@@ -247,7 +246,7 @@ export class AdapterCore {
     }
     /**  Creates a turn context */
     createContext(activity) {
-        const plaincontext = this.app.createContext(activity.serviceUrl, {
+        const plaincontext = this._app.createContext(activity.serviceUrl, {
             withResponse: true,
             protocol: URN_BOTADAPTER,
         });

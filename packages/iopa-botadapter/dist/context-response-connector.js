@@ -11,7 +11,7 @@ const $$context = Symbol('urn:io:iopa:bot:response:context');
 export function toIopaBotAdapterResponse(plainresponse, context) {
     const response = plainresponse;
     response[$$context] = context;
-    response["bot.Capability"] = context["bot.Capability"];
+    response['bot.Capability'] = context['bot.Capability'];
     response.send = ResponseHelpers.prototype.send;
     response.sendAll = ResponseHelpers.prototype.sendAll;
     response.say = ResponseHelpers.prototype.say;
@@ -24,23 +24,26 @@ export function toIopaBotAdapterResponse(plainresponse, context) {
     response.status = ResponseHelpers.prototype.status;
     response.isAwaitingMultiChoiceResponse =
         ResponseHelpers.prototype.isAwaitingMultiChoiceResponse;
-    response["bot.ShouldEndSession"] = false;
-    response["bot.ResponseHandled"] = false;
-    response["bot.IsDelayDisabled"] = false;
-    response["iopa.StatusCode"] = 200;
+    response['bot.ShouldEndSession'] = false;
+    response['bot.ResponseHandled'] = false;
+    response['bot.IsDelayDisabled'] = false;
+    response['iopa.StatusCode'] = 200;
     return response;
 }
 export class ResponseHelpers {
     say(text) {
         if (this[$$bodyState]) {
-            if (this[$$bodyState].text)
-                this[$$bodyState].text = this[$$bodyState].text + '\n' + text;
-            else
+            if (this[$$bodyState].text) {
+                this[$$bodyState].text = `${this[$$bodyState].text}\n${text}`;
+            }
+            else {
                 this[$$bodyState].text = text;
+            }
         }
-        else
-            this[$$bodyState] = { text: text };
-        this["bot.ResponseHandled"] = true;
+        else {
+            this[$$bodyState] = { text };
+        }
+        this['bot.ResponseHandled'] = true;
         return this;
     }
     card(card) {
@@ -60,13 +63,13 @@ export class ResponseHelpers {
                     this[$$bodyState].attachments || [];
                 this[$$bodyState].attachments[0] =
                     this[$$bodyState].attachments[0] || {};
-                this[$$bodyState].attachments[0]['text'] = card.title;
+                this[$$bodyState].attachments[0].text = card.title;
             }
         }
         else {
             this[$$bodyState] = this[$$bodyState] || {};
             this[$$bodyState].attachments = this[$$bodyState].attachments || [];
-            if (card.type == 'card' && 'props' in card) {
+            if (card.type === 'card' && 'props' in card) {
                 this[$$bodyState].attachments.push(CardFactory.reactiveCard(card));
             }
             else {
@@ -78,7 +81,7 @@ export class ResponseHelpers {
     /** Send response back to bot */
     async send(body) {
         if (body) {
-            if (typeof body == 'string') {
+            if (typeof body === 'string') {
                 this.say(body);
             }
             else {
@@ -87,13 +90,9 @@ export class ResponseHelpers {
         }
         let message;
         let card;
-        if (this["iopa.StatusCode"] != 200) {
+        if (this['iopa.StatusCode'] !== 200) {
             // TO DO:: FORMAT ERROR
-            message =
-                'Unfortunately an error has occured:\n  ' +
-                    this["iopa.StatusCode"] +
-                    ' ' +
-                    this[$$bodyState].text;
+            message = `Unfortunately an error has occured:\n  ${this['iopa.StatusCode']} ${this[$$bodyState].text}`;
         }
         else {
             message = this[$$bodyState].text;
@@ -107,22 +106,22 @@ export class ResponseHelpers {
             return;
         }
         if (hasMessage && !card) {
-            console.log(message);
-            await this["bot.Capability"].sendActivity(MessageFactory.text(message));
+            // console.log(message)
+            await this['bot.Capability'].sendActivity(MessageFactory.text(message));
         }
         else {
-            console.log('card');
-            await this["bot.Capability"].sendActivity(MessageFactory.attachment(card, message));
+            // console.log('card')
+            await this['bot.Capability'].sendActivity(MessageFactory.attachment(card, message));
         }
     }
     /** Helper method to indicate this response should end the dialog */
     shouldEndSession(flag) {
-        this["bot.ShouldEndSession"] = flag;
+        this['bot.ShouldEndSession'] = flag;
         return this;
     }
     /** Helper method to set the status of the response */
     status(statuscode) {
-        this["iopa.StatusCode"] = statuscode;
+        this['iopa.StatusCode'] = statuscode;
         return this;
     }
     /** Send a text string or card attachments, looping with delay if multiple provided */
@@ -130,7 +129,7 @@ export class ResponseHelpers {
         return asyncForEach(messages, async (message) => {
             const typingDuration = typingDelay || MIN_TYPING_DURATION;
             let postMessageDelay;
-            if (typeof message == 'string') {
+            if (typeof message === 'string') {
                 postMessageDelay = postMessageDelayForText(message);
                 this.say(message);
             }
@@ -139,18 +138,20 @@ export class ResponseHelpers {
                 this.card(message);
             }
             await this.showTypingIndicator();
-            await delay(this["bot.IsDelayDisabled"] ? DELAY_WHEN_DISABLED : typingDuration);
+            await delay(this['bot.IsDelayDisabled']
+                ? DELAY_WHEN_DISABLED
+                : typingDuration);
             await this.send();
             await this.hideTypingIndicator();
-            await delay(this["bot.IsDelayDisabled"]
+            await delay(this['bot.IsDelayDisabled']
                 ? DELAY_WHEN_DISABLED
                 : postMessageDelay);
         });
     }
-    fail(error, message, in_channel) {
-        this["iopa.StatusCode"] = 200;
+    fail(error, message, inChannel) {
+        this['iopa.StatusCode'] = 200;
         this[$$bodyState] = {
-            text: message + ': ' + error,
+            text: `${message}: ${error}`,
         };
         return this;
     }
@@ -160,11 +161,11 @@ export class ResponseHelpers {
         // responded flag. However this also requires tha tthe conversation reference details are explicitly added.
         let typingActivity = {
             type: ActivityTypes.Typing,
-            relatesTo: context["bot.Capability"].activity.relatesTo,
+            relatesTo: context['bot.Capability'].activity.relatesTo,
         };
-        const conversationReference = context["bot.Capability"].adapter.getConversationReference(context["bot.Capability"].activity);
-        typingActivity = context["bot.Capability"].adapter.applyConversationReference(typingActivity, conversationReference);
-        await context["bot.Capability"].adapter.sendActivities(context, [
+        const conversationReference = context['bot.Capability'].adapter.getConversationReference(context['bot.Capability'].activity);
+        typingActivity = context['bot.Capability'].adapter.applyConversationReference(typingActivity, conversationReference);
+        await context['bot.Capability'].adapter.sendActivities(context, [
             typingActivity,
         ]);
         // TO DO:   Keep sending every 2-5 seconds until no longer needed;  for now
@@ -176,7 +177,7 @@ export class ResponseHelpers {
         // for now just a single indicator is sent, so hiding is a noop
     }
     isAwaitingMultiChoiceResponse() {
-        return (this[$$context]["bot.Session"]["bot.isMultiChoicePrompt"] === true);
+        return (this[$$context]['bot.Session']['bot.isMultiChoicePrompt'] === true);
     }
 }
 //
@@ -210,6 +211,7 @@ function clamp(min, value, max) {
 }
 async function asyncForEach(array, callback) {
     for (let index = 0; index < array.length; index++) {
+        // eslint-disable-next-line no-await-in-loop
         await callback(array[index], index, array);
     }
 }

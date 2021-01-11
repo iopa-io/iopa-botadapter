@@ -70,7 +70,8 @@ class HttpAuthAppCredentials {
                 request.headers.set('authorization', `Bearer ${token}`);
             }
             else {
-                request.headers['authorization'] = `Bearer ${token}`;
+                ;
+                request.headers.authorization = `Bearer ${token}`;
             }
         }
     }
@@ -92,7 +93,7 @@ class HttpAuthAppCredentials {
         const res = await this.refreshToken();
         this.refreshingToken = null;
         let oauthResponse;
-        if (res && res.status == 200) {
+        if (res && res.status === 200) {
             // `res` is equalivent to the results from the cached promise `this.refreshingToken`.
             // Because the promise has been cached, we need to see if the body has been read.
             // If the body has not been read yet, we can call res.json() to get the access_token.
@@ -103,29 +104,24 @@ class HttpAuthAppCredentials {
                 if (res.bodyUsed) {
                     // ** not in cache but not used so likely just too close
                     // so come round again
-                    return await this.getToken();
+                    return this.getToken();
                 }
                 oauthResponse = await res.json();
                 // Subtract 5 minutes from expires_in so they'll we'll get a
                 // new token before it expires.
+                // eslint-disable-next-line @typescript-eslint/camelcase
                 oauthResponse.expiration_time =
                     Date.now() + oauthResponse.expires_in * 1000 - 300000;
                 HttpAuthAppCredentials.cache.set(this.tokenCacheKey, oauthResponse);
                 return oauthResponse.access_token;
             }
-            else {
-                const oAuthToken = HttpAuthAppCredentials.cache.get(this.tokenCacheKey);
-                if (oAuthToken) {
-                    return oAuthToken.access_token;
-                }
-                else {
-                    return await this.getToken();
-                }
+            const oAuthToken = HttpAuthAppCredentials.cache.get(this.tokenCacheKey);
+            if (oAuthToken) {
+                return oAuthToken.access_token;
             }
+            return this.getToken();
         }
-        else {
-            throw new Error(res.statusText);
-        }
+        throw new Error((res && res.statusText) || 'Unknown Fetch Error Getting Token');
     }
     async refreshToken() {
         if (!this.refreshingToken) {

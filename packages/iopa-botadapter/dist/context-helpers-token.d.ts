@@ -2,7 +2,7 @@ import { TokenResponse } from 'iopa-botadapter-schema';
 import { TokenStatus, UserTokenApi, BotSignInApi } from 'iopa-botadapter-schema-tokens';
 import { TokenHelpers as ITokenHelpers, IopaBotAdapterContext } from 'iopa-botadapter-types';
 export declare class TokenHelpers implements ITokenHelpers {
-    private context;
+    private _context;
     constructor(context: IopaBotAdapterContext);
     /** An asynchronous method that attempts to retrieve the token for a user that's in a login flow.  */
     getUserToken(connectionName: string, magicCode?: string): Promise<TokenResponse>;
@@ -20,6 +20,6 @@ export declare class TokenHelpers implements ITokenHelpers {
     protected createUserTokenApiClient(serviceUrl: string): UserTokenApi;
     /** Creates an OAuth API client. */
     protected createBotSignInApiClient(serviceUrl: string): BotSignInApi;
-    /** Gets the OAuth API endpoint.*/
+    /** Gets the OAuth API endpoint. */
     protected oauthApiUrl(contextOrServiceUrl: IopaBotAdapterContext | string): string;
 }

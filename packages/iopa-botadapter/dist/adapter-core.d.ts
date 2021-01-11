@@ -7,7 +7,7 @@ export declare const URN_BOTADAPTER = "urn:io.iopa:botadapater";
 export declare const URN_BOTINTENT_LITERAL = "urn:io.iopa.bot:intent:literal";
 /** The Iopa BotFrameworkAdapter */
 export declare class AdapterCore implements IAdapterCore {
-    protected readonly app: RouterApp<{}, IopaBotAdapterContext>;
+    protected readonly _app: RouterApp<{}, IopaBotAdapterContext>;
     readonly credentials: HttpAuthAppCredentials;
     protected readonly credentialsProvider: SimpleCredentialProvider;
     constructor(app: RouterApp<{}, IopaBotAdapterContext>);

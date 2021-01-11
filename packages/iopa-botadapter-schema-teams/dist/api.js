@@ -11,7 +11,7 @@ const url = require("url");
 const portableFetch = require("portable-fetch");
 const BASE_PATH = 'https://api.botframework.com'.replace(/\/+$/, '');
 /** TeamsApi - fetch parameter creator */
-exports.TeamsApiFetchParamCreator = function (configuration) {
+const TeamsApiFetchParamCreator = function (configuration) {
     return {
         /** Fetches channel list for a given team */
         fetchChannelList(teamId, options = {}) {
@@ -55,8 +55,9 @@ exports.TeamsApiFetchParamCreator = function (configuration) {
         },
     };
 };
+exports.TeamsApiFetchParamCreator = TeamsApiFetchParamCreator;
 /** TeamsApi - functional programming interface */
-exports.TeamsApiFp = function (configuration) {
+const TeamsApiFp = function (configuration) {
     return {
         /** Fetches channel list for a given team */
         fetchChannelList(teamId, options) {
@@ -88,6 +89,7 @@ exports.TeamsApiFp = function (configuration) {
         },
     };
 };
+exports.TeamsApiFp = TeamsApiFp;
 /** TeamsApi - object-oriented interface */
 class TeamsApi extends iopa_botadapter_schema_1.BaseAPI {
     /** Fetches channel list for a given team */

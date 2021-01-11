@@ -88,7 +88,7 @@ export class AdapterWithEventsAndMethods extends AdapterWithEvents {
         // always trust outbound serviceUrls
         HttpAuthAppCredentials.trustServiceUrl(reference.serviceUrl);
         try {
-            await this.app.invoke(context);
+            await this._app.invoke(context);
             await logic(context);
         }
         catch (err) {
@@ -142,7 +142,7 @@ export class AdapterWithEventsAndMethods extends AdapterWithEvents {
         }
         const context = this.createContext(request);
         try {
-            await this.app.invoke(context);
+            await this._app.invoke(context);
             await logic(context);
         }
         catch (err) {

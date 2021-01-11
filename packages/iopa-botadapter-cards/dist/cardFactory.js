@@ -131,12 +131,12 @@ export class CardFactory {
             buttons: [
                 {
                     type: ActionTypes.Signin,
-                    title: title,
+                    title,
                     value: link,
                     channelData: undefined,
                 },
             ],
-            connectionName: connectionName,
+            connectionName,
         };
         if (text) {
             card.text = text;
@@ -198,7 +198,7 @@ export class CardFactory {
             buttons: [
                 {
                     type: ActionTypes.Signin,
-                    title: title,
+                    title,
                     value: url,
                     channelData: undefined,
                 },
@@ -332,6 +332,6 @@ function mediaCard(contentType, title, media, buttons, other) {
     if (buttons) {
         card.buttons = CardFactory.actions(buttons);
     }
-    return { contentType: contentType, content: card };
+    return { contentType, content: card };
 }
 //# sourceMappingURL=cardFactory.js.map

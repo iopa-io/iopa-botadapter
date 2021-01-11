@@ -13,7 +13,7 @@ const EmulatorValidation = require("./emulatorValidation");
  * @returns {Promise<ClaimsIdentity>} Promise with ClaimsIdentity for the request.
  */
 async function authenticateRequest(activity, authHeader, credentials) {
-    if (!authHeader.trim()) {
+    if (!authHeader || !authHeader.trim()) {
         const isAuthDisabled = await credentials.isAuthenticationDisabled();
         if (isAuthDisabled) {
             return new claimsIdentity_1.ClaimsIdentity([], true);

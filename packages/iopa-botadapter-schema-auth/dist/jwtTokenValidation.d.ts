@@ -9,4 +9,4 @@ import { ICredentialProvider } from './credentialProvider';
  * @returns {Promise<ClaimsIdentity>} Promise with ClaimsIdentity for the request.
  */
 export declare function authenticateRequest(activity: Activity, authHeader: string, credentials: ICredentialProvider): Promise<ClaimsIdentity>;
-export declare function validateAuthHeader(authHeader: string, credentials: ICredentialProvider, channelId: string, serviceUrl?: string): Promise<ClaimsIdentity>;
+export declare function validateAuthHeader(authHeader: any, credentials: ICredentialProvider, channelId: string, serviceUrl?: string): Promise<ClaimsIdentity>;

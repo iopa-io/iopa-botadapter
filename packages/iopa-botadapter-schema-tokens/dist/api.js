@@ -60,7 +60,7 @@ exports.RequiredError = RequiredError;
  * BotSignInApi - fetch parameter creator
  * @export
  */
-exports.BotSignInApiFetchParamCreator = function (configuration) {
+const BotSignInApiFetchParamCreator = function (configuration) {
     return {
         /**
          *
@@ -104,11 +104,12 @@ exports.BotSignInApiFetchParamCreator = function (configuration) {
         },
     };
 };
+exports.BotSignInApiFetchParamCreator = BotSignInApiFetchParamCreator;
 /**
  * BotSignInApi - functional programming interface
  * @export
  */
-exports.BotSignInApiFp = function (configuration) {
+const BotSignInApiFp = function (configuration) {
     return {
         /**
          *
@@ -134,11 +135,12 @@ exports.BotSignInApiFp = function (configuration) {
         },
     };
 };
+exports.BotSignInApiFp = BotSignInApiFp;
 /**
  * BotSignInApi - factory interface
  * @export
  */
-exports.BotSignInApiFactory = function (configuration, fetch, basePath) {
+const BotSignInApiFactory = function (configuration, fetch, basePath) {
     return {
         /**
          *
@@ -154,6 +156,7 @@ exports.BotSignInApiFactory = function (configuration, fetch, basePath) {
         },
     };
 };
+exports.BotSignInApiFactory = BotSignInApiFactory;
 /**
  * BotSignInApi - object-oriented interface
  * @export
@@ -180,7 +183,7 @@ exports.BotSignInApi = BotSignInApi;
  * UserTokenApi - fetch parameter creator
  * @export
  */
-exports.UserTokenApiFetchParamCreator = function (configuration) {
+const UserTokenApiFetchParamCreator = function (configuration) {
     return {
         /**
          *
@@ -352,11 +355,12 @@ exports.UserTokenApiFetchParamCreator = function (configuration) {
         },
     };
 };
+exports.UserTokenApiFetchParamCreator = UserTokenApiFetchParamCreator;
 /**
  * UserTokenApi - functional programming interface
  * @export
  */
-exports.UserTokenApiFp = function (configuration) {
+const UserTokenApiFp = function (configuration) {
     return {
         /**
          *
@@ -446,11 +450,12 @@ exports.UserTokenApiFp = function (configuration) {
         },
     };
 };
+exports.UserTokenApiFp = UserTokenApiFp;
 /**
  * UserTokenApi - factory interface
  * @export
  */
-exports.UserTokenApiFactory = function (configuration, fetch, basePath) {
+const UserTokenApiFactory = function (configuration, fetch, basePath) {
     return {
         /**
          *
@@ -500,6 +505,7 @@ exports.UserTokenApiFactory = function (configuration, fetch, basePath) {
         },
     };
 };
+exports.UserTokenApiFactory = UserTokenApiFactory;
 /**
  * UserTokenApi - object-oriented interface
  * @export

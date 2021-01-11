@@ -224,7 +224,7 @@ var TextFormatTypes;
  * AttachmentsApi - fetch parameter creator
  * @export
  */
-exports.AttachmentsApiFetchParamCreator = function (configuration) {
+const AttachmentsApiFetchParamCreator = function (configuration) {
     return {
         /**
          * Get the named view as binary content
@@ -287,11 +287,12 @@ exports.AttachmentsApiFetchParamCreator = function (configuration) {
         },
     };
 };
+exports.AttachmentsApiFetchParamCreator = AttachmentsApiFetchParamCreator;
 /**
  * AttachmentsApi - functional programming interface
  * @export
  */
-exports.AttachmentsApiFp = function (configuration) {
+const AttachmentsApiFp = function (configuration) {
     return {
         /**
          * Get the named view as binary content
@@ -336,11 +337,12 @@ exports.AttachmentsApiFp = function (configuration) {
         },
     };
 };
+exports.AttachmentsApiFp = AttachmentsApiFp;
 /**
  * AttachmentsApi - factory interface
  * @export
  */
-exports.AttachmentsApiFactory = function (configuration, fetch, basePath) {
+const AttachmentsApiFactory = function (configuration, fetch, basePath) {
     return {
         /**
          * Get the named view as binary content
@@ -365,6 +367,7 @@ exports.AttachmentsApiFactory = function (configuration, fetch, basePath) {
         },
     };
 };
+exports.AttachmentsApiFactory = AttachmentsApiFactory;
 /**
  * AttachmentsApi - object-oriented interface
  * @export
@@ -401,7 +404,7 @@ exports.AttachmentsApi = AttachmentsApi;
  * ConversationsApi - fetch parameter creator
  * @export
  */
-exports.ConversationsApiFetchParamCreator = function (configuration) {
+const ConversationsApiFetchParamCreator = function (configuration) {
     return {
         /**
          * Create a new Conversation.    POST to this method with a  * Bot being the bot creating the conversation  * IsGroup set to true if this is not a direct message (default is false)  * Array containing the members to include in the conversation    The return value is a ResourceResponse which contains a conversation id which is suitable for use  in the message payload and REST API uris.    Most channels only support the semantics of bots initiating a direct message conversation.  An example of how to do that would be:    ```  var resource = await connector.conversations.CreateConversation(new ConversationParameters(){ Bot = bot, members = new ChannelAccount[] { new ChannelAccount(\"user1\") } );  await connect.Conversations.SendToConversationAsync(resource.Id, new Activity() ... ) ;    ```
@@ -826,11 +829,12 @@ exports.ConversationsApiFetchParamCreator = function (configuration) {
         },
     };
 };
+exports.ConversationsApiFetchParamCreator = ConversationsApiFetchParamCreator;
 /**
  * ConversationsApi - functional programming interface
  * @export
  */
-exports.ConversationsApiFp = function (configuration) {
+const ConversationsApiFp = function (configuration) {
     return {
         /**
          * Create a new Conversation.    POST to this method with a  * Bot being the bot creating the conversation  * IsGroup set to true if this is not a direct message (default is false)  * Array containing the members to include in the conversation    The return value is a ResourceResponse which contains a conversation id which is suitable for use  in the message payload and REST API uris.    Most channels only support the semantics of bots initiating a direct message conversation.  An example of how to do that would be:    ```  var resource = await connector.conversations.CreateConversation(new ConversationParameters(){ Bot = bot, members = new ChannelAccount[] { new ChannelAccount(\"user1\") } );  await connect.Conversations.SendToConversationAsync(resource.Id, new Activity() ... ) ;    ```
@@ -1086,11 +1090,12 @@ exports.ConversationsApiFp = function (configuration) {
         },
     };
 };
+exports.ConversationsApiFp = ConversationsApiFp;
 /**
  * ConversationsApi - factory interface
  * @export
  */
-exports.ConversationsApiFactory = function (configuration, fetch, basePath) {
+const ConversationsApiFactory = function (configuration, fetch, basePath) {
     return {
         /**
          * Create a new Conversation.    POST to this method with a  * Bot being the bot creating the conversation  * IsGroup set to true if this is not a direct message (default is false)  * Array containing the members to include in the conversation    The return value is a ResourceResponse which contains a conversation id which is suitable for use  in the message payload and REST API uris.    Most channels only support the semantics of bots initiating a direct message conversation.  An example of how to do that would be:    ```  var resource = await connector.conversations.CreateConversation(new ConversationParameters(){ Bot = bot, members = new ChannelAccount[] { new ChannelAccount(\"user1\") } );  await connect.Conversations.SendToConversationAsync(resource.Id, new Activity() ... ) ;    ```
@@ -1226,6 +1231,7 @@ exports.ConversationsApiFactory = function (configuration, fetch, basePath) {
         },
     };
 };
+exports.ConversationsApiFactory = ConversationsApiFactory;
 /**
  * ConversationsApi - object-oriented interface
  * @export

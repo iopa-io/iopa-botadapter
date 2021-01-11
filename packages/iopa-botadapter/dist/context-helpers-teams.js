@@ -1,31 +1,31 @@
-import { TeamsApi } from 'iopa-botadapter-schema-teams';
+import { TeamsApi, } from 'iopa-botadapter-schema-teams';
 export class TeamsHelpers {
     constructor(context) {
-        this.context = context;
+        this._context = context;
     }
     getChannelId() {
-        if (!this.context["bot.Capability"].activity) {
+        if (!this._context['bot.Capability'].activity) {
             throw new Error('Missing activity on context');
         }
-        const channelData = this.context["bot.Capability"]
+        const channelData = this._context['bot.Capability']
             .activity.channelData;
         const channel = channelData ? channelData.channel : null;
         return channel && channel.id ? channel.id : null;
     }
     getChannelName() {
-        if (!this.context["bot.Capability"].activity) {
+        if (!this._context['bot.Capability'].activity) {
             throw new Error('Missing activity on context');
         }
-        const channelData = this.context["bot.Capability"]
+        const channelData = this._context['bot.Capability']
             .activity.channelData;
         const channel = channelData ? channelData.channel : null;
         return channel && channel.name ? channel.name : undefined;
     }
     getTeamId() {
-        if (!this.context["bot.Capability"].activity) {
+        if (!this._context['bot.Capability'].activity) {
             throw new Error('Missing activity on context');
         }
-        const channelData = this.context["bot.Capability"].activity
+        const channelData = this._context['bot.Capability'].activity
             .channelData;
         const team = channelData && channelData.team ? channelData.team : null;
         const teamId = team && typeof team.id === 'string' ? team.id : null;
@@ -50,7 +50,7 @@ export class TeamsHelpers {
         if (!t) {
             throw new Error('This method is only valid within the scope of a MS Teams Team.');
         }
-        return await this.getTeamsConnectorClient().teamsFetchTeamDetails(t);
+        return this.getTeamsConnectorClient().teamsFetchTeamDetails(t);
     }
     async getTeamChannels(teamId) {
         teamId = teamId || this.getTeamId();
@@ -63,14 +63,11 @@ export class TeamsHelpers {
     async getMembers() {
         const teamId = this.getTeamId();
         if (teamId) {
-            return await this.getTeamMembers(teamId);
+            return this.getTeamMembers(teamId);
         }
-        else {
-            const conversation = this.context["bot.Capability"].activity
-                .conversation;
-            const conversationId = conversation && conversation.id ? conversation.id : undefined;
-            return await this.getMembersInternal(this.getConnectorClient(), conversationId);
-        }
+        const { conversation } = this._context['bot.Capability'].activity;
+        const conversationId = conversation && conversation.id ? conversation.id : undefined;
+        return this.getMembersInternal(this.getConnectorClient(), conversationId);
     }
     async getTeamMembers(teamId) {
         teamId = teamId || this.getTeamId();
@@ -95,11 +92,11 @@ export class TeamsHelpers {
             },
             activity: message,
         };
-        const adapter = this.context["bot.Capability"].adapter;
-        const conversationsApiClient = adapter.createConversationsApiClient(this.context["bot.Capability"].activity.serviceUrl);
+        const { adapter } = this._context['bot.Capability'];
+        const conversationsApiClient = adapter.createConversationsApiClient(this._context['bot.Capability'].activity.serviceUrl);
         // This call does NOT send the outbound Activity is not being sent through the middleware stack.
         const conversationResourceResponse = await conversationsApiClient.conversationsCreateConversation(conversationParameters);
-        const conversationReference = adapter.getConversationReference(this.context["bot.Capability"].activity);
+        const conversationReference = adapter.getConversationReference(this._context['bot.Capability'].activity);
         conversationReference.conversation.id = conversationResourceResponse.id;
         return [conversationReference, conversationResourceResponse.activityId];
     }
@@ -121,20 +118,20 @@ export class TeamsHelpers {
         return teamMembers;
     }
     getConnectorClient() {
-        if (!this.context["bot.Capability"].adapter ||
+        if (!this._context['bot.Capability'].adapter ||
             !('createConversationsApiClient' in
-                this.context["bot.Capability"].adapter)) {
+                this._context['bot.Capability'].adapter)) {
             throw new Error('This method requires a connector client.');
         }
-        return this.context["bot.Capability"].adapter.createConversationsApiClient(this.context["bot.Capability"].activity.serviceUrl);
+        return this._context['bot.Capability'].adapter.createConversationsApiClient(this._context['bot.Capability'].activity.serviceUrl);
     }
     getTeamsConnectorClient() {
-        const credentials = this.context["bot.Capability"].adapter.credentials;
+        const { credentials } = this._context['bot.Capability'].adapter;
         const fetchProxy = async (url, init) => {
             await credentials.signRequest(url, init);
             return fetch(url, init);
         };
-        const client = new TeamsApi({}, this.context["bot.Capability"].activity.serviceUrl.replace(/\/+$/, ''), fetchProxy);
+        const client = new TeamsApi({}, this._context['bot.Capability'].activity.serviceUrl.replace(/\/+$/, ''), fetchProxy);
         return client;
     }
 }

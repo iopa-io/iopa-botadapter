@@ -2,7 +2,7 @@ import { Activity, ConversationReference } from 'iopa-botadapter-schema';
 import { ChannelInfo, TeamsChannelAccount, TeamDetails } from 'iopa-botadapter-schema-teams';
 import { TeamsHelpers as ITeamsHelpers, IopaBotAdapterContext } from 'iopa-botadapter-types';
 export declare class TeamsHelpers implements ITeamsHelpers {
-    private context;
+    private _context;
     constructor(context: IopaBotAdapterContext);
     getChannelId(): string;
     getChannelName(): string;

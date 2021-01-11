@@ -36,7 +36,7 @@ export class MessageFactory {
     static text(text, speak, inputHint) {
         const msg = {
             type: ActivityTypes.Message,
-            text: text,
+            text,
             inputHint: inputHint || InputHints.AcceptingInput,
         };
         if (speak) {
@@ -156,7 +156,7 @@ export class MessageFactory {
      * @param inputHint (Optional) input hint for the message.
      */
     static contentUrl(url, contentType, name, text, speak, inputHint) {
-        const a = { contentType: contentType, contentUrl: url };
+        const a = { contentType, contentUrl: url };
         if (name) {
             a.name = name;
         }
@@ -174,8 +174,8 @@ export class MessageFactory {
 function attachmentActivity(attachmentLayout, attachments, text, speak, inputHint) {
     const msg = {
         type: ActivityTypes.Message,
-        attachmentLayout: attachmentLayout,
-        attachments: attachments,
+        attachmentLayout,
+        attachments,
         inputHint: inputHint || InputHints.AcceptingInput,
     };
     if (text) {
